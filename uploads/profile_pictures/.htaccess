@@ -1,0 +1,11 @@
+Options -Indexes
+<Files ~ "\.php$">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Allow image files
+<FilesMatch "\.(jpg|jpeg|png|gif|webp)$">
+    Order allow,deny
+    Allow from all
+</FilesMatch>

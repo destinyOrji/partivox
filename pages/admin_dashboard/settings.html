@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="../../images/IconDiamond.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/enhanced-typography.css" rel="stylesheet">
+  <style>
+    :root {
+      /* === PARTIVOX DESIGN SYSTEM === */
+      
+      /* Core Background Colors */
+      --primary-bg: #0a0a0f;
+      --secondary-bg: #1a1a1f;
+      --card-bg: #1e1e24;
+      --sidebar-bg: #16161b;
+      --surface-bg: #252530;
+      --overlay-bg: rgba(10, 10, 15, 0.95);
+      
+      /* Lemon Green Brand Colors (Primary) */
+      --accent-color: #caf403; /* signature lemon green */
+      --accent-hover: #9dcf00; /* darker lemon green */
+      --accent-light: #e8ff4d; /* lighter lemon green */
+      --accent-dark: #7ba800; /* darkest lemon green */
+      --accent-rgb: 202, 244, 3;
+      
+      /* Secondary Brand Colors */
+      --primary-color: #667eea;
+      --primary-hover: #5a67d8;
+      --primary-light: #7c3aed;
+      --primary-rgb: 102, 126, 234;
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --text-inverse: #000000;
+      --text-accent: var(--accent-color);
+      
+      /* Status Colors */
+      --success-color: #10b981;
+      --success-light: #34d399;
+      --warning-color: #f59e0b;
+      --warning-light: #fbbf24;
+      --danger-color: #ef4444;
+      --danger-light: #f87171;
+      --info-color: #3b82f6;
+      --info-light: #60a5fa;
+      
+      /* Border & Divider Colors */
+      --border-color: #27272a;
+      --border-light: #374151;
+      --border-accent: var(--accent-color);
+      --divider-color: rgba(255, 255, 255, 0.1);
+      
+      /* Layout Variables */
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 60px;
+      --topbar-height: 70px;
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --border-radius-lg: 16px;
+      
+      /* Spacing Scale */
+      --space-xs: 0.25rem;    /* 4px */
+      --space-sm: 0.5rem;     /* 8px */
+      --space-md: 1rem;       /* 16px */
+      --space-lg: 1.5rem;     /* 24px */
+      --space-xl: 2rem;       /* 32px */
+      --space-2xl: 3rem;      /* 48px */
+      --space-3xl: 4rem;      /* 64px */
+      
+      /* Typography Scale */
+      --text-xs: 0.75rem;     /* 12px */
+      --text-sm: 0.875rem;    /* 14px */
+      --text-base: 1rem;      /* 16px */
+      --text-lg: 1.125rem;    /* 18px */
+      --text-xl: 1.25rem;     /* 20px */
+      --text-2xl: 1.5rem;     /* 24px */
+      --text-3xl: 1.875rem;   /* 30px */
+      --text-4xl: 2.25rem;    /* 36px */
+      
+      /* Animation & Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.2s ease;
+      --transition-slow: 0.3s ease;
+      --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+      --shadow-accent: 0 0 0 3px rgba(202, 244, 3, 0.15);
+      
+      /* Z-Index Scale */
+      --z-dropdown: 1000;
+      --z-sticky: 1020;
+      --z-fixed: 1030;
+      --z-modal-backdrop: 1040;
+      --z-modal: 1050;
+      --z-popover: 1060;
+      --z-tooltip: 1070;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f14 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background: linear-gradient(180deg, var(--sidebar-bg) 0%, #12121a 100%);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      width: 280px;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-240px);
+      width: 60px;
+    }
+
+    .sidebar.collapsed .logo h4,
+    .sidebar.collapsed .nav-section h6,
+    .sidebar.collapsed a span {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar .logo {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar .logo h4 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar .nav-section {
+      padding: 1rem 0;
+    }
+
+    .sidebar .nav-section h6 {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sidebar a i {
+      width: 20px;
+      margin-right: 12px;
+      font-size: 1rem;
+    }
+
+    .sidebar a:hover {
+      background: rgba(202, 244, 3, 0.1);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    .sidebar a.active {
+      background: linear-gradient(90deg, var(--accent-color), transparent);
+      color: var(--text-primary);
+      border-right: 3px solid var(--accent-color);
+    }
+
+    .sidebar a.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent-color);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+    }
+
+    .main-content.sidebar-collapsed {
+      margin-left: 60px;
+    }
+
+    .sidebar-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-secondary);
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--accent-color);
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .content {
+      padding: 2rem;
+      background: transparent;
+    }
+
+    .topbar {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar h4 {
+      font-weight: 700;
+      font-size: 1.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .topbar p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid var(--accent-color);
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .content-card h6 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .form-control, .form-select {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      border-radius: 8px;
+    }
+
+    .form-control:focus, .form-select:focus {
+      background: var(--secondary-bg);
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+      box-shadow: 0 0 0 3px rgba(202, 244, 3, 0.15);
+    }
+
+    .form-label {
+      color: var(--text-primary);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn {
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #000;
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      background: var(--danger-color);
+      border-color: var(--danger-color);
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+      border-color: #dc2626;
+      transform: translateY(-1px);
+    }
+
+    .settings-section {
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .settings-section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 50px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: var(--border-color);
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: var(--accent-color);
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(26px);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        width: 280px;
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.sidebar-collapsed {
+        margin-left: 0;
+      }
+
+      .topbar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch !important;
+      }
+
+      .topbar .d-flex {
+        justify-content: center;
+      }
+
+      .user-info {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .content-card {
+        padding: 1rem;
+      }
+
+      .row {
+        margin: 0;
+      }
+
+      .col-md-8, .col-md-4 {
+        padding: 0;
+        margin-bottom: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .topbar h4 {
+        font-size: 1.25rem;
+      }
+
+      .topbar p {
+        font-size: 0.875rem;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+
+      .user-avatar {
+        width: 32px;
+        height: 32px;
+      }
+
+      .settings-section .row {
+        flex-direction: column;
+      }
+
+      .settings-section .col-md-6 {
+        margin-bottom: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <h4>
+        <img src="../../images/IconDiamond.png" alt="" width="24" height="24" class="me-2">
+        PARTIVOX
+      </h4>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Main</h6>
+      <a href="/pages/admin_dashboard/dashboard1.html">
+        <i class="fas fa-chart-line"></i>
+        <span>Overview</span>
+      </a>
+      <a href="/pages/admin_dashboard/user.html">
+        <i class="fas fa-users"></i>
+        <span>Users</span>
+      </a>
+      <a href="/pages/admin_dashboard/campaigns.html">
+        <i class="fas fa-bullhorn"></i>
+        <span>Campaigns</span>
+      </a>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Management</h6>
+      <a href="/pages/admin_dashboard/transactions.html">
+        <i class="fas fa-credit-card"></i>
+        <span>Transactions</span>
+      </a>
+      <a href="/pages/admin_dashboard/reports.html">
+        <i class="fas fa-chart-bar"></i>
+        <span>Reports</span>
+      </a>
+      <a href="/pages/admin_dashboard/settings.html" class="active">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+    
+    <div class="nav-section mt-auto">
+      <a href="#" class="text-danger" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="content">
+      <!-- Topbar -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </div>
+          <div>
+            <h4>System Settings</h4>
+            <p>Configure platform-wide settings: general preferences, campaign parameters, user policies, transaction limits, and system maintenance options</p>
+          </div>
+        </div>
+        <div class="user-info">
+          <img src="../../images/avartar1.jpg" class="user-avatar" alt="avatar" />
+          <div>
+            <div id="adminName" class="fw-semibold">Admin</div>
+            <small class="text-muted">Administrator</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Content -->
+      <div class="row">
+        <div class="col-md-8">
+          <!-- General Settings -->
+          <div class="content-card">
+            <h6><i class="fas fa-cog me-2"></i>General Settings</h6>
+            
+            <div class="settings-section">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Platform Name</label>
+                    <input type="text" id="platformName" class="form-control" value="PARTIVOX" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Admin Email</label>
+                    <input type="email" id="adminEmail" class="form-control" value="admin@partivox.com" />
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label class="form-label">Platform Description</label>
+                <textarea id="platformDescription" class="form-control" rows="3">A decentralized platform for social media campaigns and task completion.</textarea>
+              </div>
+            </div>
+
+            <!-- Campaign Settings -->
+            <div class="settings-section">
+              <h6 class="mb-3"><i class="fas fa-bullhorn me-2"></i>Campaign Settings</h6>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Minimum Campaign Budget</label>
+                    <div class="input-group">
+                      <input type="number" id="minBudget" class="form-control" value="100" />
+                      <span class="input-group-text bg-secondary text-light border-secondary">💎 Diamonds</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Maximum Campaign Budget</label>
+                    <div class="input-group">
+                      <input type="number" id="maxBudget" class="form-control" value="10000" />
+                      <span class="input-group-text bg-secondary text-light border-secondary">💎 Diamonds</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <div class="fw-semibold">Auto-approve campaigns</div>
+                  <small class="text-muted">Automatically approve campaigns that meet criteria</small>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="autoApprove" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="fw-semibold">Require campaign verification</div>
+                  <small class="text-muted">Require manual verification for all campaigns</small>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="requireVerification">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <!-- User Settings -->
+            <div class="settings-section">
+              <h6 class="mb-3"><i class="fas fa-users me-2"></i>User Settings</h6>
+              
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <div class="fw-semibold">Allow user registration</div>
+                  <small class="text-muted">Enable new users to register on the platform</small>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="allowRegistration" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <div class="fw-semibold">Email verification required</div>
+                  <small class="text-muted">Require email verification for new accounts</small>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="emailVerification" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Default user diamonds</label>
+                    <input type="number" id="defaultDiamonds" class="form-control" value="50" />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Referral bonus</label>
+                    <input type="number" id="referralBonus" class="form-control" value="25" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Transaction Settings -->
+            <div class="settings-section">
+              <h6 class="mb-3"><i class="fas fa-credit-card me-2"></i>Transaction Settings</h6>
+              
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Minimum withdrawal amount</label>
+                    <div class="input-group">
+                      <span class="input-group-text bg-secondary text-light border-secondary">$</span>
+                      <input type="number" id="minWithdrawal" class="form-control" value="10" />
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label class="form-label">Transaction fee (%)</label>
+                    <input type="number" id="transactionFee" class="form-control" value="2.5" step="0.1" />
+                  </div>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="fw-semibold">Auto-approve withdrawals</div>
+                  <small class="text-muted">Automatically approve withdrawal requests under $100</small>
+                </div>
+                <label class="switch">
+                  <input type="checkbox" id="autoApproveWithdrawals">
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+
+            <div class="d-flex gap-2">
+              <button class="btn btn-primary" id="saveSettingsBtn">
+                <i class="fas fa-save me-1"></i>
+                Save Settings
+              </button>
+              <button class="btn btn-outline-light" id="resetSettingsBtn">
+                <i class="fas fa-undo me-1"></i>
+                Reset to Defaults
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <!-- System Status -->
+          <div class="content-card">
+            <h6><i class="fas fa-server me-2"></i>System Status</h6>
+            
+            <div id="systemStatus">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span>Database</span>
+                <span id="dbStatus" class="badge bg-success">Online</span>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span>API Server</span>
+                <span id="apiStatus" class="badge bg-success">Online</span>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <span>Payment Gateway</span>
+                <span id="paymentStatus" class="badge bg-warning">Maintenance</span>
+              </div>
+              
+              <div class="d-flex justify-content-between align-items-center">
+                <span>Email Service</span>
+                <span id="emailStatus" class="badge bg-success">Online</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Actions -->
+          <div class="content-card">
+            <h6><i class="fas fa-bolt me-2"></i>Quick Actions</h6>
+            
+            <div class="d-grid gap-2">
+              <button class="btn btn-outline-light btn-sm" onclick="performSystemAction('refresh_cache')">
+                <i class="fas fa-sync me-1"></i>
+                Refresh Cache
+              </button>
+              <button class="btn btn-outline-light btn-sm" onclick="performSystemAction('backup_database')">
+                <i class="fas fa-database me-1"></i>
+                Backup Database
+              </button>
+              <button class="btn btn-outline-warning btn-sm" id="maintenanceBtn" onclick="performSystemAction('toggle_maintenance')">
+                <i class="fas fa-exclamation-triangle me-1"></i>
+                Maintenance Mode
+              </button>
+              <button class="btn btn-outline-danger btn-sm" onclick="performSystemAction('system_restart')">
+                <i class="fas fa-power-off me-1"></i>
+                System Restart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // SIDEBAR TOGGLE FUNCTIONALITY
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    
+    if (sidebarToggle && sidebar && mainContent) {
+      sidebarToggle.addEventListener('click', () => {
+        // Check if we're on mobile
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+          // On mobile, toggle the 'show' class
+          sidebar.classList.toggle('show');
+        } else {
+          // On desktop, toggle the 'collapsed' class
+          sidebar.classList.toggle('collapsed');
+          mainContent.classList.toggle('sidebar-collapsed');
+        }
+        
+        // Change icon based on state
+        const icon = sidebarToggle.querySelector('i');
+        if (isMobile) {
+          if (sidebar.classList.contains('show')) {
+            icon.className = 'fas fa-times';
+          } else {
+            icon.className = 'fas fa-bars';
+          }
+        } else {
+          if (sidebar.classList.contains('collapsed')) {
+            icon.className = 'fas fa-chevron-right';
+          } else {
+            icon.className = 'fas fa-bars';
+          }
+        }
+      });
+      
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', (e) => {
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile && sidebar.classList.contains('show')) {
+          if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('show');
+            sidebarToggle.querySelector('i').className = 'fas fa-bars';
+          }
+        }
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        const isMobile = window.innerWidth <= 768;
+        const icon = sidebarToggle.querySelector('i');
+        
+        if (!isMobile) {
+          // Reset mobile classes when switching to desktop
+          sidebar.classList.remove('show');
+          icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-bars';
+        } else {
+          // Reset desktop classes when switching to mobile
+          sidebar.classList.remove('collapsed');
+          mainContent.classList.remove('sidebar-collapsed');
+          icon.className = sidebar.classList.contains('show') ? 'fas fa-times' : 'fas fa-bars';
+        }
+      });
+    }
+
+    // LOGOUT FUNCTIONALITY - Handled by admin-auth.js
+    // The logout button will be automatically configured by the auth system
+    // If you want to customize the logout functionality, you can do so here
+
+    // Get user name from token
+    function getUserNameFromToken() {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          return payload.data && payload.data.name ? payload.data.name : (payload.data && payload.data.email ? payload.data.email.split('@')[0] : 'Admin');
+        } catch (e) {
+          console.error('Error parsing token:', e);
+          return 'Admin';
+        }
+      }
+      return 'Admin';
+    }
+
+    // API Base URL (use global if available)
+    if (typeof API_BASE_URL === 'undefined') {
+      window.API_BASE_URL = '/';
+    }
+
+    // Helper: Show notification
+    function showNotification(message, type = 'success') {
+      const notif = document.createElement('div');
+      notif.className = `alert alert-${type}`;
+      notif.style.position = 'fixed';
+      notif.style.top = '20px';
+      notif.style.right = '20px';
+      notif.style.zIndex = 9999;
+      notif.innerText = message;
+      document.body.appendChild(notif);
+      setTimeout(() => notif.remove(), 3000);
+    }
+
+    // Load settings from API
+    async function loadSettings() {
+      try {
+        const token = localStorage.getItem('authToken');
+        console.log('Loading settings with token:', token ? 'Present' : 'Missing');
+        
+        const res = await fetch(`${window.API_BASE_URL || '/'}api/admin/settings`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        console.log('Settings response status:', res.status);
+        console.log('Settings response headers:', res.headers);
+        
+        if (!res.ok) {
+          const errorText = await res.text();
+          console.error('Settings API error response:', errorText);
+          throw new Error(`HTTP ${res.status}: ${errorText}`);
+        }
+        
+        const data = await res.json();
+        console.log('Settings data received:', data);
+        
+        if (data.status === 'success') {
+          populateSettings(data.data);
+        } else {
+          showNotification('Failed to load settings: ' + (data.message || 'Unknown error'), 'danger');
+        }
+      } catch (error) {
+        console.error('Error loading settings:', error);
+        showNotification('Network error loading settings: ' + error.message, 'danger');
+      }
+    }
+
+    // Populate form with settings data
+    function populateSettings(settings) {
+      // General settings
+      if (settings.general) {
+        document.getElementById('platformName').value = settings.general.platform_name || 'PARTIVOX';
+        document.getElementById('adminEmail').value = settings.general.admin_email || 'admin@partivox.com';
+        document.getElementById('platformDescription').value = settings.general.platform_description || '';
+      }
+
+      // Campaign settings
+      if (settings.campaign) {
+        document.getElementById('minBudget').value = settings.campaign.min_budget || 100;
+        document.getElementById('maxBudget').value = settings.campaign.max_budget || 10000;
+        document.getElementById('autoApprove').checked = settings.campaign.auto_approve || false;
+        document.getElementById('requireVerification').checked = settings.campaign.require_verification || false;
+      }
+
+      // User settings
+      if (settings.user) {
+        document.getElementById('allowRegistration').checked = settings.user.allow_registration || false;
+        document.getElementById('emailVerification').checked = settings.user.email_verification_required || false;
+        document.getElementById('defaultDiamonds').value = settings.user.default_diamonds || 50;
+        document.getElementById('referralBonus').value = settings.user.referral_bonus || 25;
+      }
+
+      // Transaction settings
+      if (settings.transaction) {
+        document.getElementById('minWithdrawal').value = settings.transaction.min_withdrawal || 10;
+        document.getElementById('transactionFee').value = settings.transaction.transaction_fee || 2.5;
+        document.getElementById('autoApproveWithdrawals').checked = settings.transaction.auto_approve_withdrawals || false;
+      }
+    }
+
+    // Save settings
+    async function saveSettings() {
+      try {
+        const token = localStorage.getItem('authToken');
+        
+        const settingsData = {
+          general: {
+            platform_name: document.getElementById('platformName').value,
+            admin_email: document.getElementById('adminEmail').value,
+            platform_description: document.getElementById('platformDescription').value
+          },
+          campaign: {
+            min_budget: parseInt(document.getElementById('minBudget').value),
+            max_budget: parseInt(document.getElementById('maxBudget').value),
+            auto_approve: document.getElementById('autoApprove').checked,
+            require_verification: document.getElementById('requireVerification').checked
+          },
+          user: {
+            allow_registration: document.getElementById('allowRegistration').checked,
+            email_verification_required: document.getElementById('emailVerification').checked,
+            default_diamonds: parseInt(document.getElementById('defaultDiamonds').value),
+            referral_bonus: parseInt(document.getElementById('referralBonus').value)
+          },
+          transaction: {
+            min_withdrawal: parseFloat(document.getElementById('minWithdrawal').value),
+            transaction_fee: parseFloat(document.getElementById('transactionFee').value),
+            auto_approve_withdrawals: document.getElementById('autoApproveWithdrawals').checked
+          }
+        };
+
+        const res = await fetch(`${window.API_BASE_URL || '/'}api/admin/settings`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(settingsData)
+        });
+
+        const result = await res.json();
+        
+        if (result.status === 'success') {
+          showNotification('Settings saved successfully!', 'success');
+        } else {
+          showNotification(result.message || 'Failed to save settings', 'danger');
+        }
+      } catch (error) {
+        console.error('Error saving settings:', error);
+        showNotification('Network error saving settings', 'danger');
+      }
+    }
+
+    // Reset settings to defaults
+    async function resetSettings() {
+      if (!confirm('Are you sure you want to reset all settings to defaults? This cannot be undone.')) {
+        return;
+      }
+
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${window.API_BASE_URL || '/'}api/admin/settings/reset`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ type: 'all' })
+        });
+
+        const result = await res.json();
+        
+        if (result.status === 'success') {
+          showNotification('Settings reset to defaults successfully!', 'success');
+          loadSettings(); // Reload settings
+        } else {
+          showNotification(result.message || 'Failed to reset settings', 'danger');
+        }
+      } catch (error) {
+        console.error('Error resetting settings:', error);
+        showNotification('Network error resetting settings', 'danger');
+      }
+    }
+
+    // Load system status
+    async function loadSystemStatus() {
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${window.API_BASE_URL || '/'}api/admin/system/status`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+          updateSystemStatus(data.data);
+        }
+      } catch (error) {
+        console.error('Error loading system status:', error);
+      }
+    }
+
+    // Update system status display
+    function updateSystemStatus(status) {
+      const statusMap = {
+        'online': 'bg-success',
+        'offline': 'bg-danger',
+        'maintenance': 'bg-warning'
+      };
+
+      document.getElementById('dbStatus').className = `badge ${statusMap[status.database] || 'bg-secondary'}`;
+      document.getElementById('dbStatus').textContent = status.database.charAt(0).toUpperCase() + status.database.slice(1);
+
+      document.getElementById('apiStatus').className = `badge ${statusMap[status.api_server] || 'bg-secondary'}`;
+      document.getElementById('apiStatus').textContent = status.api_server.charAt(0).toUpperCase() + status.api_server.slice(1);
+
+      document.getElementById('paymentStatus').className = `badge ${statusMap[status.payment_gateway] || 'bg-secondary'}`;
+      document.getElementById('paymentStatus').textContent = status.payment_gateway.charAt(0).toUpperCase() + status.payment_gateway.slice(1);
+
+      document.getElementById('emailStatus').className = `badge ${statusMap[status.email_service] || 'bg-secondary'}`;
+      document.getElementById('emailStatus').textContent = status.email_service.charAt(0).toUpperCase() + status.email_service.slice(1);
+    }
+
+    // Perform system action
+    async function performSystemAction(action) {
+      try {
+        const token = localStorage.getItem('authToken');
+        
+        // Show loading state
+        const actionButton = event.target.closest('button');
+        const originalText = actionButton.innerHTML;
+        actionButton.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Processing...';
+        actionButton.disabled = true;
+
+        const res = await fetch(`${window.API_BASE_URL || '/'}api/admin/system/action`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ action })
+        });
+
+        const result = await res.json();
+        
+        if (result.status === 'success') {
+          showNotification(result.message, 'success');
+          
+          // Update maintenance button if needed
+          if (action === 'toggle_maintenance' && result.maintenance_mode !== undefined) {
+            const maintenanceBtn = document.getElementById('maintenanceBtn');
+            if (result.maintenance_mode) {
+              maintenanceBtn.className = 'btn btn-outline-success btn-sm';
+              maintenanceBtn.innerHTML = '<i class="fas fa-check me-1"></i>Exit Maintenance';
+            } else {
+              maintenanceBtn.className = 'btn btn-outline-warning btn-sm';
+              maintenanceBtn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Maintenance Mode';
+            }
+          }
+          
+          // Reload system status
+          loadSystemStatus();
+        } else {
+          showNotification(result.message || 'Action failed', 'danger');
+        }
+
+        // Restore button state
+        actionButton.innerHTML = originalText;
+        actionButton.disabled = false;
+      } catch (error) {
+        console.error('Error performing system action:', error);
+        showNotification('Network error performing action', 'danger');
+        
+        // Restore button state
+        const actionButton = event.target.closest('button');
+        actionButton.disabled = false;
+      }
+    }
+
+    // Event listeners
+    document.getElementById('saveSettingsBtn').addEventListener('click', saveSettings);
+    document.getElementById('resetSettingsBtn').addEventListener('click', resetSettings);
+
+    // Initialize page
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('adminName').textContent = getUserNameFromToken();
+      loadSettings();
+      loadSystemStatus();
+      
+      // Refresh system status every 30 seconds
+      setInterval(loadSystemStatus, 30000);
+    });
+  </script>
+  <script src=/pages/admin_dashboard/js/admin-auth.js></script>
+</body>
+</html>

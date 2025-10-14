@@ -1,0 +1,27 @@
+RewriteEngine On
+
+# Handle Authorization Header
+RewriteCond %{HTTP:Authorization} .
+RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+# Handle API requests - route to api/index.php
+RewriteRule ^api/(.*)$ api/index.php [L,QSA]
+
+# Redirect admin dashboard requests to the correct directory
+RewriteRule ^admin/(.*)$ /pages/admin_dashboard/$1 [L]
+
+# Redirect root to public directory
+RewriteRule ^$ public/ [L]
+
+# Redirect all other requests to public directory if the file doesn't exist
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ public/$1 [L]
+
+# Set the default charset
+AddDefaultCharset UTF-8
+
+# Enable CORS
+Header set Access-Control-Allow-Origin "*"
+Header set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+Header set Access-Control-Allow-Headers "Content-Type, Authorization"

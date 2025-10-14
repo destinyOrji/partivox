@@ -1,0 +1,417 @@
+<!-- SHARED ADMIN TEMPLATE - Copy this structure to other admin pages -->
+
+<!-- CSS (Add to <head>) -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+  :root {
+    --primary-bg: #0a0a0f;
+    --secondary-bg: #1a1a1f;
+    --card-bg: #1e1e24;
+    --sidebar-bg: #16161b;
+    --accent-color: #caf403; /* lemon green */
+    --accent-hover: #9dcf00; /* darker lemon green */
+    --text-primary: #ffffff;
+    --text-secondary: #a1a1aa;
+    --text-muted: #71717a;
+    --border-color: #27272a;
+    --success-color: #10b981;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f14 100%);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+  }
+
+  .sidebar {
+    height: 100vh;
+    background: linear-gradient(180deg, var(--sidebar-bg) 0%, #12121a 100%);
+    border-right: 1px solid var(--border-color);
+    position: fixed;
+    width: 280px;
+    z-index: 1000;
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(-240px);
+    width: 60px;
+  }
+
+  .sidebar.collapsed .logo h4,
+  .sidebar.collapsed .nav-section h6,
+  .sidebar.collapsed a span {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .sidebar .logo {
+    padding: 2rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+  }
+
+  .sidebar .logo h4 {
+    font-weight: 700;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .sidebar .nav-section {
+    padding: 1rem 0;
+  }
+
+  .sidebar .nav-section h6 {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 0 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .sidebar a {
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .sidebar a i {
+    width: 20px;
+    margin-right: 12px;
+    font-size: 1rem;
+  }
+
+  .sidebar a:hover {
+    background: rgba(202, 244, 3, 0.1);
+    color: var(--text-primary);
+    transform: translateX(4px);
+  }
+
+  .sidebar a.active {
+    background: linear-gradient(90deg, var(--accent-color), transparent);
+    color: var(--text-primary);
+    border-right: 3px solid var(--accent-color);
+  }
+
+  .sidebar a.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--accent-color);
+  }
+
+  .main-content {
+    margin-left: 280px;
+    min-height: 100vh;
+    transition: margin-left 0.3s ease;
+  }
+
+  .main-content.sidebar-collapsed {
+    margin-left: 60px;
+  }
+
+  .sidebar-toggle {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-secondary);
+  }
+
+  .sidebar-toggle:hover {
+    background: var(--accent-color);
+    color: #000;
+    transform: scale(1.05);
+  }
+
+  .content {
+    padding: 2rem;
+    background: transparent;
+  }
+
+  .topbar {
+    background: var(--card-bg);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+  }
+
+  .topbar h4 {
+    font-weight: 700;
+    font-size: 1.75rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .topbar p {
+    color: var(--text-secondary);
+    margin: 0;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    border: 2px solid var(--accent-color);
+  }
+
+  .search-input {
+    background: var(--secondary-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 0.75rem 1rem;
+    color: var(--text-primary);
+    width: 300px;
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 3px rgba(202, 244, 3, 0.15);
+  }
+
+  .content-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .content-card h6 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .table {
+    color: var(--text-secondary);
+    background: transparent;
+  }
+
+  .table th {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0.75rem;
+  }
+
+  .table td {
+    border-bottom: 1px solid rgba(39, 39, 42, 0.5);
+    padding: 1rem 0.75rem;
+    vertical-align: middle;
+  }
+
+  .table tbody tr:hover {
+    background: rgba(202, 244, 3, 0.05);
+  }
+
+  .btn {
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+
+  .btn-primary {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: #000;
+  }
+
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: #000;
+    transform: translateY(-1px);
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      transform: translateX(-100%);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.show {
+      transform: translateX(0);
+    }
+
+    .main-content {
+      margin-left: 0;
+    }
+
+    .search-input {
+      width: 100%;
+    }
+  }
+</style>
+
+<!-- HTML Structure (Replace <body> content) -->
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <h4>
+        <img src="../../images/IconDiamond.png" alt="" width="24" height="24" class="me-2">
+        PARTIVOX
+      </h4>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Main</h6>
+      <a href="/pages/admin_dashboard/dashboard1.html">
+        <i class="fas fa-chart-line"></i>
+        <span>Overview</span>
+      </a>
+      <a href="/pages/admin_dashboard/user.html">
+        <i class="fas fa-users"></i>
+        <span>Users</span>
+      </a>
+      <a href="/pages/admin_dashboard/campaigns.html" class="active">
+        <i class="fas fa-bullhorn"></i>
+        <span>Campaigns</span>
+      </a>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Management</h6>
+      <a href="/pages/admin_dashboard/transactions.html">
+        <i class="fas fa-credit-card"></i>
+        <span>Transactions</span>
+      </a>
+      <a href="/pages/admin_dashboard/reports.html">
+        <i class="fas fa-chart-bar"></i>
+        <span>Reports</span>
+      </a>
+      <a href="/pages/admin_dashboard/settings.html">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+    
+    <div class="nav-section mt-auto">
+      <a href="#" class="text-danger" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="content">
+      <!-- Topbar -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </div>
+          <div>
+            <h4>PAGE_TITLE</h4>
+            <p>PAGE_DESCRIPTION</p>
+          </div>
+        </div>
+        <div class="user-info">
+          <input type="text" class="search-input" placeholder="Search..." />
+          <img src="../../images/avartar1.jpg" class="user-avatar" alt="avatar" />
+          <div>
+            <div id="adminName" class="fw-semibold">Admin</div>
+            <small class="text-muted">Administrator</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE CONTENT GOES HERE -->
+      <div class="content-card">
+        <h6>Content Title</h6>
+        <!-- Your page-specific content -->
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript (Add before </body>) -->
+  <script>
+    // SIDEBAR TOGGLE FUNCTIONALITY
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    
+    if (sidebarToggle && sidebar && mainContent) {
+      sidebarToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('sidebar-collapsed');
+        
+        // Change icon based on state
+        const icon = sidebarToggle.querySelector('i');
+        if (sidebar.classList.contains('collapsed')) {
+          icon.className = 'fas fa-chevron-right';
+        } else {
+          icon.className = 'fas fa-bars';
+        }
+      });
+    }
+
+    // LOGOUT FUNCTIONALITY
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('authToken');
+        window.location.href = '/pages/admin_dashboard/login.html';
+      });
+    }
+
+    // Get user name from token
+    function getUserNameFromToken() {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.data && payload.data.name ? payload.data.name : (payload.data && payload.data.email ? payload.data.email.split('@')[0] : 'Admin');
+      }
+      return 'Admin';
+    }
+
+    // Initialize page
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('adminName').textContent = getUserNameFromToken();
+    });
+  </script>
+</body>

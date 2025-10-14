@@ -1,0 +1,3714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallet - PARTIVOX</title>
+    <link rel="shortcut icon" href="../images/IconDiamond.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/enhanced-typography.css" rel="stylesheet">
+  <style>
+    :root {
+      /* === PARTIVOX DESIGN SYSTEM === */
+      
+      /* Core Background Colors */
+      --primary-bg: #0a0a0f;
+      --secondary-bg: #1a1a1f;
+      --card-bg: #1e1e24;
+      --sidebar-bg: #16161b;
+      --surface-bg: #252530;
+      --overlay-bg: rgba(10, 10, 15, 0.95);
+      
+      /* Lemon Green Brand Colors (Primary) */
+      --accent-color: #caf403; /* signature lemon green */
+      --accent-hover: #9dcf00; /* darker lemon green */
+      --accent-light: #e8ff4d; /* lighter lemon green */
+      --accent-dark: #7ba800; /* darkest lemon green */
+      --accent-rgb: 202, 244, 3;
+      
+      /* Secondary Brand Colors */
+      --primary-color: #667eea;
+      --primary-hover: #5a67d8;
+      --primary-light: #7c3aed;
+      --primary-rgb: 102, 126, 234;
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --text-inverse: #000000;
+      --text-accent: var(--accent-color);
+      
+      /* Status Colors */
+      --success-color: #10b981;
+      --success-light: #34d399;
+      --warning-color: #f59e0b;
+      --warning-light: #fbbf24;
+      --danger-color: #ef4444;
+      --danger-light: #f87171;
+      --info-color: #3b82f6;
+      --info-light: #60a5fa;
+      
+      /* Border & Divider Colors */
+      --border-color: #27272a;
+      --border-light: #374151;
+      --border-accent: var(--accent-color);
+      --divider-color: rgba(255, 255, 255, 0.1);
+      
+      /* Layout Variables */
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 60px;
+      --topbar-height: 70px;
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --border-radius-lg: 16px;
+      
+      /* Spacing Scale */
+      --space-xs: 0.25rem;    /* 4px */
+      --space-sm: 0.5rem;     /* 8px */
+      --space-md: 1rem;       /* 16px */
+      --space-lg: 1.5rem;     /* 24px */
+      --space-xl: 2rem;       /* 32px */
+      --space-2xl: 3rem;      /* 48px */
+      --space-3xl: 4rem;      /* 64px */
+      
+      /* Typography Scale */
+      --text-xs: 0.75rem;     /* 12px */
+      --text-sm: 0.875rem;    /* 14px */
+      --text-base: 1rem;      /* 16px */
+      --text-lg: 1.125rem;    /* 18px */
+      --text-xl: 1.25rem;     /* 20px */
+      --text-2xl: 1.5rem;     /* 24px */
+      --text-3xl: 1.875rem;   /* 30px */
+      --text-4xl: 2.25rem;    /* 36px */
+      
+      /* Animation & Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.2s ease;
+      --transition-slow: 0.3s ease;
+      --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+      --shadow-accent: 0 0 0 3px rgba(202, 244, 3, 0.15);
+      
+      /* Z-Index Scale */
+      --z-dropdown: 1000;
+      --z-sticky: 1020;
+      --z-fixed: 1030;
+      --z-modal-backdrop: 1040;
+      --z-modal: 1050;
+      --z-popover: 1060;
+      --z-tooltip: 1070;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f14 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background: linear-gradient(180deg, var(--sidebar-bg) 0%, #12121a 100%);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      width: 280px;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-240px);
+      width: 60px;
+    }
+
+    .sidebar.collapsed .logo h4,
+    .sidebar.collapsed .nav-section h6,
+    .sidebar.collapsed a span {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar .logo {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar .logo h4 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar .nav-section {
+      padding: 1rem 0;
+    }
+
+    .sidebar .nav-section h6 {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+      color: var(--text-secondary);
+      padding: 0.875rem 1.5rem;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sidebar a i {
+      width: 20px;
+      margin-right: 12px;
+      font-size: 1rem;
+    }
+
+    .sidebar a:hover {
+      color: var(--text-primary);
+      background: rgba(202, 244, 3, 0.1);
+    }
+
+    .sidebar a.active {
+      color: var(--accent-color);
+      background: rgba(202, 244, 3, 0.15);
+      border-right: 3px solid var(--accent-color);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+      background: transparent;
+    }
+
+    .main-content.sidebar-collapsed {
+      margin-left: 60px;
+    }
+
+    .topbar {
+      background: rgba(30, 30, 36, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--accent-color);
+      color: #000;
+      border-color: var(--accent-color);
+    }
+
+    .user-profile {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .user-details h6 {
+      font-size: 0.875rem;
+      margin: 0;
+    }
+
+    .user-details small {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    /* Campaign Upload Specific Styles */
+    .upload-label {
+      border: 2px dashed var(--border-color);
+      background: var(--secondary-bg);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .upload-label:hover {
+      border-color: var(--accent-color);
+      background: rgba(202, 244, 3, 0.05);
+    }
+
+    .form-control {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      border-radius: 8px;
+    }
+
+    .form-control:focus {
+      background: var(--secondary-bg);
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+      box-shadow: 0 0 0 0.2rem rgba(202, 244, 3, 0.25);
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #000;
+    }
+
+    .btn-outline-primary {
+      color: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+
+    .btn-outline-primary:hover,
+    .btn-outline-primary:focus {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .custom-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1050;
+      border-radius: 16px;
+      display: none;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .overlay.show {
+      display: flex !important;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.sidebar-collapsed {
+        margin-left: 0;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <h4>
+        <i class="fas fa-gem me-2"></i>
+        PARTIVOX
+      </h4>
+    </div>
+    
+    <div class="user-profile">
+      <img src="../images/avartar1.jpg" alt="User Avatar" class="user-avatar" id="userAvatar" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+      <div class="user-details">
+        <h6 id="userHandle">@username</h6>
+        <small id="walletAddress">Connect wallet</small>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <h6>Main</h6>
+      <a href="userDashboard.html">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="campaign_upload.html">
+        <i class="fas fa-plus-circle"></i>
+        <span>Create Campaign</span>
+      </a>
+      <a href="campaignProgress.html">
+        <i class="fas fa-tasks"></i>
+        <span>My Campaigns</span>
+      </a>
+      <a href="task_engage.html">
+        <i class="fas fa-bolt"></i>
+        <span>Tasks</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <h6>Account</h6>
+      <a href="Wallet.html" class="active">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="settings.html">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <div class="content">
+      <!-- Topbar -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </div>
+          <div>
+            <h5 class="mb-0">Wallet</h5>
+            <small class="text-muted">Manage your diamond balance, convert to USDT, track transaction history, and withdraw earnings securely</small>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-outline-secondary btn-sm" onclick="refreshWalletBalance()" title="Refresh Balance">
+            <i class="fas fa-sync-alt me-1"></i>Refresh
+          </button>
+          <button class="btn btn-primary btn-sm" id="connectWalletBtn" onclick="connectWallet()">
+            <i class="fas fa-wallet me-1"></i>Connect Wallet
+          </button>
+        </div>
+      </div>
+
+      <!-- Wallet Overview Cards -->
+      <div class="row g-4 mb-4">
+        <!-- Diamond Balance Card -->
+        <div class="col-lg-4 col-md-6">
+          <div class="content-card">
+            <h6 class="mb-3">Diamond Balance</h6>
+            <div class="d-flex align-items-center mb-3">
+              <img src="../images/IconDiamond.png" alt="Diamond" style="width: 40px; height: 40px; background: #000; border-radius: 20px;">
+              <h2 class="ms-3 mb-0 text-white" id="diamondBalance">50</h2>
+            </div>
+            <div class="d-flex align-items-center justify-content-between mb-3">
+              <small class="text-muted">Rate: 1 💎 = $0.05</small>
+              <img src="../images/IconDiamond.png" alt="Diamond" style="width: 16px; height: 16px;">
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-primary btn-sm flex-fill" onclick="openConvertModal()">
+                Convert to USDT
+              </button>
+              <button class="btn btn-primary btn-sm flex-fill" onclick="openBuyModal()">
+                <img src="../images/blackDiamond.png" alt="Diamond" style="width: 16px; height: 16px;" class="me-1">
+                Buy Diamonds
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- USDT Value Card -->
+        <div class="col-lg-4 col-md-6">
+          <div class="content-card">
+            <h6 class="mb-3">USDT Value</h6>
+            <div class="d-flex align-items-center mb-3">
+              <img src="../images/walletIcon.png" alt="Wallet" style="width: 40px; height: 40px;">
+              <h2 class="ms-3 mb-0 text-white" id="usdtBalance">$0.00</h2>
+            </div>
+            <div class="d-flex gap-2">
+              <button class="btn btn-outline-success btn-sm flex-fill" onclick="buyUSDT()">
+                <i class="fas fa-shopping-cart me-1"></i>Buy USDT
+              </button>
+              <button class="btn btn-success btn-sm flex-fill" onclick="openWithdrawModal()">
+                <i class="fas fa-arrow-up me-1"></i>Withdraw
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Activity Card -->
+        <div class="col-lg-4">
+          <div class="content-card">
+            <h6 class="mb-3">Recent Activity</h6>
+            <div class="activity-list" id="recentActivity">
+              <div class="d-flex align-items-center mb-2">
+                <img src="../images/speakIcon.png" alt="Activity" style="width: 24px; height: 24px; margin-right: 8px;">
+                <div class="flex-grow-1">
+                  <small class="text-white">Campaign created</small>
+                  <div class="text-muted" style="font-size: 0.75rem;">1 minute ago</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center mb-2">
+                <img src="../images/checkIcon.png" alt="Activity" style="width: 24px; height: 24px; margin-right: 8px;">
+                <div class="flex-grow-1">
+                  <small class="text-white">Claimed reward</small>
+                  <div class="text-muted" style="font-size: 0.75rem;">5 minutes ago</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center">
+                <img src="../images/upArrow.png" alt="Activity" style="width: 24px; height: 24px; margin-right: 8px;">
+                <div class="flex-grow-1">
+                  <small class="text-white">USDT withdrawal</small>
+                  <div class="text-muted" style="font-size: 0.75rem;">1 hour ago</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Transaction Filters -->
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div class="d-flex gap-2 flex-wrap">
+          <button class="btn btn-primary btn-sm active" data-filter="all">All Transactions</button>
+          <button class="btn btn-outline-secondary btn-sm" data-filter="campaign_spend">Campaign Spend</button>
+          <button class="btn btn-outline-secondary btn-sm" data-filter="task_earning">Task Earnings</button>
+          <button class="btn btn-outline-secondary btn-sm" data-filter="withdraw_usdt">Withdrawals</button>
+        </div>
+        
+        <div class="d-flex gap-2">
+          <select class="form-select form-select-sm" style="width: auto; border-radius: 20px;" id="transactionFilter">
+            <option value="all" selected>All Transactions</option>
+            <option value="campaign_spend">Campaign Spend</option>
+            <option value="task_earning">Task Earnings</option>
+            <option value="withdraw_usdt">Withdrawals</option>
+          </select>
+          <div class="position-relative">
+            <i class="fas fa-search position-absolute" style="left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+            <input type="text" class="form-control form-control-sm" placeholder="Search transactions..." style="padding-left: 2.5rem; border-radius: 20px; width: 200px;" id="transactionSearch">
+          </div>
+        </div>
+      </div>
+
+      <!-- Transactions Table -->
+      <div class="content-card">
+        <div class="table-responsive">
+          <table class="table table-dark table-hover">
+            <thead>
+              <tr>
+                <th>Transaction Type</th>
+                <th>Date</th>
+                <th>Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="transactionsBody">
+              <!-- Sample transactions -->
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="../images/speakIcon.png" alt="Campaign" style="width: 24px; height: 24px; margin-right: 8px; background: #000; border-radius: 20px;">
+                    Campaign spend
+                  </div>
+                </td>
+                <td>01-25-2025</td>
+                <td>600 diamonds</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    Completed
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <img src="../images/checkIcon.png" alt="Task" style="width: 24px; height: 24px; margin-right: 8px; background: #000; border-radius: 20px;">
+                    Task earnings
+                  </div>
+                </td>
+                <td>01-25-2025</td>
+                <td>150 diamonds</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-check-circle text-success me-2"></i>
+                    Completed
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-arrow-up text-white" style="width: 24px; height: 24px; margin-right: 8px; background: #000; border-radius: 20px; display: flex; align-items: center; justify-content: center;"></i>
+                    USDT withdrawal
+                  </div>
+                </td>
+                <td>01-24-2025</td>
+                <td>$250.00</td>
+                <td>
+                  <div class="d-flex align-items-center">
+                    <i class="fas fa-times-circle text-danger me-2"></i>
+                    Declined
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <div>
+            <button class="btn btn-sm btn-secondary" id="prevPage">Previous</button>
+            <button class="btn btn-sm btn-secondary ms-2" id="nextPage">Next</button>
+          </div>
+          <div class="text-muted">
+            Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+          </div>
+          <div>
+            <select class="form-select form-select-sm" style="width: auto;" id="pageSize">
+              <option value="5">5 per page</option>
+              <option value="10" selected>10 per page</option>
+              <option value="20">20 per page</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONVERT MODAL -->
+  <div class="modal fade" id="convertModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-4" style="background-color: #1a1a1d; border-radius: 12px; color: #fff;">
+        <h5 class="mb-3">Convert to USDT</h5>
+        <div class="text-center mb-3">
+          <div style="font-size: 2rem; font-weight: bold;" id="convertUSDTDisplay">$0.00</div>
+        </div>
+        <p class="text-muted">Enter the number of diamonds to convert to USDT (Available: <span id="availableDiamonds">50</span>). Minimum 3 diamonds required for conversion.</p>
+        <input type="number" id="convertAmount" class="form-control mb-4" placeholder="Enter amount of diamond" 
+               oninput="updateConvertCalculation()" 
+               style="background: #2a2a2e; color: #fff; border: none; padding: 12px; border-radius: 8px;">
+        <div class="mb-3" style="background: #2a2a2e; border-radius: 8px; padding: 12px;">
+          <div>Conversion rate: <span class="float-end">1 Diamond = $0.005</span></div>
+          <div>Total value: <span id="convertValue" class="float-end">$0.00</span></div>
+          <div>App Fee (5%): <span id="convertFee" class="float-end text-warning">-$0.00</span></div>
+          <div>You receive: <span id="convertTotal" class="float-end fw-bold text-success">$0.00</span></div>
+        </div>
+        <p style="color: orange; font-size: 0.9rem; margin-top: 8px;">⚠️ Minimum: 3 Diamonds</p>
+        <div class="d-flex justify-content-between">
+          <button class="btn px-4 py-2" data-bs-dismiss="modal" style="background: #2a2a2e; color: white; border-radius: 12px;">Cancel</button>
+          <button class="btn px-4 py-2" onclick="confirmConvertToUSDT()" style="background: #d6ff00; color: black; border-radius: 12px; font-weight: bold;" id="convertBtn">Convert</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BUY MODAL -->
+  <div class="modal fade" id="buyModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-4" style="background-color: #1a1a1d; border-radius: 12px; color: #fff;">
+        <h5 class="mb-3">Buy Diamonds</h5>
+        <div class="text-center mb-3">
+          <div style="font-size: 2rem; font-weight: bold;" id="buyDiamondDisplay">💎 0.00</div>
+        </div>
+        <p class="text-muted">Select quantity</p>
+        <div class="d-flex gap-2 mb-4">
+          <button class="btn" onclick="selectQuantity(100, event)" style="background: #2a2a2e; color: #fff; border: none; padding: 10px 20px; border-radius: 8px;">100</button>
+          <button class="btn" onclick="selectQuantity(200, event)" style="background: #2a2a2e; color: #fff; border: none; padding: 10px 20px; border-radius: 8px;">200</button>
+          <button class="btn" onclick="selectQuantity(500, event)" style="background: #2a2a2e; color: #fff; border: none; padding: 10px 20px; border-radius: 8px;">500</button>
+          <button class="btn active" onclick="selectQuantity(1000, event)" style="background: #7c3aed; color: #fff; border: none; padding: 10px 20px; border-radius: 8px;">1000</button>
+        </div>
+        <input type="number" id="customQuantity" class="form-control mb-3" placeholder="Custom quantity" 
+               oninput="updateBuyCalculation()" 
+               style="background: #2a2a2e; color: #fff; border: none; padding: 12px; border-radius: 8px;">
+        <div class="mb-3" style="background: #2a2a2e; border-radius: 8px; padding: 12px;">
+          <div>Price per Diamond: <span class="float-end">$0.005</span></div>
+          <div>Total cost: <span id="buyTotal" class="float-end fw-bold">$5.00</span></div>
+          <hr style="border-color: #444; margin: 8px 0;">
+          <div style="font-size: 0.85rem; color: #aaa;">
+            <div>App Revenue (20%): <span id="appRevenue" class="float-end">$1.00</span></div>
+            <div>Your Diamonds (80%): <span id="diamondValue" class="float-end">800 💎</span></div>
+          </div>
+        </div>
+        <p class="text-center text-muted small">Connected Wallet: <span id="buyWalletAddress">0xAb..b12</span></p>
+        <div class="d-flex justify-content-between">
+          <button class="btn px-4 py-2" data-bs-dismiss="modal" style="background: #2a2a2e; color: white; border-radius: 12px;">Cancel</button>
+          <button class="btn px-4 py-2" onclick="confirmBuyDiamonds()" style="background: #d6ff00; color: black; border-radius: 12px; font-weight: bold;" id="buyDiamondsBtn">Buy Diamonds</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WITHDRAW MODAL -->
+  <div class="modal fade" id="withdrawModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content p-4" style="background-color: #1a1a1d; border-radius: 12px; color: #fff;">
+        <h5 class="mb-3">Withdraw USDT</h5>
+        <div class="text-center mb-3">
+          <div style="font-size: 2rem; font-weight: bold;" id="withdrawUSDTDisplay">$0.00</div>
+        </div>
+        <p class="text-muted">Withdrawal Amount (Available: $<span id="availableUSDT">0.00</span>)</p>
+        <input type="number" id="withdrawAmount" class="form-control mb-3" placeholder="Enter amount" 
+               oninput="updateWithdrawCalculation()" 
+               style="background: #2a2a2e; color: #fff; border: none; padding: 12px; border-radius: 8px;">
+        <p class="text-muted">Withdrawal Address</p>
+        <input type="text" id="withdrawAddress" class="form-control mb-4" placeholder="Enter wallet address" 
+               style="background: #2a2a2e; color: #fff; border: none; padding: 12px; border-radius: 8px;">
+        <div class="mb-3" style="background: #2a2a2e; border-radius: 8px; padding: 12px;">
+          <div>Withdrawal amount: <span class="float-end">$<span id="withdrawAmountDisplay">0.00</span></span></div>
+          <div>Withdrawal fee (5%): <span id="withdrawFee" class="float-end">-$0.00</span></div>
+          <div>You will receive: <span id="withdrawTotal" class="float-end fw-bold">$0.00</span></div>
+        </div>
+        <p class="text-center text-muted small">Connected Wallet: <span id="withdrawWalletAddress">Not connected</span></p>
+        <div class="d-flex justify-content-between">
+          <button class="btn px-4 py-2" data-bs-dismiss="modal" style="background: #2a2a2e; color: white; border-radius: 12px;">Cancel</button>
+          <button class="btn px-4 py-2" onclick="confirmWithdrawUSDT()" style="background: #d6ff00; color: black; border-radius: 12px; font-weight: bold;" id="withdrawBtn">Withdraw USDT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/ethers@6.12.1/dist/ethers.umd.min.js"></script>
+  <script src="../js/contracts.js"></script>
+  <script src="../javascript/globalUser.js"></script>
+  <script>
+    // Dynamic API base URL to match current origin
+    const API_BASE_URL = window.location.origin + "/";
+
+    // Global wallet connection state
+    let isConnecting = false;
+
+    // Wallet conflict detection and bypass
+    let walletConflictDetected = false;
+    
+    // Global wallet data for demo mode
+    let walletData = {
+      diamonds: 150.0,  // Default demo balance
+      usdt: 25.50       // Default demo balance
+    };
+    
+    // Check for evmAsk.js and other conflicting extensions
+    function detectWalletConflicts() {
+      const conflicts = [];
+      
+      // Check for evmAsk.js
+      if (typeof window.evmAsk !== 'undefined' || document.querySelector('script[src*="evmAsk"]')) {
+        conflicts.push('evmAsk.js');
+      }
+      
+      // Check for other potential conflicts
+      if (window.tronWeb) conflicts.push('TronLink');
+      if (window.solana) conflicts.push('Phantom');
+      if (window.keplr) conflicts.push('Keplr');
+      
+      if (conflicts.length > 0) {
+        console.warn('🚫 Wallet extension conflicts detected:', conflicts);
+        walletConflictDetected = true;
+        return true;
+      }
+      
+      return false;
+    }
+    
+    // Run conflict detection immediately
+    detectWalletConflicts();
+
+    // SIDEBAR TOGGLE FUNCTIONALITY
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+      function toggleSidebar() {
+        if (window.innerWidth <= 768) {
+          // Mobile behavior
+          sidebar.classList.toggle('show');
+          sidebarOverlay.style.display = sidebar.classList.contains('show') ? 'block' : 'none';
+        } else {
+          // Desktop behavior
+          sidebar.classList.toggle('collapsed');
+          mainContent.classList.toggle('sidebar-collapsed');
+        }
+      }
+
+      sidebarToggle.addEventListener('click', toggleSidebar);
+      sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('show');
+        sidebarOverlay.style.display = 'none';
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('show');
+          sidebarOverlay.style.display = 'none';
+        }
+      });
+
+      // Update user info
+      updateUserProfile();
+      updateWalletAddress();
+      
+      // Initialize avatar loading
+      loadUserAvatar();
+      
+      // Initialize wallet functionality
+      initializeWalletFunctionality();
+      
+      // Initialize wallet (like userDashboard)
+      initializeWallet();
+      
+      // Initialize global user manager for avatar updates
+      if (window.globalUserManager) {
+        window.globalUserManager.initializePage();
+      }
+
+      // Initialize modal calculations when they open
+      updateBalanceDisplaysInModals();
+      
+      // Update user info
+      updateUserProfile();
+      updateWalletAddress();
+      
+      // Initialize avatar loading
+      loadUserAvatar();
+      
+      // Initialize wallet functionality
+      initializeWalletFunctionality();
+      
+      // Initialize wallet (like userDashboard)
+      initializeWallet();
+      
+      // Check MetaMask availability and update button
+      checkMetaMaskAvailability();
+      
+      // Test modal functionality
+      console.log('Testing modal elements...');
+      console.log('Convert modal:', document.getElementById('convertModal'));
+      console.log('Buy modal:', document.getElementById('buyModal'));
+      console.log('Withdraw modal:', document.getElementById('withdrawModal'));
+      
+      // Connect button now has onclick attribute directly
+      
+      // Add wallet connection status check on page focus
+      window.addEventListener('focus', () => {
+        console.log('Page focused, checking wallet status...');
+        checkWalletConnection();
+      });
+    });
+
+    // Update balance displays in modals
+    function updateBalanceDisplaysInModals() {
+      if (walletData) {
+        // Update available amounts in modals
+        const availableDiamonds = document.getElementById('availableDiamonds');
+        const availableUSDT = document.getElementById('availableUSDT');
+        const buyWalletAddress = document.getElementById('buyWalletAddress');
+        const withdrawWalletAddress = document.getElementById('withdrawWalletAddress');
+        const diamondPrice = document.getElementById('diamondPrice');
+        const conversionRate = document.getElementById('conversionRate');
+        
+        if (availableDiamonds) availableDiamonds.textContent = walletData.diamonds || 0;
+        if (availableUSDT) availableUSDT.textContent = (walletData.usdt || 0).toFixed(2);
+        
+        // Update rates
+        if (walletData.rates) {
+          if (diamondPrice) diamondPrice.textContent = walletData.rates.diamond_price_usd.toFixed(2);
+          if (conversionRate) conversionRate.textContent = walletData.rates.diamond_to_usdt_rate.toFixed(2);
+        }
+
+        // Update connected wallet addresses
+        const connectedWallet = localStorage.getItem('connected_evm_wallet');
+        const shortAddress = connectedWallet ? 
+          `${connectedWallet.slice(0, 6)}...${connectedWallet.slice(-4)}` : 
+          'Not connected';
+        
+        if (buyWalletAddress) buyWalletAddress.textContent = shortAddress;
+        if (withdrawWalletAddress) withdrawWalletAddress.textContent = shortAddress;
+        
+        // Auto-fill withdrawal address
+        const withdrawAddress = document.getElementById('withdrawAddress');
+        if (connectedWallet && withdrawAddress) {
+          withdrawAddress.value = connectedWallet;
+        }
+      }
+      
+      // Add wallet connection status check on page focus
+      window.addEventListener('focus', () => {
+        console.log('Page focused, checking wallet status...');
+        checkWalletConnection();
+      });
+    }
+
+    // Initialize wallet data rates (walletData already declared above)
+    walletData.rates = {
+      diamond_price_usd: 0.005,
+      diamond_to_usdt_rate: 0.005,
+      withdraw_fee_rate: 0.05
+    };
+    
+    // Update buy calculation with revenue sharing
+    function updateBuyCalculation() {
+      const quantity = parseInt(document.getElementById('customQuantity').value) || selectedDiamondQuantity;
+      const totalCost = quantity * 0.005;
+      const appRevenue = totalCost * 0.20;
+      const diamondPortion = totalCost * 0.80;
+      const actualDiamonds = Math.floor(diamondPortion * 200);
+      
+      document.getElementById('buyTotal').textContent = `$${totalCost.toFixed(3)}`;
+      document.getElementById('appRevenue').textContent = `$${appRevenue.toFixed(3)}`;
+      document.getElementById('diamondValue').textContent = `${actualDiamonds} 💎`;
+    }
+    
+    // Update calculation when quantity is selected
+    function selectQuantity(quantity, event) {
+      // Remove active class from all buttons
+      const buttons = event.target.parentElement.querySelectorAll('.btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.style.background = '#2a2a2e';
+      });
+      
+      // Add active class to clicked button
+      event.target.classList.add('active');
+      event.target.style.background = '#7c3aed';
+      
+      // Update selected quantity and calculation
+      selectedDiamondQuantity = quantity;
+      document.getElementById('customQuantity').value = quantity;
+      updateBuyCalculation();
+    }
+    
+    // Update convert calculation with 5% withdrawal fee
+    function updateConvertCalculation() {
+      const diamonds = parseInt(document.getElementById('convertAmount').value) || 0;
+      const totalValue = diamonds * 0.005; // 1 diamond = $0.005
+      const appFee = totalValue * 0.05; // 5% app fee
+      const userReceives = totalValue - appFee; // 95% to user
+      
+      document.getElementById('convertValue').textContent = `$${totalValue.toFixed(4)}`;
+      document.getElementById('convertFee').textContent = `-$${appFee.toFixed(4)}`;
+      document.getElementById('convertTotal').textContent = `$${userReceives.toFixed(4)}`;
+      document.getElementById('convertUSDTDisplay').textContent = `$${userReceives.toFixed(4)}`;
+    }
+    
+    // Update withdraw calculation with 5% app fee
+    function updateWithdrawCalculation() {
+      const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+      const appFee = amount * 0.05; // 5% app fee
+      const userReceives = amount - appFee; // 95% to user
+      
+      document.getElementById('withdrawAmountDisplay').textContent = amount.toFixed(2);
+      document.getElementById('withdrawFee').textContent = `-$${appFee.toFixed(2)}`;
+      document.getElementById('withdrawTotal').textContent = `$${userReceives.toFixed(2)}`;
+      document.getElementById('withdrawUSDTDisplay').textContent = `$${userReceives.toFixed(2)}`;
+    }
+
+    // Load wallet balance from API
+    async function loadWalletBalance() {
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          console.log('No auth token available for wallet balance');
+          return;
+        }
+
+        console.log('Loading wallet balance...');
+        const response = await fetch(`${API_BASE_URL}api/wallet/balance`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Wallet balance data:', data);
+          
+          if (data.status === 'success') {
+            // Update wallet data object
+            walletData.diamonds = data.data.diamonds || 0;
+            walletData.usdt = data.data.usdt || 0;
+            if (data.data.rates) {
+              walletData.rates = data.data.rates;
+            }
+            
+            // Update diamond balance
+            const diamondElement = document.getElementById('diamondBalance');
+            if (diamondElement) {
+              diamondElement.textContent = walletData.diamonds;
+            }
+            
+            // Update USDT balance
+            const usdtElement = document.getElementById('usdtBalance');
+            if (usdtElement) {
+              usdtElement.textContent = `$${walletData.usdt.toFixed(2)}`;
+            }
+            
+            console.log(`✅ Wallet balance updated: ${walletData.diamonds} diamonds, $${walletData.usdt} USDT`);
+            updateBalanceDisplaysInModals(); // Update modal displays
+            showWalletNotification('Wallet balance updated', 'success');
+          }
+        } else {
+          console.error('Failed to load wallet balance:', response.status);
+          showWalletNotification('Failed to load wallet balance', 'error');
+        }
+      } catch (error) {
+        console.error('Error loading wallet balance:', error);
+        showWalletNotification('Error loading wallet balance', 'error');
+      }
+    }
+
+    // Refresh wallet balance (called by refresh button)
+    async function refreshWalletBalance() {
+      console.log('🔄 Refreshing wallet balance...');
+      showWalletNotification('Refreshing balance...', 'info');
+      await loadWalletBalance();
+    }
+
+    // Load wallet data (comprehensive)
+    async function loadWalletData() {
+      console.log('🚀 Loading wallet data...');
+      await loadWalletBalance();
+      // Could add transaction loading here later
+    }
+
+    // Initialize wallet functionality
+    function initializeWalletFunctionality() {
+      console.log('🔧 Initializing wallet functionality...');
+      // Any additional wallet initialization
+    }
+
+    // Initialize wallet (main initialization)
+    function initializeWallet() {
+      console.log('💰 Initializing wallet...');
+      loadWalletData();
+    }
+
+    // Load user avatar
+    async function loadUserAvatar() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}api/settings/profile-picture`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.profile_picture_url) {
+            const avatarElement = document.getElementById('userAvatar');
+            if (avatarElement) {
+              avatarElement.src = `${data.data.profile_picture_url}?t=${Date.now()}`;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user avatar:', error);
+      }
+    }
+
+    // Helper function to get valid token
+    async function getValidToken() {
+        let token = localStorage.getItem('authToken');
+        
+        // If no JWT token, try to get one for Twitter users
+        if (!token) {
+            try {
+                const response = await fetch(`${API_BASE_URL}api/twitter/get-token.php`, {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.status === 'success' && data.token) {
+                        token = data.token;
+                        localStorage.setItem('authToken', token);
+                    }
+                }
+            } catch (error) {
+                console.error('Error getting token:', error);
+            }
+        }
+        
+        return token;
+    }
+
+    // Update user profile information
+    async function updateUserProfile() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch('http://localhost:8000/api/settings/profile', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.twitter_handle) {
+            const userHandle = document.getElementById('userHandle');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (userHandle) {
+              userHandle.textContent = `@${data.data.twitter_handle}`;
+            }
+            
+            if (userAvatar) {
+              userAvatar.textContent = data.data.twitter_handle.charAt(0).toUpperCase();
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user profile:', error);
+      }
+    }
+
+    // Update wallet address display
+    function updateWalletAddress() {
+      const CONNECTED_EVM_KEY = 'connected_evm_wallet';
+      const localWallet = localStorage.getItem(CONNECTED_EVM_KEY);
+      const walletAddress = document.getElementById('walletAddress');
+      
+      if (walletAddress) {
+        if (localWallet && localWallet.startsWith('0x')) {
+          const shortAddress = `${localWallet.slice(0, 6)}...${localWallet.slice(-4)}`;
+          walletAddress.textContent = shortAddress;
+        } else {
+          walletAddress.textContent = 'Connect wallet';
+        }
+      }
+    }
+
+    // Load wallet data
+    async function loadWalletData() {
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          console.warn('No authentication token available');
+          // Don't redirect immediately, try to show cached data or defaults
+          return;
+        }
+
+        console.log('Loading wallet balance...');
+        
+        // Load wallet balance
+        const balanceResponse = await fetch('http://localhost:8000/api/wallet/balance', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log('Balance response status:', balanceResponse.status);
+
+        if (balanceResponse.ok) {
+          const balanceData = await balanceResponse.json();
+          console.log('Balance API response:', balanceData);
+          
+          if (balanceData.status === 'success') {
+            updateWalletBalance(balanceData.data);
+          } else {
+            console.error('Balance API returned error:', balanceData.message);
+            // Show default values if API returns error
+            updateWalletBalance({ diamonds: 0, usdt: 0 });
+          }
+        } else if (balanceResponse.status === 401) {
+          console.error('Authentication failed - token may be expired');
+          // Try to refresh token
+          const newToken = await getValidToken();
+          if (newToken && newToken !== token) {
+            // Retry with new token
+            return loadWalletData();
+          } else {
+            console.error('Token refresh failed');
+            updateWalletBalance({ diamonds: 0, usdt: 0 });
+          }
+        } else {
+          console.error('Failed to load wallet balance:', balanceResponse.status);
+          updateWalletBalance({ diamonds: 0, usdt: 0 });
+        }
+
+        // Load transactions
+        await loadTransactions();
+
+      } catch (error) {
+        console.error('Error loading wallet data:', error);
+        // Show default values on error
+        updateWalletBalance({ diamonds: 0, usdt: 0 });
+      }
+    }
+
+    // Refresh wallet balance (can be called manually)
+    async function refreshWalletBalance() {
+      console.log('Manually refreshing wallet balance...');
+      await loadWalletData();
+    }
+
+    // Update wallet balance display
+    function updateWalletBalance(balanceData) {
+      console.log('Updating wallet balance with data:', balanceData);
+      
+      // Update global wallet data
+      walletData.diamonds = balanceData.diamonds || balanceData.diamond_balance || 0;
+      walletData.usdt = balanceData.usdt || balanceData.usdt_balance || 0;
+      if (balanceData.rates) {
+        walletData.rates = balanceData.rates;
+      }
+      
+      const diamondBalance = document.getElementById('diamondBalance');
+      const usdtBalance = document.getElementById('usdtBalance');
+      
+      // Update main balance displays
+      if (diamondBalance) {
+        diamondBalance.textContent = Number(walletData.diamonds).toLocaleString();
+        console.log('Updated diamond balance to:', walletData.diamonds);
+      }
+      
+      if (usdtBalance) {
+        usdtBalance.textContent = `$${Number(walletData.usdt).toFixed(2)}`;
+        console.log('Updated USDT balance to:', walletData.usdt);
+      }
+      
+      // Update modal displays
+      updateBalanceDisplaysInModals();
+    }
+
+    // Load transactions
+    async function loadTransactions(page = 1, limit = 10, type = 'all') {
+      try {
+        const token = await getValidToken();
+        const params = new URLSearchParams({
+          page: page.toString(),
+          limit: limit.toString()
+        });
+        
+        if (type !== 'all') {
+          params.set('type', type);
+        }
+
+        const response = await fetch(`http://localhost:8000/api/wallet/transactions?${params}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Transactions API response:', data);
+          
+          if (data.status === 'success') {
+            // Handle different possible response structures
+            const transactions = data.data?.items || data.data?.transactions || data.data || [];
+            const pagination = data.data?.pagination || data.pagination || {
+              current_page: 1,
+              total_pages: 1,
+              total: transactions.length
+            };
+            
+            updateTransactionsTable(transactions);
+            updatePagination(pagination);
+          } else {
+            console.warn('Transactions API returned error:', data.message);
+            updateTransactionsTable([]); // Show empty table
+            updatePagination(null); // Reset pagination
+          }
+        } else {
+          console.error('Failed to load transactions:', response.status);
+          updateTransactionsTable([]); // Show empty table
+          updatePagination(null); // Reset pagination
+        }
+      } catch (error) {
+        console.error('Error loading transactions:', error);
+      }
+    }
+
+    // Update transactions table
+    function updateTransactionsTable(transactions) {
+      const tbody = document.getElementById('transactionsBody');
+      if (!tbody) return;
+      
+      tbody.innerHTML = '';
+      
+      const iconMap = {
+        'campaign_spend': '<img src="../images/speakIcon.png" alt="Campaign" style="width: 24px; height: 24px; margin-right: 8px; background: #000; border-radius: 20px;">',
+        'task_earning': '<img src="../images/checkIcon.png" alt="Task" style="width: 24px; height: 24px; margin-right: 8px; background: #000; border-radius: 20px;">',
+        'withdraw_usdt': '<i class="fas fa-arrow-up text-white" style="width: 24px; height: 24px; margin-right: 8px; background: #000; border-radius: 20px; display: flex; align-items: center; justify-content: center;"></i>',
+        'buy_diamonds': '<img src="../images/blackDiamond.png" alt="Diamond" style="width: 24px; height: 24px; margin-right: 8px;">',
+        'convert_to_usdt': '<i class="fas fa-exchange-alt text-white" style="width: 24px; height: 24px; margin-right: 8px; background: #000; border-radius: 20px; display: flex; align-items: center; justify-content: center;"></i>'
+      };
+      
+      const labelMap = {
+        'campaign_spend': 'Campaign spend',
+        'task_earning': 'Task earnings',
+        'withdraw_usdt': 'USDT withdrawal',
+        'buy_diamonds': 'Buy diamonds',
+        'convert_to_usdt': 'Convert to USDT'
+      };
+
+      transactions.forEach(tx => {
+        const tr = document.createElement('tr');
+        const date = tx.created_at ? new Date(tx.created_at).toLocaleDateString() : '';
+        const statusIcon = tx.status === 'completed'
+          ? '<i class="fas fa-check-circle text-success me-2"></i>Completed'
+          : tx.status === 'pending'
+          ? '<i class="fas fa-clock text-warning me-2"></i>Pending'
+          : '<i class="fas fa-times-circle text-danger me-2"></i>Declined';
+
+        let amountText = '';
+        if (tx.currency === 'DIAMOND') {
+          amountText = `${tx.amount} diamonds`;
+        } else if (tx.currency === 'USDT') {
+          amountText = `$${Number(tx.amount).toFixed(2)}`;
+        } else {
+          amountText = String(tx.amount);
+        }
+
+        tr.innerHTML = `
+          <td>
+            <div class="d-flex align-items-center">
+              ${iconMap[tx.type] || ''}
+              ${labelMap[tx.type] || tx.type}
+            </div>
+          </td>
+          <td>${date}</td>
+          <td>${amountText}</td>
+          <td>
+            <div class="d-flex align-items-center">
+              ${statusIcon}
+            </div>
+          </td>
+        `;
+        
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Update pagination
+    function updatePagination(pagination) {
+      console.log('Updating pagination with:', pagination);
+      
+      const currentPage = document.getElementById('currentPage');
+      const totalPages = document.getElementById('totalPages');
+      const prevBtn = document.getElementById('prevPage');
+      const nextBtn = document.getElementById('nextPage');
+      
+      // Handle case where pagination might be undefined or have different structure
+      if (!pagination) {
+        console.warn('No pagination data provided');
+        if (currentPage) currentPage.textContent = '1';
+        if (totalPages) totalPages.textContent = '1';
+        if (prevBtn) prevBtn.disabled = true;
+        if (nextBtn) nextBtn.disabled = true;
+        return;
+      }
+      
+      const current = pagination.current_page || pagination.page || 1;
+      const total = pagination.total_pages || pagination.totalPages || 1;
+      
+      if (currentPage) currentPage.textContent = current;
+      if (totalPages) totalPages.textContent = total;
+      if (prevBtn) prevBtn.disabled = current <= 1;
+      if (nextBtn) nextBtn.disabled = current >= total;
+    }
+
+    // Initialize wallet functionality
+    function initializeWalletFunctionality() {
+      // Convert amount input listener
+      const convertAmount = document.getElementById('convertAmount');
+      if (convertAmount) {
+        convertAmount.addEventListener('input', function() {
+          const amount = parseFloat(this.value) || 0;
+          const rate = 0.05;
+          const total = amount * rate;
+          const convertTotal = document.getElementById('convertTotal');
+          if (convertTotal) convertTotal.textContent = `$${total.toFixed(2)}`;
+        });
+      }
+
+      // Buy diamonds quantity selection
+      const buyOptions = document.querySelectorAll('.buy-option');
+      buyOptions.forEach(option => {
+        option.addEventListener('click', function() {
+          buyOptions.forEach(opt => opt.classList.remove('btn-primary'));
+          buyOptions.forEach(opt => opt.classList.add('btn-outline-secondary'));
+          
+          this.classList.remove('btn-outline-secondary');
+          this.classList.add('btn-primary');
+          
+          const quantity = parseInt(this.dataset.qty);
+          const rate = 0.05;
+          const total = quantity * rate;
+          
+          const selectedQuantity = document.getElementById('selectedQuantity');
+          const buyTotal = document.getElementById('buyTotal');
+          
+          if (selectedQuantity) selectedQuantity.textContent = quantity;
+          if (buyTotal) buyTotal.textContent = `$${total.toFixed(2)}`;
+        });
+      });
+
+      // Withdraw amount input listener
+      const withdrawAmount = document.getElementById('withdrawAmount');
+      if (withdrawAmount) {
+        withdrawAmount.addEventListener('input', function() {
+          const amount = parseFloat(this.value) || 0;
+          const fee = amount * 0.05;
+          const total = amount - fee;
+          
+          const withdrawFee = document.getElementById('withdrawFee');
+          const withdrawTotal = document.getElementById('withdrawTotal');
+          
+          if (withdrawFee) withdrawFee.textContent = `-$${fee.toFixed(2)}`;
+          if (withdrawTotal) withdrawTotal.textContent = `$${total.toFixed(2)}`;
+        });
+      }
+
+      // Transaction filter buttons
+      const filterButtons = document.querySelectorAll('[data-filter]');
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          filterButtons.forEach(btn => {
+            btn.classList.remove('btn-primary');
+            btn.classList.add('btn-outline-secondary');
+          });
+          
+          this.classList.remove('btn-outline-secondary');
+          this.classList.add('btn-primary');
+          
+          const filter = this.dataset.filter;
+          loadTransactions(1, 10, filter);
+        });
+      });
+    }
+
+
+    // Close modal when clicking outside
+    function closeModalOnOutsideClick(event) {
+      if (event.target.classList.contains('overlay')) {
+        const modalId = event.target.id;
+        console.log('Closing modal by outside click:', modalId);
+        
+        if (modalId === 'convertModal') closeConvertModal();
+        else if (modalId === 'buyModal') closeBuyModal();
+        else if (modalId === 'withdrawModal') closeWithdrawModal();
+      }
+    }
+
+    // Add event listeners for outside clicks
+    document.addEventListener('click', closeModalOnOutsideClick);
+
+    // Add keyboard support for closing modals (ESC key)
+    document.addEventListener('keydown', function(event) {
+      if (event.key === 'Escape') {
+        // Close any open modals
+        const openModals = document.querySelectorAll('.overlay.show');
+        openModals.forEach(modal => {
+          const modalId = modal.id;
+          if (modalId === 'convertModal') closeConvertModal();
+          else if (modalId === 'buyModal') closeBuyModal();
+          else if (modalId === 'withdrawModal') closeWithdrawModal();
+        });
+      }
+    });
+
+    // Test function to check if modals work
+    function testModals() {
+      console.log('Testing modals...');
+      console.log('Convert modal element:', document.getElementById('convertModal'));
+      console.log('Buy modal element:', document.getElementById('buyModal'));
+      console.log('Withdraw modal element:', document.getElementById('withdrawModal'));
+    }
+
+    // Make functions globally accessible for debugging
+    window.refreshBalance = refreshBalance;
+    window.testBalanceAPI = testBalanceAPI;
+
+    // API diagnostic function
+    window.testAPIEndpoints = async function() {
+      console.log('🧪 Testing API endpoints...');
+      
+      const endpoints = [
+        'api/test.php',
+        'api/wallet/balance',
+        'api/wallet/withdraw'
+      ];
+      
+      for (const endpoint of endpoints) {
+        try {
+          console.log(`Testing: ${API_BASE_URL}${endpoint}`);
+          const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+            method: endpoint.includes('withdraw') ? 'POST' : 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: endpoint.includes('withdraw') ? JSON.stringify({amount: 1, to: '0x123'}) : undefined
+          });
+          
+          console.log(`${endpoint}: ${response.status} ${response.statusText}`);
+          
+          if (response.status === 404) {
+            console.warn(`❌ ${endpoint} not found - server routing issue`);
+          } else if (response.status === 401) {
+            console.log(`🔒 ${endpoint} requires authentication (expected)`);
+          } else if (response.ok) {
+            console.log(`✅ ${endpoint} accessible`);
+          } else {
+            console.warn(`⚠️ ${endpoint} returned ${response.status}`);
+          }
+          
+        } catch (error) {
+          console.error(`💥 ${endpoint} failed:`, error.message);
+        }
+      }
+      
+      console.log('🔍 Server diagnostics:');
+      console.log('- Current URL:', window.location.href);
+      console.log('- API Base URL:', API_BASE_URL);
+      console.log('- User Agent:', navigator.userAgent);
+      console.log('💡 If endpoints return 404, check server configuration and .htaccess rules');
+    };
+    window.testWithdrawModal = () => {
+      console.log('Testing withdraw modal...');
+      openWithdrawModal();
+    };
+    
+    // Check current wallet connection status
+    async function checkWalletConnection() {
+      // Don't check if we're currently connecting
+      if (isConnecting) {
+        console.log('Connection in progress, skipping status check...');
+        return;
+      }
+      
+      if (typeof window.ethereum !== 'undefined' && window.ethereum.isMetaMask) {
+        try {
+          // Handle evmAsk.js conflicts by wrapping in timeout and error handling
+          let accounts;
+          try {
+            accounts = await Promise.race([
+              window.ethereum.request({ method: 'eth_accounts' }),
+              new Promise((_, reject) => 
+                setTimeout(() => reject(new Error('Connection timeout')), 5000)
+              )
+            ]);
+          } catch (error) {
+            if (error.message.includes('evmAsk') || error.message.includes('selectExtension') || error.message.includes('Connection timeout')) {
+              console.log('Wallet extension conflict detected during status check, using stored wallet...');
+              const localWallet = localStorage.getItem('connected_evm_wallet');
+              if (localWallet) {
+                updateConnectedWalletDisplays(localWallet);
+              }
+              return;
+            }
+            throw error;
+          }
+          
+          const localWallet = localStorage.getItem('connected_evm_wallet');
+          
+          if (accounts.length > 0 && localWallet) {
+            // Verify the stored wallet matches the current MetaMask account
+            if (accounts[0].toLowerCase() !== localWallet.toLowerCase()) {
+              console.log('Wallet mismatch detected, updating...');
+              localStorage.setItem('connected_evm_wallet', accounts[0]);
+              updateWalletAddress();
+              updateConnectButton();
+              updateConnectedWalletDisplays(accounts[0]);
+            }
+          } else if (accounts.length === 0 && localWallet) {
+            // MetaMask disconnected but we still have stored wallet
+            console.log('MetaMask disconnected, clearing stored wallet...');
+            localStorage.removeItem('connected_evm_wallet');
+            updateWalletAddress();
+            updateConnectButton();
+            updateConnectedWalletDisplays(null);
+          }
+        } catch (error) {
+          console.error('Error checking wallet connection:', error);
+          // If there's an error, just use the stored wallet address
+          const localWallet = localStorage.getItem('connected_evm_wallet');
+          if (localWallet) {
+            updateConnectedWalletDisplays(localWallet);
+          }
+        }
+      }
+    }
+    
+    // Enhanced MetaMask integration with external interference protection
+    async function connectWallet() {
+      try {
+        console.log('=== CONNECT WALLET FUNCTION CALLED ===');
+        
+        // Prevent multiple simultaneous connection attempts
+        if (isConnecting) {
+          console.log('Connection already in progress, ignoring...');
+          return;
+        }
+        
+        isConnecting = true;
+        
+        // Check if MetaMask is installed
+        if (typeof window.ethereum === 'undefined') {
+          console.error('MetaMask not found');
+          showWalletNotification('MetaMask is not installed. Please install MetaMask to connect your wallet.', 'error');
+          // Redirect to MetaMask installation
+          setTimeout(() => {
+            if (confirm('MetaMask is required to connect your wallet.\n\nWould you like to install MetaMask now?')) {
+              window.open('https://metamask.io/download/', '_blank');
+            }
+          }, 1000);
+          isConnecting = false;
+          return;
+        }
+
+        // Enhanced MetaMask detection with fallback for external interference
+        let ethereum = window.ethereum;
+        
+        // If there are multiple providers, try to find MetaMask specifically
+        if (window.ethereum.providers && Array.isArray(window.ethereum.providers)) {
+          console.log('Multiple providers detected, finding MetaMask...');
+          ethereum = window.ethereum.providers.find(provider => provider.isMetaMask) || window.ethereum;
+        }
+        
+        // Check if MetaMask is accessible
+        if (!ethereum || !ethereum.isMetaMask) {
+          showWalletNotification('Please use MetaMask to connect your wallet', 'warning');
+          isConnecting = false;
+          return;
+        }
+
+        console.log('MetaMask detected, requesting account access...');
+        
+        // First check if already connected
+        let accounts;
+        try {
+          accounts = await ethereum.request({ method: 'eth_accounts' });
+          
+          if (accounts.length > 0) {
+            console.log('Already connected to:', accounts[0]);
+            // Update UI with existing connection
+            localStorage.setItem('connected_evm_wallet', accounts[0]);
+            updateWalletAddress();
+            updateConnectButton();
+            updateConnectedWalletDisplays(accounts[0]);
+            showWalletNotification('Wallet already connected!', 'info');
+            isConnecting = false;
+            return;
+          }
+        } catch (error) {
+          console.log('No existing connection, requesting new connection...');
+        }
+        
+        // Request account access with timeout protection
+        const connectionPromise = ethereum.request({
+          method: 'eth_requestAccounts'
+        });
+        
+        // Add timeout to prevent hanging on external interference
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Connection timeout - please try again')), 30000);
+        });
+        
+        accounts = await Promise.race([connectionPromise, timeoutPromise]);
+
+        if (accounts && accounts.length > 0) {
+          const walletAddress = accounts[0];
+          console.log('Wallet connected:', walletAddress);
+          
+          // Store wallet address locally
+          localStorage.setItem('connected_evm_wallet', walletAddress);
+          
+          // Update UI elements
+          updateWalletAddress();
+          updateConnectButton();
+          updateConnectedWalletDisplays(walletAddress);
+          
+          // Show success notification
+          showWalletNotification('Wallet connected successfully!', 'success');
+          
+          // Try to save to backend (optional, non-blocking)
+          try {
+            await saveWalletToBackend(walletAddress);
+          } catch (backendError) {
+            console.warn('Backend save failed, but wallet connected locally:', backendError);
+          }
+          
+          // Refresh balance after connection
+          await refreshWalletBalance();
+          
+        } else {
+          showWalletNotification('No accounts found. Please make sure MetaMask is unlocked.', 'warning');
+        }
+        
+      } catch (error) {
+        console.error('Error connecting wallet:', error);
+        
+        // Handle specific error codes and external interference
+        if (error.code === 4001) {
+          showWalletNotification('Connection request was rejected by user', 'warning');
+        } else if (error.code === -32002) {
+          showWalletNotification('Connection request is already pending. Please check MetaMask.', 'info');
+        } else if (error.code === -32603) {
+          showWalletNotification('Internal error. Please try again.', 'error');
+        } else if (error.message && error.message.includes('Connection timeout')) {
+          showWalletNotification('Connection timed out. Please disable any wallet extensions that may interfere and try again.', 'warning');
+        } else if (error.message && error.message.includes('Unexpected error')) {
+          showWalletNotification('MetaMask connection error. Please try refreshing the page.', 'error');
+        } else if (error.message && (error.message.includes('evmAsk') || error.message.includes('selectExtension'))) {
+          showWalletNotification('External wallet extension interference detected. Please disable conflicting extensions and try again.', 'warning');
+        } else {
+          showWalletNotification('Failed to connect wallet: ' + (error.message || 'Unknown error'), 'error');
+        }
+      } finally {
+        // Always reset the connecting flag
+        isConnecting = false;
+      }
+    }
+
+    // Initialize wallet connection (enhanced)
+    function initializeWallet() {
+      console.log('Initializing wallet functionality...');
+      
+      // Check for existing wallet connection
+      updateWalletAddress();
+      updateConnectButton();
+      
+      // Update modal displays with current wallet
+      const localWallet = localStorage.getItem('connected_evm_wallet');
+      updateConnectedWalletDisplays(localWallet);
+      
+      // Listen for wallet connection changes (MetaMask events) with enhanced provider detection
+      if (typeof window.ethereum !== 'undefined') {
+        // Enhanced MetaMask detection with fallback for external interference
+        let ethereum = window.ethereum;
+        
+        // If there are multiple providers, try to find MetaMask specifically
+        if (window.ethereum.providers && Array.isArray(window.ethereum.providers)) {
+          console.log('Multiple providers detected during initialization, finding MetaMask...');
+          ethereum = window.ethereum.providers.find(provider => provider.isMetaMask) || window.ethereum;
+        }
+        
+        if (ethereum && ethereum.isMetaMask) {
+          console.log('Setting up MetaMask event listeners...');
+          
+          // Account changes
+          ethereum.on('accountsChanged', (accounts) => {
+          console.log('MetaMask accounts changed:', accounts);
+          
+          if (accounts && accounts.length > 0) {
+            const newAccount = accounts[0];
+            localStorage.setItem('connected_evm_wallet', newAccount);
+            updateWalletAddress();
+            updateConnectButton();
+            updateConnectedWalletDisplays(newAccount);
+            showWalletNotification('Wallet account changed: ' + newAccount.slice(0, 6) + '...', 'info');
+            
+            // Save new account to backend
+            saveWalletToBackend(newAccount).catch(console.warn);
+          } else {
+            // No accounts available (disconnected)
+            localStorage.removeItem('connected_evm_wallet');
+            updateWalletAddress();
+            updateConnectButton();
+            updateConnectedWalletDisplays(null);
+            showWalletNotification('Wallet disconnected', 'info');
+          }
+        });
+        
+        // Chain changes
+        ethereum.on('chainChanged', (chainId) => {
+          console.log('MetaMask chain changed:', chainId);
+          showWalletNotification('Network changed. Please refresh if needed.', 'info');
+        });
+        
+        // Connection changes
+        ethereum.on('connect', (connectInfo) => {
+          console.log('MetaMask connected:', connectInfo);
+        });
+        
+        ethereum.on('disconnect', (error) => {
+          console.log('MetaMask disconnected:', error);
+          localStorage.removeItem('connected_evm_wallet');
+          updateWalletAddress();
+          updateConnectButton();
+          updateConnectedWalletDisplays(null);
+          showWalletNotification('MetaMask disconnected', 'warning');
+        });
+        
+        } else {
+          console.warn('MetaMask not available for event listeners');
+        }
+      } else {
+        console.warn('window.ethereum not available');
+      }
+    }
+
+    // Save wallet to backend (optional, non-blocking)
+    async function saveWalletToBackend(walletAddress) {
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          console.log('No auth token, skipping backend save');
+          return;
+        }
+
+        const response = await fetch('http://localhost:8000/api/wallet/connect', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ wallet_address: walletAddress })
+        });
+
+        if (response.ok) {
+          console.log('Wallet saved to backend successfully');
+        } else {
+          console.warn('Failed to save wallet to backend, but continuing locally');
+        }
+      } catch (error) {
+        console.warn('Backend save failed, but wallet connected locally:', error);
+      }
+    }
+
+    // Update connected wallet displays in modals
+    function updateConnectedWalletDisplays(walletAddress) {
+      const connectedWallet = document.getElementById('connectedWallet');
+      const connectedWalletWithdraw = document.getElementById('connectedWalletWithdraw');
+      const withdrawAddress = document.getElementById('withdrawAddress');
+      
+      if (walletAddress && walletAddress.startsWith('0x')) {
+        const shortAddress = `${walletAddress.slice(0, 6)}...${walletAddress.slice(-4)}`;
+        if (connectedWallet) connectedWallet.textContent = shortAddress;
+        if (connectedWalletWithdraw) connectedWalletWithdraw.textContent = shortAddress;
+        
+        // Update withdraw address field if modal is open
+        if (withdrawAddress && document.getElementById('withdrawModal').classList.contains('show')) {
+          withdrawAddress.value = walletAddress;
+          withdrawAddress.placeholder = 'Connected wallet address';
+        }
+      } else {
+        if (connectedWallet) connectedWallet.textContent = 'Not connected';
+        if (connectedWalletWithdraw) connectedWalletWithdraw.textContent = 'Not connected';
+        
+        // Clear withdraw address field
+        if (withdrawAddress) {
+          withdrawAddress.value = '';
+          withdrawAddress.placeholder = 'Enter USDT withdrawal address';
+        }
+      }
+    }
+
+    // Show wallet notifications
+    function showWalletNotification(message, type = 'info') {
+      // Create a simple notification
+      const notification = document.createElement('div');
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        padding: 12px 20px;
+        border-radius: 8px;
+        color: white;
+        font-weight: 500;
+        z-index: 10000;
+        max-width: 300px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      `;
+      
+      switch(type) {
+        case 'success':
+          notification.style.background = '#10B981';
+          break;
+        case 'error':
+          notification.style.background = '#EF4444';
+          break;
+        case 'warning':
+          notification.style.background = '#F59E0B';
+          break;
+        default:
+          notification.style.background = '#6366F1';
+      }
+      
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      
+      // Remove after 3 seconds
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 3000);
+    }
+
+    // Check MetaMask availability on page load
+    function checkMetaMaskAvailability() {
+      console.log('Checking MetaMask availability...');
+      const connectBtn = document.getElementById('connectWalletBtn');
+      
+      if (!connectBtn) {
+        console.error('Connect wallet button not found during MetaMask check!');
+        return;
+      }
+      
+      if (typeof window.ethereum === 'undefined') {
+        console.warn('MetaMask not detected');
+        connectBtn.innerHTML = '<i class="fas fa-download me-1"></i>Install MetaMask';
+        connectBtn.classList.remove('btn-primary', 'btn-success');
+        connectBtn.classList.add('btn-warning');
+        
+        // Remove existing listeners and add new one
+        const newBtn = connectBtn.cloneNode(true);
+        connectBtn.parentNode.replaceChild(newBtn, connectBtn);
+        newBtn.addEventListener('click', () => {
+          if (confirm('MetaMask is required to connect your wallet.\n\nWould you like to install MetaMask now?')) {
+            window.open('https://metamask.io/download/', '_blank');
+          }
+        });
+        
+      } else if (!window.ethereum.isMetaMask) {
+        console.warn('Non-MetaMask wallet detected');
+        connectBtn.innerHTML = '<i class="fas fa-exclamation-triangle me-1"></i>Use MetaMask';
+        connectBtn.classList.remove('btn-primary', 'btn-success');
+        connectBtn.classList.add('btn-warning');
+        
+      } else {
+        console.log('MetaMask detected and ready');
+        // Check if already connected
+        const localWallet = localStorage.getItem('connected_evm_wallet');
+        if (localWallet) {
+          console.log('Previously connected wallet found:', localWallet);
+        }
+        // Always call updateConnectButton to set up the proper event listeners
+        updateConnectButton();
+        updateConnectedWalletDisplays(localWallet);
+      }
+    }
+
+    // Update connect button based on wallet status (enhanced)
+    function updateConnectButton() {
+      const connectBtn = document.getElementById('connectWalletBtn');
+      if (!connectBtn) {
+        console.error('Connect wallet button not found!');
+        return;
+      }
+
+      const localWallet = localStorage.getItem('connected_evm_wallet');
+      console.log('Updating connect button, wallet:', localWallet);
+      
+      if (localWallet && localWallet.startsWith('0x')) {
+        const shortAddress = `${localWallet.slice(0, 6)}...${localWallet.slice(-4)}`;
+        connectBtn.innerHTML = `<i class="fas fa-check me-1"></i>${shortAddress}`;
+        connectBtn.classList.remove('btn-primary', 'btn-warning');
+        connectBtn.classList.add('btn-success');
+        connectBtn.onclick = disconnectWallet;
+        console.log('Button set to disconnect mode');
+      } else {
+        connectBtn.innerHTML = '<i class="fas fa-wallet me-1"></i>Connect Wallet';
+        connectBtn.classList.remove('btn-success', 'btn-warning');
+        connectBtn.classList.add('btn-primary');
+        connectBtn.onclick = connectWallet;
+        console.log('Button set to connect mode');
+      }
+    }
+
+    // Disconnect wallet function
+    async function disconnectWallet() {
+      if (confirm('Are you sure you want to disconnect your wallet?\n\nThis will remove the wallet connection from this application.')) {
+        try {
+          // Remove from local storage
+          localStorage.removeItem('connected_evm_wallet');
+          
+          // Update UI elements
+          updateWalletAddress();
+          updateConnectButton();
+          updateConnectedWalletDisplays(null);
+          
+          // Try to disconnect from backend (optional)
+          try {
+            const token = await getValidToken();
+            if (token) {
+              await fetch(`${API_BASE_URL}api/wallet/disconnect`, {
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json'
+                }
+              });
+            }
+          } catch (backendError) {
+            console.warn('Backend disconnect failed:', backendError);
+          }
+          
+          showWalletNotification('Wallet disconnected successfully!', 'success');
+          
+        } catch (error) {
+          console.error('Error disconnecting wallet:', error);
+          showWalletNotification('Error disconnecting wallet', 'error');
+        }
+      }
+    }
+
+    // Global state for selected quantity
+    let selectedDiamondQuantity = 1000;
+
+    // Modal opening functions using Bootstrap with fallback
+    function openConvertModal() {
+      console.log('Opening convert modal...');
+      updateBalanceDisplaysInModals();
+      const modal = document.getElementById('convertModal');
+      if (modal) {
+        try {
+          const bootstrapModal = new bootstrap.Modal(modal);
+          bootstrapModal.show();
+          console.log('Convert modal opened');
+          
+          // Fallback mechanism
+          setTimeout(() => {
+            if (window.getComputedStyle(modal).display === 'none') {
+              modal.style.display = 'block';
+              modal.classList.add('show');
+              console.log('Applied fallback display for convert modal');
+            }
+          }, 100);
+          
+          // Update available diamonds in modal
+          const availableDiamonds = document.getElementById('availableDiamonds');
+          if (availableDiamonds) {
+            availableDiamonds.textContent = walletData.diamonds || 0;
+          }
+        } catch (error) {
+          console.error('Error opening convert modal:', error);
+          // Manual fallback
+          modal.style.display = 'block';
+          modal.classList.add('show');
+        }
+      } else {
+        console.error('Convert modal not found!');
+      }
+    }
+
+    function openBuyModal() {
+      console.log('Opening buy modal...');
+      updateBalanceDisplaysInModals();
+      const modal = document.getElementById('buyModal');
+      if (modal) {
+        try {
+          const bootstrapModal = new bootstrap.Modal(modal);
+          bootstrapModal.show();
+          console.log('Buy modal opened');
+          
+          // Fallback mechanism
+          setTimeout(() => {
+            if (window.getComputedStyle(modal).display === 'none') {
+              modal.style.display = 'block';
+              modal.classList.add('show');
+              console.log('Applied fallback display for buy modal');
+            }
+          }, 100);
+          
+          // Update connected wallet display
+          const connectedWallet = localStorage.getItem('connected_evm_wallet');
+          const buyWalletAddress = document.getElementById('buyWalletAddress');
+          if (buyWalletAddress) {
+            if (connectedWallet && connectedWallet.startsWith('0x')) {
+              const shortAddress = `${connectedWallet.slice(0, 6)}...${connectedWallet.slice(-4)}`;
+              buyWalletAddress.textContent = shortAddress;
+            } else {
+              buyWalletAddress.textContent = 'Not connected';
+            }
+          }
+          
+          // Set default quantity
+          updateBuyCalculation();
+        } catch (error) {
+          console.error('Error opening buy modal:', error);
+          // Manual fallback
+          modal.style.display = 'block';
+          modal.classList.add('show');
+        }
+      } else {
+        console.error('Buy modal not found!');
+      }
+    }
+
+    function openWithdrawModal() {
+      console.log('Opening withdraw modal...');
+      updateBalanceDisplaysInModals();
+      const modal = document.getElementById('withdrawModal');
+      if (modal) {
+        try {
+          const bootstrapModal = new bootstrap.Modal(modal);
+          bootstrapModal.show();
+          console.log('Withdraw modal opened');
+          
+          // Fallback mechanism
+          setTimeout(() => {
+            if (window.getComputedStyle(modal).display === 'none') {
+              modal.style.display = 'block';
+              modal.classList.add('show');
+              console.log('Applied fallback display for withdraw modal');
+            }
+          }, 100);
+          
+          // Auto-fill wallet address if connected
+          const connectedWallet = localStorage.getItem('connected_evm_wallet');
+          const withdrawAddress = document.getElementById('withdrawAddress');
+          const withdrawWalletAddress = document.getElementById('withdrawWalletAddress');
+          
+          if (connectedWallet && withdrawAddress) {
+            withdrawAddress.value = connectedWallet;
+          }
+          
+          if (withdrawWalletAddress) {
+            if (connectedWallet && connectedWallet.startsWith('0x')) {
+              const shortAddress = `${connectedWallet.slice(0, 6)}...${connectedWallet.slice(-4)}`;
+              withdrawWalletAddress.textContent = shortAddress;
+            } else {
+              withdrawWalletAddress.textContent = 'Not connected';
+            }
+          }
+        } catch (error) {
+          console.error('Error opening withdraw modal:', error);
+          // Manual fallback
+          modal.style.display = 'block';
+          modal.classList.add('show');
+        }
+      } else {
+        console.error('Withdraw modal not found!');
+      }
+    }
+
+    // Calculation functions for modals
+    function selectQuantity(quantity, event) {
+      selectedDiamondQuantity = quantity;
+      document.getElementById('customQuantity').value = quantity;
+      
+      // Update active button styling
+      const buyModal = document.getElementById('buyModal');
+      if (buyModal) {
+        buyModal.querySelectorAll('.btn').forEach(btn => {
+          btn.style.background = '#2a2a2e';
+          btn.classList.remove('active');
+        });
+        if (event && event.target) {
+          event.target.style.background = '#7c3aed';
+          event.target.classList.add('active');
+        }
+      }
+      
+      updateBuyCalculation();
+    }
+
+    function updateBuyCalculation() {
+      const customAmount = document.getElementById('customQuantity').value;
+      const quantity = customAmount ? parseInt(customAmount) : selectedDiamondQuantity;
+      const price = walletData.rates?.diamond_price_usd || 0.05;
+      const total = quantity * price;
+
+      document.getElementById('buyDiamondDisplay').textContent = `💎 ${quantity}`;
+      document.getElementById('selectedQuantity').textContent = quantity;
+      document.getElementById('totalCost').textContent = total.toFixed(2);
+    }
+
+    function updateConvertCalculation() {
+      const diamonds = parseInt(document.getElementById('convertAmount').value) || 0;
+      const rate = walletData.rates?.diamond_to_usdt_rate || 0.05;
+      const total = diamonds * rate;
+
+      document.getElementById('convertUSDTDisplay').textContent = `$${total.toFixed(2)}`;
+      document.getElementById('convertDiamonds').textContent = diamonds;
+      document.getElementById('convertTotal').textContent = total.toFixed(2);
+    }
+
+    function updateWithdrawCalculation() {
+      const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+      const feeRate = walletData.rates?.withdraw_fee_rate || 0.05;
+      const fee = amount * feeRate;
+      const total = amount - fee;
+
+      document.getElementById('withdrawUSDTDisplay').textContent = `$${total.toFixed(2)}`;
+      document.getElementById('withdrawAmountDisplay').textContent = amount.toFixed(2);
+      document.getElementById('withdrawFee').textContent = fee.toFixed(2);
+      document.getElementById('withdrawTotal').textContent = Math.max(0, total).toFixed(2);
+    }
+
+    // Confirm functions for modals
+    // Removed duplicate/broken function - using the correct one below
+
+    async function confirmBuyDiamonds() {
+      const quantity = parseInt(document.getElementById('customQuantity').value) || selectedDiamondQuantity;
+      
+      if (quantity <= 0) {
+        showWalletNotification('Please enter a valid quantity', 'warning');
+        return;
+      }
+
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          showWalletNotification('Please log in to buy diamonds', 'error');
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}api/wallet/buy`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ quantity: quantity })
+        });
+
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+          showWalletNotification('Diamonds purchased successfully!', 'success');
+          closeBuyModal();
+          loadWalletBalance(); // Refresh balance
+        } else {
+          showWalletNotification('Error: ' + result.message, 'error');
+        }
+      } catch (error) {
+        console.error('Error buying diamonds:', error);
+        showWalletNotification('Error buying diamonds. Please try again.', 'error');
+      }
+    }
+
+    async function confirmWithdrawUSDT() {
+      const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+      const address = document.getElementById('withdrawAddress').value.trim();
+      
+      if (amount <= 0) {
+        showWalletNotification('Please enter a valid amount', 'warning');
+        return;
+      }
+
+      if (amount > walletData.usdt) {
+        showWalletNotification('Insufficient USDT balance', 'error');
+        return;
+      }
+
+      if (!address) {
+        showWalletNotification('Please enter a withdrawal address', 'warning');
+        return;
+      }
+
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          showWalletNotification('Please log in to withdraw USDT', 'error');
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}api/wallet/withdraw`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            amount: amount,
+            to: address
+          })
+        });
+
+        const result = await response.json();
+        
+        if (result.status === 'success') {
+          showWalletNotification('USDT withdrawal initiated successfully!', 'success');
+          closeWithdrawModal();
+          loadWalletBalance(); // Refresh balance
+        } else {
+          showWalletNotification('Error: ' + result.message, 'error');
+        }
+      } catch (error) {
+        console.error('Error withdrawing USDT:', error);
+        showWalletNotification('Error withdrawing USDT. Please try again.', 'error');
+      }
+    }
+
+    // Legacy confirm function (keeping for compatibility)
+    async function confirmConvert() {
+      console.log('=== CONFIRM CONVERT CALLED ===');
+      const amount = parseFloat(document.getElementById('convertAmount').value);
+      console.log('Convert amount:', amount);
+      
+      if (!amount || amount < 100) {
+        showWalletNotification('Minimum conversion amount is 100 diamonds', 'warning');
+        return;
+      }
+
+      try {
+        const token = await getValidToken();
+        const response = await fetch('http://localhost:8000/api/wallet/convert', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ amount: amount })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            showWalletNotification('Conversion successful!', 'success');
+            closeConvertModal();
+            await refreshWalletBalance(); // Refresh balance immediately
+          } else {
+            showWalletNotification('Conversion failed: ' + (data.message || 'Unknown error'), 'error');
+          }
+        } else {
+          const errorData = await response.json();
+          showWalletNotification('Conversion failed: ' + (errorData.message || 'Please try again.'), 'error');
+        }
+      } catch (error) {
+        console.error('Error converting diamonds:', error);
+        showWalletNotification('Error converting diamonds. Please try again.', 'error');
+      }
+    }
+
+    async function confirmBuy() {
+      console.log('=== CONFIRM BUY CALLED ===');
+      const quantity = parseInt(document.getElementById('selectedQuantity').textContent);
+      console.log('Buy quantity:', quantity);
+      
+      if (!quantity) {
+        showWalletNotification('Please select a quantity to buy', 'warning');
+        return;
+      }
+
+      try {
+        const token = await getValidToken();
+        const response = await fetch('http://localhost:8000/api/wallet/buy-diamonds', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ quantity: quantity })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            showWalletNotification('Purchase successful!', 'success');
+            closeBuyModal();
+            await refreshWalletBalance(); // Refresh balance immediately
+          } else {
+            showWalletNotification('Purchase failed: ' + (data.message || 'Unknown error'), 'error');
+          }
+        } else {
+          const errorData = await response.json();
+          showWalletNotification('Purchase failed: ' + (errorData.message || 'Please try again.'), 'error');
+        }
+      } catch (error) {
+        console.error('Error buying diamonds:', error);
+        showWalletNotification('Error buying diamonds. Please try again.', 'error');
+      }
+    }
+
+    async function confirmWithdraw() {
+      console.log('=== CONFIRM WITHDRAW CALLED ===');
+      const amount = parseFloat(document.getElementById('withdrawAmount').value);
+      const address = document.getElementById('withdrawAddress').value.trim();
+      console.log('Withdraw amount:', amount, 'Address:', address);
+      
+      if (!amount || amount <= 0) {
+        showWalletNotification('Please enter a valid withdrawal amount', 'warning');
+        return;
+      }
+      
+      if (!address) {
+        showWalletNotification('Please enter a withdrawal address', 'warning');
+        return;
+      }
+
+      try {
+        const token = await getValidToken();
+        const response = await fetch('http://localhost:8000/api/wallet/withdraw', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            amount: amount,
+            address: address
+          })
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            showWalletNotification('Withdrawal request submitted successfully!', 'success');
+            closeWithdrawModal();
+            await refreshWalletBalance(); // Refresh balance immediately
+          } else {
+            showWalletNotification('Withdrawal failed: ' + (data.message || 'Unknown error'), 'error');
+          }
+        } else {
+          const errorData = await response.json();
+          showWalletNotification('Withdrawal failed: ' + (errorData.message || 'Please try again.'), 'error');
+        }
+      } catch (error) {
+        console.error('Error withdrawing USDT:', error);
+        showWalletNotification('Error withdrawing USDT. Please try again.', 'error');
+      }
+    }
+
+    // Modal Functions
+    function openConvertModal() {
+      console.log('🔄 Opening convert modal...');
+      const modal = document.getElementById('convertModal');
+      if (!modal) {
+        console.error('❌ Convert modal not found');
+        return;
+      }
+      
+      // Update available balance
+      updateBalanceDisplaysInModals();
+      
+      // Show modal
+      modal.classList.add('show');
+      
+      // Fallback display method
+      setTimeout(() => {
+        if (window.getComputedStyle(modal).display === 'none') {
+          console.log('🔧 Using fallback display method for convert modal');
+          modal.style.display = 'flex';
+          modal.style.alignItems = 'center';
+          modal.style.justifyContent = 'center';
+        }
+      }, 10);
+    }
+
+    function closeConvertModal() {
+      const modal = document.getElementById('convertModal');
+      if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+          modal.style.display = 'none';
+        }, 300);
+      }
+    }
+
+    function openBuyModal() {
+      console.log('💎 Opening buy modal...');
+      const modal = document.getElementById('buyModal');
+      if (!modal) {
+        console.error('❌ Buy modal not found');
+        return;
+      }
+      
+      // Update wallet info
+      updateBalanceDisplaysInModals();
+      
+      // Show modal
+      modal.classList.add('show');
+      
+      // Fallback display method
+      setTimeout(() => {
+        if (window.getComputedStyle(modal).display === 'none') {
+          console.log('🔧 Using fallback display method for buy modal');
+          modal.style.display = 'flex';
+          modal.style.alignItems = 'center';
+          modal.style.justifyContent = 'center';
+        }
+      }, 10);
+    }
+
+    function closeBuyModal() {
+      const modal = document.getElementById('buyModal');
+      if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+          modal.style.display = 'none';
+        }, 300);
+      }
+    }
+
+    function openWithdrawModal() {
+      console.log('💸 Opening withdraw modal...');
+      const modal = document.getElementById('withdrawModal');
+      if (!modal) {
+        console.error('❌ Withdraw modal not found');
+        return;
+      }
+      
+      // Update balance and wallet info
+      updateBalanceDisplaysInModals();
+      
+      // Auto-fill withdrawal address with connected wallet
+      const connectedWallet = localStorage.getItem('connected_evm_wallet');
+      const withdrawAddress = document.getElementById('withdrawAddress');
+      if (connectedWallet && withdrawAddress) {
+        withdrawAddress.value = connectedWallet;
+      }
+      
+      // Show modal
+      modal.classList.add('show');
+      
+      // Fallback display method
+      setTimeout(() => {
+        if (window.getComputedStyle(modal).display === 'none') {
+          console.log('🔧 Using fallback display method for withdraw modal');
+          modal.style.display = 'flex';
+          modal.style.alignItems = 'center';
+          modal.style.justifyContent = 'center';
+        }
+      }, 10);
+    }
+
+    function closeWithdrawModal() {
+      const modal = document.getElementById('withdrawModal');
+      if (modal) {
+        modal.classList.remove('show');
+        setTimeout(() => {
+          modal.style.display = 'none';
+        }, 300);
+      }
+    }
+
+    // Modal action functions - confirmConvertToUSDT is defined later with smart contract integration
+
+    async function confirmBuyDiamonds() {
+      const quantity = parseInt(document.getElementById('customQuantity').value) || selectedDiamondQuantity;
+      
+      if (quantity <= 0) {
+        showWalletNotification('Please enter a valid quantity', 'warning');
+        return;
+      }
+      
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          showWalletNotification('Authentication required', 'error');
+          return;
+        }
+        
+        const response = await fetch(`${API_BASE_URL}api/wallet/buy`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ quantity: quantity })
+        });
+        
+        const result = await response.json();
+        if (result.status === 'success') {
+          showWalletNotification('Diamonds purchased successfully!', 'success');
+          closeBuyModal();
+          loadWalletBalance(); // Refresh balance
+        } else {
+          showWalletNotification('Error: ' + result.message, 'error');
+        }
+      } catch (error) {
+        console.error('Error buying diamonds:', error);
+        showWalletNotification('Failed to purchase diamonds', 'error');
+      }
+    }
+
+    async function confirmWithdrawUSDT() {
+      const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+      const address = document.getElementById('withdrawAddress').value;
+      
+      if (amount <= 0) {
+        showWalletNotification('Please enter a valid amount', 'warning');
+        return;
+      }
+      
+      if (!address || !address.startsWith('0x')) {
+        showWalletNotification('Please connect your wallet first', 'warning');
+        return;
+      }
+      
+      if (amount > (walletData.usdt || 0)) {
+        showWalletNotification('Insufficient USDT balance', 'error');
+        return;
+      }
+      
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          showWalletNotification('Authentication required', 'error');
+          return;
+        }
+        
+        const response = await fetch(`${API_BASE_URL}api/wallet/withdraw`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ amount: amount, to: address })
+        });
+        
+        const result = await response.json();
+        if (result.status === 'success') {
+          showWalletNotification('USDT withdrawal initiated successfully!', 'success');
+          closeWithdrawModal();
+          loadWalletBalance(); // Refresh balance
+        } else {
+          showWalletNotification('Error: ' + result.message, 'error');
+        }
+      } catch (error) {
+        console.error('Error withdrawing USDT:', error);
+        showWalletNotification('Failed to withdraw USDT', 'error');
+      }
+    }
+
+    // Global variables for modal state
+    // selectedDiamondQuantity already declared above
+
+    // Diamond quantity selection function
+    function selectDiamondQuantity(quantity) {
+      selectedDiamondQuantity = quantity;
+      const customQuantityInput = document.getElementById('customQuantity');
+      if (customQuantityInput) {
+        customQuantityInput.value = quantity;
+      }
+      updateBuyCalculation();
+    }
+
+    // Debug functions for testing
+    window.testConnectWallet = () => {
+      console.log('Testing wallet connection...');
+      connectWallet();
+    };
+
+    window.testConvertModal = () => {
+      console.log('Testing convert modal...');
+      openConvertModal();
+    };
+
+    window.testBuyModal = () => {
+      console.log('Testing buy modal...');
+      openBuyModal();
+    };
+
+    window.testWithdrawModal = () => {
+      console.log('Testing withdraw modal...');
+      openWithdrawModal();
+    };
+
+    window.testAllModals = () => {
+      console.log('Testing all modals...');
+      console.log('Convert modal element:', document.getElementById('convertModal'));
+      console.log('Buy modal element:', document.getElementById('buyModal'));
+      console.log('Withdraw modal element:', document.getElementById('withdrawModal'));
+      console.log('Connect button element:', document.getElementById('connectWalletBtn'));
+    };
+
+    // ========================================
+    // SMART CONTRACT INTEGRATION FUNCTIONS
+    // ========================================
+    
+    // Global smart contract instance
+    let contractInstance = null;
+    let isContractInitialized = false;
+    
+    // Initialize smart contract connection
+    async function initializeSmartContract() {
+      try {
+        if (!window.diamondContract) {
+          console.warn('Diamond contract not available');
+          return false;
+        }
+        
+        contractInstance = window.diamondContract;
+        await contractInstance.initialize();
+        isContractInitialized = true;
+        
+        console.log('✅ Smart contract initialized successfully');
+        
+        // Load blockchain balances
+        await loadBlockchainBalances();
+        
+        return true;
+      } catch (error) {
+        console.error('Failed to initialize smart contract:', error);
+        showWalletNotification('Smart contract initialization failed: ' + error.message, 'warning');
+        return false;
+      }
+    }
+    
+    // Load balances from blockchain
+    async function loadBlockchainBalances() {
+      if (!isContractInitialized) return;
+      
+      try {
+        const balances = await contractInstance.getUserBalances();
+        console.log('Blockchain balances:', balances);
+        
+        // Update UI with blockchain balances
+        const diamondElement = document.getElementById('diamondBalance');
+        const usdtElement = document.getElementById('usdtBalance');
+        
+        if (diamondElement) {
+          diamondElement.textContent = parseFloat(balances.diamondBalance).toLocaleString();
+        }
+        
+        if (usdtElement) {
+          usdtElement.textContent = `$${parseFloat(balances.usdtBalance).toFixed(2)}`;
+        }
+        
+        // Update global wallet data
+        walletData.diamonds = parseFloat(balances.diamondBalance);
+        walletData.usdt = parseFloat(balances.usdtBalance);
+        
+        updateBalanceDisplaysInModals();
+        
+      } catch (error) {
+        console.error('Failed to load blockchain balances:', error);
+      }
+    }
+    
+    // Buy USDT function - opens DEX for USDT purchase
+    async function buyUSDT() {
+      try {
+        console.log('🛒 Opening USDT purchase...');
+        
+        // Check if wallet is connected
+        const connectedWallet = localStorage.getItem('connected_evm_wallet');
+        if (!connectedWallet) {
+          showWalletNotification('Please connect your wallet first', 'warning');
+          return;
+        }
+        
+        // Check for known wallet conflicts and skip smart contract initialization
+        if (walletConflictDetected || detectWalletConflicts()) {
+          console.log('Wallet conflicts detected, skipping smart contract and opening external DEX...');
+          showWalletNotification('Opening external DEX for USDT purchase...', 'info');
+          window.open('https://app.uniswap.org/#/swap?outputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7', '_blank');
+          return;
+        }
+
+        // Try to initialize contract if needed, but handle conflicts gracefully
+        if (!isContractInitialized) {
+          try {
+            // Set a shorter timeout for this specific call
+            const initPromise = initializeSmartContract();
+            const timeoutPromise = new Promise((_, reject) => 
+              setTimeout(() => reject(new Error('Initialization timeout')), 3000)
+            );
+            
+            const initialized = await Promise.race([initPromise, timeoutPromise]);
+            if (!initialized) {
+              // If initialization fails, show a user-friendly message and open external DEX
+              showWalletNotification('Opening external DEX for USDT purchase...', 'info');
+              // Open Uniswap or other DEX in a new tab
+              window.open('https://app.uniswap.org/#/swap?outputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7', '_blank');
+              return;
+            }
+          } catch (error) {
+            if (error.message.includes('evmAsk') || 
+                error.message.includes('selectExtension') || 
+                error.message.includes('Connection timeout') ||
+                error.message.includes('Initialization timeout') ||
+                error.message.includes('Unexpected error')) {
+              console.log('Smart contract initialization blocked by wallet conflict, opening external DEX...');
+              showWalletNotification('Opening external DEX for USDT purchase...', 'info');
+              window.open('https://app.uniswap.org/#/swap?outputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7', '_blank');
+              return;
+            }
+            throw error;
+          }
+        }
+        
+        // Try to use smart contract, fallback to external DEX
+        try {
+          const result = await contractInstance.buyUSDT();
+          showWalletNotification(result.message, 'info');
+        } catch (contractError) {
+          console.log('Smart contract call failed, opening external DEX...', contractError);
+          showWalletNotification('Opening external DEX for USDT purchase...', 'info');
+          window.open('https://app.uniswap.org/#/swap?outputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7', '_blank');
+        }
+        
+      } catch (error) {
+        console.error('Error opening USDT purchase:', error);
+        // Final fallback - always provide a way to buy USDT
+        showWalletNotification('Opening external DEX for USDT purchase...', 'info');
+        window.open('https://app.uniswap.org/#/swap?outputCurrency=0xdAC17F958D2ee523a2206206994597C13D831ec7', '_blank');
+      }
+    }
+    
+    // Enhanced buy diamonds function with smart contract
+    async function confirmBuyDiamonds() {
+      const quantity = parseInt(document.getElementById('customQuantity').value) || selectedDiamondQuantity;
+      const buyBtn = document.getElementById('buyDiamondsBtn');
+      
+      if (quantity <= 0) {
+        showWalletNotification('Please enter a valid quantity', 'warning');
+        return;
+      }
+      
+      // Check if wallet is connected
+      const connectedWallet = localStorage.getItem('connected_evm_wallet');
+      if (!connectedWallet) {
+        showWalletNotification('Please connect your wallet first', 'warning');
+        return;
+      }
+      
+      try {
+        buyBtn.disabled = true;
+        buyBtn.textContent = 'Processing...';
+        
+        // Calculate USDT needed (quantity * 0.005)
+        const usdtNeeded = quantity * 0.005;
+        
+        // Check for wallet conflicts first
+        if (walletConflictDetected || detectWalletConflicts()) {
+          // Demo mode purchase with new revenue sharing model
+          const appRevenue = usdtNeeded * 0.20; // 20% to app
+          const diamondPortion = usdtNeeded * 0.80; // 80% for diamonds
+          const diamondsReceived = Math.floor(diamondPortion * 200); // 200 diamonds per USDT portion
+          
+          walletData.diamonds += diamondsReceived;
+          walletData.usdt -= usdtNeeded;
+          
+          // Update UI
+          document.getElementById('diamondBalance').textContent = walletData.diamonds;
+          document.getElementById('usdtBalance').textContent = `$${Math.max(0, walletData.usdt).toFixed(2)}`;
+          
+          showWalletNotification(`Successfully purchased ${diamondsReceived} diamonds! App revenue: $${appRevenue.toFixed(2)} (Demo Mode)`, 'success');
+          closeBuyModal();
+          return;
+        }
+        
+        // Initialize contract if needed
+        if (!isContractInitialized) {
+          const initialized = await initializeSmartContract();
+          if (!initialized) {
+            // Fallback to demo mode with revenue sharing
+            const appRevenue = usdtNeeded * 0.20;
+            const diamondPortion = usdtNeeded * 0.80;
+            const diamondsReceived = Math.floor(diamondPortion * 200);
+            
+            walletData.diamonds += diamondsReceived;
+            walletData.usdt -= usdtNeeded;
+            
+            document.getElementById('diamondBalance').textContent = walletData.diamonds;
+            document.getElementById('usdtBalance').textContent = `$${Math.max(0, walletData.usdt).toFixed(2)}`;
+            
+            showWalletNotification(`Successfully purchased ${diamondsReceived} diamonds! App revenue: $${appRevenue.toFixed(2)} (Demo Mode)`, 'success');
+            closeBuyModal();
+            return;
+          }
+        }
+        
+        showWalletNotification('Initiating diamond purchase...', 'info');
+        
+        // Call smart contract deposit function
+        const result = await contractInstance.depositUSDT(usdtNeeded, (progress) => {
+          buyBtn.textContent = progress;
+        });
+        
+        showWalletNotification(`Successfully purchased ${result.diamondsReceived} diamonds for $${usdtNeeded.toFixed(2)} USDT!`, 'success');
+        console.log('Purchase result:', result);
+        
+        // Close modal and refresh balances
+        closeBuyModal();
+        await loadBlockchainBalances();
+        await loadWalletBalance(); // Also update backend balance
+        
+      } catch (error) {
+        console.error('Error buying diamonds:', error);
+        showWalletNotification('Purchase failed: ' + error.message, 'error');
+      } finally {
+        buyBtn.disabled = false;
+        buyBtn.textContent = 'Buy Diamonds';
+      }
+    }
+    
+    // Enhanced convert function with smart contract
+    async function confirmConvertToUSDT() {
+      const diamonds = parseInt(document.getElementById('convertAmount').value) || 0;
+      const convertBtn = document.getElementById('convertBtn');
+      
+      if (diamonds < 3) {
+        showWalletNotification('Minimum withdrawal is 3 diamonds', 'warning');
+        return;
+      }
+      
+      if (diamonds > walletData.diamonds) {
+        showWalletNotification('Insufficient diamonds', 'error');
+        return;
+      }
+      
+      // Check if wallet is connected
+      const connectedWallet = localStorage.getItem('connected_evm_wallet');
+      if (!connectedWallet) {
+        showWalletNotification('Please connect your wallet first', 'warning');
+        return;
+      }
+      
+      try {
+        convertBtn.disabled = true;
+        convertBtn.textContent = 'Processing...';
+        
+        // Check for wallet conflicts first
+        if (walletConflictDetected || detectWalletConflicts()) {
+          // Demo mode conversion with 5% app fee
+          const totalValue = diamonds * 0.005; // Total USDT value
+          const appFee = totalValue * 0.05; // 5% app fee
+          const usdtReceived = totalValue - appFee; // 95% to user
+          
+          walletData.diamonds -= diamonds;
+          walletData.usdt += usdtReceived;
+          
+          // Update UI
+          document.getElementById('diamondBalance').textContent = walletData.diamonds;
+          document.getElementById('usdtBalance').textContent = `$${walletData.usdt.toFixed(2)}`;
+          
+          showWalletNotification(`Successfully converted ${diamonds} diamonds to $${usdtReceived.toFixed(2)} USDT! App fee: $${appFee.toFixed(2)} (Demo Mode)`, 'success');
+          closeConvertModal();
+          return;
+        }
+        
+        // Initialize contract if needed
+        if (!isContractInitialized) {
+          const initialized = await initializeSmartContract();
+          if (!initialized) {
+            // Fallback to demo mode with 5% app fee
+            const totalValue = diamonds * 0.005;
+            const appFee = totalValue * 0.05;
+            const usdtReceived = totalValue - appFee;
+            
+            walletData.diamonds -= diamonds;
+            walletData.usdt += usdtReceived;
+            
+            document.getElementById('diamondBalance').textContent = walletData.diamonds;
+            document.getElementById('usdtBalance').textContent = `$${walletData.usdt.toFixed(2)}`;
+            
+            showWalletNotification(`Successfully converted ${diamonds} diamonds to $${usdtReceived.toFixed(2)} USDT! App fee: $${appFee.toFixed(2)} (Demo Mode)`, 'success');
+            closeConvertModal();
+            return;
+          }
+        }
+        
+        showWalletNotification('Converting diamonds to USDT...', 'info');
+        
+        // Check if contract is properly initialized and not in demo mode
+        if (contractInstance && !contractInstance.demoMode && contractInstance.diamondContract) {
+          try {
+            // Call smart contract withdraw function
+            const result = await contractInstance.withdrawDiamonds(diamonds, (progress) => {
+              convertBtn.textContent = progress;
+            });
+            
+            showWalletNotification(`Successfully converted ${diamonds} diamonds to $${result.usdtReceived} USDT!`, 'success');
+            console.log('Conversion result:', result);
+            
+            // Close modal and refresh balances
+            closeConvertModal();
+            await loadBlockchainBalances();
+            await loadWalletBalance(); // Also update backend balance
+            return;
+          } catch (contractError) {
+            console.warn('Smart contract conversion failed, falling back to demo mode:', contractError);
+          }
+        }
+        
+        // Fallback to demo mode conversion with 5% app fee
+        console.log('Using demo mode for conversion');
+        const totalValue = diamonds * 0.005; // Total USDT value
+        const appFee = totalValue * 0.05; // 5% app fee
+        const usdtReceived = totalValue - appFee; // 95% to user
+        
+        walletData.diamonds -= diamonds;
+        walletData.usdt += usdtReceived;
+        
+        // Update UI
+        document.getElementById('diamondBalance').textContent = walletData.diamonds;
+        document.getElementById('usdtBalance').textContent = `$${walletData.usdt.toFixed(2)}`;
+        
+        showWalletNotification(`Successfully converted ${diamonds} diamonds to $${usdtReceived.toFixed(2)} USDT! App fee: $${appFee.toFixed(2)} (Demo Mode)`, 'success');
+        closeConvertModal();
+        
+      } catch (error) {
+        console.error('Error converting diamonds:', error);
+        showWalletNotification('Conversion failed: ' + error.message, 'error');
+      } finally {
+        convertBtn.disabled = false;
+        convertBtn.textContent = 'Convert';
+      }
+    }
+    
+    // Enhanced withdraw function with smart contract
+    async function confirmWithdrawUSDT() {
+      const amount = parseFloat(document.getElementById('withdrawAmount').value) || 0;
+      const address = document.getElementById('withdrawAddress').value.trim();
+      const withdrawBtn = document.getElementById('withdrawBtn');
+      
+      if (amount <= 0) {
+        showWalletNotification('Please enter a valid amount', 'warning');
+        return;
+      }
+      
+      if (amount > walletData.usdt) {
+        showWalletNotification('Insufficient USDT balance', 'error');
+        return;
+      }
+      
+      if (!address) {
+        showWalletNotification('Please enter a withdrawal address', 'warning');
+        return;
+      }
+      
+      // Check if wallet is connected
+      const connectedWallet = localStorage.getItem('connected_evm_wallet');
+      if (!connectedWallet) {
+        showWalletNotification('Please connect your wallet first', 'warning');
+        return;
+      }
+      
+      try {
+        withdrawBtn.disabled = true;
+        withdrawBtn.textContent = 'Processing...';
+        
+        // Check for wallet conflicts first
+        if (walletConflictDetected || detectWalletConflicts()) {
+          // Demo mode withdrawal with 5% app fee
+          const appFee = amount * 0.05; // 5% app fee
+          const amountAfterFee = amount - appFee; // User receives 95%
+          walletData.usdt -= amount; // Deduct full amount from balance
+          
+          // Update UI
+          document.getElementById('usdtBalance').textContent = `$${Math.max(0, walletData.usdt).toFixed(2)}`;
+          
+          showWalletNotification(`Successfully withdrew $${amountAfterFee.toFixed(2)} USDT to ${address.substring(0, 6)}...${address.substring(address.length - 4)}! App fee: $${appFee.toFixed(2)} (Demo Mode)`, 'success');
+          closeWithdrawModal();
+          return;
+        }
+        
+        // Try smart contract withdrawal first, fallback to API
+        try {
+          // Initialize contract if needed
+          if (!isContractInitialized) {
+            const initialized = await initializeSmartContract();
+            if (!initialized) {
+              throw new Error('Smart contract not available');
+            }
+          }
+          
+          showWalletNotification('Processing USDT withdrawal...', 'info');
+          
+          // Note: This would require a smart contract function for external withdrawals
+          // For now, we'll use the API approach
+          throw new Error('Smart contract withdrawal not implemented yet');
+          
+        } catch (contractError) {
+          console.log('Smart contract withdrawal failed, using API...', contractError);
+          
+          // Fallback to API withdrawal
+          const token = await getValidToken();
+          if (!token) {
+            showWalletNotification('Please log in to withdraw USDT', 'error');
+            return;
+          }
+          
+          console.log('Withdrawing USDT to:', `${API_BASE_URL}api/wallet/withdraw`);
+          console.log('Withdrawal data:', { amount: amount, to: address });
+          console.log('Token present:', token ? 'Yes' : 'No');
+          
+          const response = await fetch(`${API_BASE_URL}api/wallet/withdraw`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ 
+            amount: amount,
+            to: address
+          })
+        });
+        
+        console.log('Withdraw response status:', response.status);
+        console.log('Withdraw response headers:', [...response.headers.entries()]);
+        
+        // Check if we got a 404 error (API endpoint not found)
+        if (response.status === 404) {
+          console.warn('API endpoint not found, falling back to demo mode withdrawal');
+          
+          // Demo mode withdrawal - simulate the process
+          const totalValue = amount;
+          const appFee = totalValue * 0.05; // 5% app fee
+          const userReceives = totalValue - appFee;
+          
+          // Update local wallet data
+          if (walletData.usdt >= totalValue) {
+            walletData.usdt -= totalValue;
+            
+            // Update UI
+            const usdtElement = document.getElementById('usdtBalance');
+            if (usdtElement) {
+              usdtElement.textContent = `$${walletData.usdt.toFixed(2)}`;
+            }
+            
+            showWalletNotification(`Demo withdrawal: $${userReceives.toFixed(2)} USDT sent to ${address.slice(0,6)}...${address.slice(-4)}. Fee: $${appFee.toFixed(2)}`, 'success');
+          } else {
+            showWalletNotification('Insufficient USDT balance for withdrawal', 'error');
+          }
+          
+          closeWithdrawModal();
+          return;
+        }
+        
+        const responseText = await response.text();
+        console.log('Withdraw response raw text:', responseText.substring(0, 500));
+        
+        let result;
+        try {
+          result = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error('Failed to parse withdraw response as JSON:', parseError);
+          console.error('Response was not valid JSON. Full response:', responseText);
+          showWalletNotification('Server returned invalid response. Using demo mode instead.', 'warning');
+          
+          // Fallback to demo mode
+          const totalValue = amount;
+          const appFee = totalValue * 0.05;
+          const userReceives = totalValue - appFee;
+          
+          if (walletData.usdt >= totalValue) {
+            walletData.usdt -= totalValue;
+            const usdtElement = document.getElementById('usdtBalance');
+            if (usdtElement) {
+              usdtElement.textContent = `$${walletData.usdt.toFixed(2)}`;
+            }
+            showWalletNotification(`Demo withdrawal: $${userReceives.toFixed(2)} USDT sent to ${address.slice(0,6)}...${address.slice(-4)}`, 'success');
+          } else {
+            showWalletNotification('Insufficient USDT balance', 'error');
+          }
+          
+          closeWithdrawModal();
+          return;
+        }
+        
+        console.log('Withdraw response parsed data:', result);
+        
+        if (result.status === 'success') {
+          showWalletNotification('USDT withdrawal initiated successfully!', 'success');
+          closeWithdrawModal();
+          await loadBlockchainBalances();
+          await loadWalletBalance();
+          } else {
+            showWalletNotification('Error: ' + result.message, 'error');
+          }
+        }
+        
+      } catch (error) {
+        console.error('Error withdrawing USDT:', error);
+        showWalletNotification('Withdrawal failed: ' + error.message, 'error');
+      } finally {
+        withdrawBtn.disabled = false;
+        withdrawBtn.textContent = 'Withdraw USDT';
+      }
+    }
+    
+    // Close modal functions
+    function closeConvertModal() {
+      const modal = document.getElementById('convertModal');
+      if (modal) {
+        const bootstrapModal = bootstrap.Modal.getInstance(modal);
+        if (bootstrapModal) {
+          bootstrapModal.hide();
+        } else {
+          modal.style.display = 'none';
+          modal.classList.remove('show');
+        }
+      }
+    }
+    
+    function closeBuyModal() {
+      const modal = document.getElementById('buyModal');
+      if (modal) {
+        const bootstrapModal = bootstrap.Modal.getInstance(modal);
+        if (bootstrapModal) {
+          bootstrapModal.hide();
+        } else {
+          modal.style.display = 'none';
+          modal.classList.remove('show');
+        }
+      }
+    }
+    
+    function closeWithdrawModal() {
+      const modal = document.getElementById('withdrawModal');
+      if (modal) {
+        const bootstrapModal = bootstrap.Modal.getInstance(modal);
+        if (bootstrapModal) {
+          bootstrapModal.hide();
+        } else {
+          modal.style.display = 'none';
+          modal.classList.remove('show');
+        }
+      }
+    }
+    
+    // Update balance displays in modals
+    function updateBalanceDisplaysInModals() {
+      // Update convert modal
+      const convertUSDTDisplay = document.getElementById('convertUSDTDisplay');
+      const availableDiamonds = document.getElementById('availableDiamonds');
+      if (convertUSDTDisplay) {
+        convertUSDTDisplay.textContent = `$${walletData.usdt.toFixed(2)}`;
+      }
+      if (availableDiamonds) {
+        availableDiamonds.textContent = walletData.diamonds;
+      }
+      
+      // Update buy modal
+      const buyWalletAddress = document.getElementById('buyWalletAddress');
+      if (buyWalletAddress) {
+        const connectedWallet = localStorage.getItem('connected_evm_wallet');
+        if (connectedWallet) {
+          buyWalletAddress.textContent = `${connectedWallet.substring(0, 6)}...${connectedWallet.substring(connectedWallet.length - 4)}`;
+        }
+      }
+      
+      // Update withdraw modal
+      const availableUSDT = document.getElementById('availableUSDT');
+      const withdrawWalletAddress = document.getElementById('withdrawWalletAddress');
+      if (availableUSDT) {
+        availableUSDT.textContent = walletData.usdt.toFixed(2);
+      }
+      if (withdrawWalletAddress) {
+        const connectedWallet = localStorage.getItem('connected_evm_wallet');
+        if (connectedWallet) {
+          withdrawWalletAddress.textContent = `${connectedWallet.substring(0, 6)}...${connectedWallet.substring(connectedWallet.length - 4)}`;
+          // Auto-fill withdrawal address
+          const withdrawAddress = document.getElementById('withdrawAddress');
+          if (withdrawAddress && !withdrawAddress.value) {
+            withdrawAddress.value = connectedWallet;
+          }
+        }
+      }
+    }
+    
+    // Enhanced wallet connection with smart contract initialization
+    async function connectWallet() {
+      try {
+        console.log('=== CONNECT WALLET FUNCTION CALLED ===');
+        
+        // Prevent multiple simultaneous connection attempts
+        if (isConnecting) {
+          console.log('Connection already in progress, ignoring...');
+          return;
+        }
+        
+        isConnecting = true;
+        
+        // Check if MetaMask is installed
+        if (typeof window.ethereum === 'undefined') {
+          console.error('MetaMask not found');
+          showWalletNotification('MetaMask is not installed. Please install MetaMask to connect your wallet.', 'error');
+          setTimeout(() => {
+            if (confirm('MetaMask is required to connect your wallet.\n\nWould you like to install MetaMask now?')) {
+              window.open('https://metamask.io/download/', '_blank');
+            }
+          }, 1000);
+          isConnecting = false;
+          return;
+        }
+        
+        // Enhanced MetaMask detection with fallback for external interference
+        let ethereum = window.ethereum;
+        
+        // If there are multiple providers, try to find MetaMask specifically
+        if (window.ethereum.providers && Array.isArray(window.ethereum.providers)) {
+          console.log('Multiple providers detected, finding MetaMask...');
+          ethereum = window.ethereum.providers.find(provider => provider.isMetaMask) || window.ethereum;
+        }
+        
+        // Check if MetaMask is accessible
+        if (!ethereum || !ethereum.isMetaMask) {
+          showWalletNotification('Please use MetaMask to connect your wallet', 'warning');
+          isConnecting = false;
+          return;
+        }
+        
+        console.log('MetaMask detected, requesting account access...');
+        
+        // First check if already connected
+        let accounts;
+        try {
+          accounts = await ethereum.request({ method: 'eth_accounts' });
+          
+          if (accounts.length > 0) {
+            console.log('Already connected to:', accounts[0]);
+            // Update UI with existing connection
+            localStorage.setItem('connected_evm_wallet', accounts[0]);
+            updateWalletAddress();
+            updateConnectButton();
+            updateConnectedWalletDisplays(accounts[0]);
+            showWalletNotification('Wallet already connected!', 'info');
+            
+            // Initialize smart contract
+            await initializeSmartContract();
+            
+            isConnecting = false;
+            return;
+          }
+        } catch (error) {
+          console.log('No existing connection, requesting new connection...');
+        }
+        
+        // Request account access with timeout protection
+        const connectionPromise = ethereum.request({
+          method: 'eth_requestAccounts'
+        });
+        
+        // Add timeout to prevent hanging on external interference
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Connection timeout - please try again')), 30000);
+        });
+        
+        accounts = await Promise.race([connectionPromise, timeoutPromise]);
+        
+        if (accounts && accounts.length > 0) {
+          const walletAddress = accounts[0];
+          console.log('Wallet connected:', walletAddress);
+          
+          // Store wallet address locally
+          localStorage.setItem('connected_evm_wallet', walletAddress);
+          
+          // Update UI elements
+          updateWalletAddress();
+          updateConnectButton();
+          updateConnectedWalletDisplays(walletAddress);
+          
+          // Show success notification
+          showWalletNotification('Wallet connected successfully!', 'success');
+          
+          // Try to save to backend (optional, non-blocking)
+          try {
+            await saveWalletToBackend(walletAddress);
+          } catch (backendError) {
+            console.warn('Backend save failed, but wallet connected locally:', backendError);
+          }
+          
+          // Initialize smart contract
+          await initializeSmartContract();
+          
+          // Refresh balance after connection
+          await refreshWalletBalance();
+          
+        } else {
+          showWalletNotification('No accounts found. Please make sure MetaMask is unlocked.', 'warning');
+        }
+        
+      } catch (error) {
+        console.error('Error connecting wallet:', error);
+        
+        // Handle specific error codes and external interference
+        if (error.code === 4001) {
+          showWalletNotification('Connection request was rejected by user', 'warning');
+        } else if (error.code === -32002) {
+          showWalletNotification('Connection request is already pending. Please check MetaMask.', 'info');
+        } else if (error.code === -32603) {
+          showWalletNotification('Internal error. Please try again.', 'error');
+        } else if (error.message && error.message.includes('Connection timeout')) {
+          showWalletNotification('Connection timed out. Please disable any wallet extensions that may interfere and try again.', 'warning');
+        } else if (error.message && error.message.includes('Unexpected error')) {
+          showWalletNotification('MetaMask connection error. Please try refreshing the page.', 'error');
+        } else if (error.message && (error.message.includes('evmAsk') || error.message.includes('selectExtension'))) {
+          showWalletNotification('External wallet extension interference detected. Please disable conflicting extensions and try again.', 'warning');
+        } else {
+          showWalletNotification('Failed to connect wallet: ' + (error.message || 'Unknown error'), 'error');
+        }
+      } finally {
+        // Always reset the connecting flag
+        isConnecting = false;
+      }
+    }
+    
+    console.log('Wallet page loaded. Available test functions:');
+    console.log('- testConnectWallet()');
+    console.log('- testConvertModal()');
+    console.log('- testBuyModal()');
+    console.log('- testWithdrawModal()');
+    console.log('- testAllModals()');
+    console.log('- buyUSDT() - Opens DEX for USDT purchase');
+    console.log('- initializeSmartContract() - Initialize blockchain connection');
+    
+    // Global error handler for evmAsk.js and other wallet conflicts
+    window.addEventListener('error', function(event) {
+      if (event.error && event.error.message && 
+          (event.error.message.includes('evmAsk') || 
+           event.error.message.includes('selectExtension') ||
+           event.error.message.includes('Unexpected error'))) {
+        console.warn('🚫 Wallet extension conflict detected and handled:', event.error.message);
+        event.preventDefault(); // Prevent the error from breaking the page
+        return false;
+      }
+    });
+    
+    // Global unhandled promise rejection handler
+    window.addEventListener('unhandledrejection', function(event) {
+      if (event.reason && event.reason.message && 
+          (event.reason.message.includes('evmAsk') || 
+           event.reason.message.includes('selectExtension') ||
+           event.reason.message.includes('Unexpected error'))) {
+        console.warn('🚫 Wallet extension promise rejection handled:', event.reason.message);
+        event.preventDefault(); // Prevent the error from breaking the page
+        return false;
+      }
+    });
+  </script>
+
+  <!-- Convert Diamonds to USDT Modal -->
+  <div class="overlay" id="convertModal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Convert Diamonds to USDT</h5>
+        <button type="button" class="btn-close" onclick="closeConvertModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="balance-info mb-3">
+          <small class="text-muted">Available: <span id="availableDiamonds">0</span> Diamonds</small>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Amount to Convert</label>
+          <input type="number" class="form-control" id="convertAmount" placeholder="Enter diamonds amount" min="3" oninput="updateConvertCalculation()">
+          <small class="text-warning">⚠️ Minimum: 3 Diamonds</small>
+        </div>
+        
+        <div class="conversion-details">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Total Value:</span>
+            <span id="convertValue">$0.0000</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2 text-warning">
+            <span>App Fee (5%):</span>
+            <span id="convertFee">-$0.0000</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between mb-3">
+            <strong>You Receive:</strong>
+            <strong id="convertTotal">$0.0000</strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeConvertModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="confirmConvertToUSDT()">Convert</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Buy Diamonds Modal -->
+  <div class="overlay" id="buyModal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Buy Diamonds</h5>
+        <button type="button" class="btn-close" onclick="closeBuyModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="wallet-info mb-3">
+          <small class="text-muted">Connected Wallet: <span id="buyWalletAddress">Not connected</span></small>
+        </div>
+        
+        <div class="diamond-packages mb-3">
+          <h6>Quick Select</h6>
+          <div class="row g-2">
+            <div class="col-4">
+              <button class="btn btn-outline-primary w-100" onclick="selectDiamondQuantity(100)">100 💎</button>
+            </div>
+            <div class="col-4">
+              <button class="btn btn-outline-primary w-100" onclick="selectDiamondQuantity(500)">500 💎</button>
+            </div>
+            <div class="col-4">
+              <button class="btn btn-outline-primary w-100" onclick="selectDiamondQuantity(1000)">1000 💎</button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Custom Amount</label>
+          <input type="number" class="form-control" id="customQuantity" placeholder="Enter diamond amount" min="1" oninput="updateBuyCalculation()">
+        </div>
+        
+        <div class="purchase-details">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Total Cost:</span>
+            <span id="buyTotal">$0.000</span>
+          </div>
+          <div class="d-flex justify-content-between mb-2 text-info">
+            <span>App Revenue (20%):</span>
+            <span id="appRevenue">$0.000</span>
+          </div>
+          <div class="d-flex justify-content-between mb-3">
+            <span>Diamond Value:</span>
+            <span id="diamondValue">0 💎</span>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeBuyModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="confirmBuyDiamonds()">Buy with Wallet</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Withdraw USDT Modal -->
+  <div class="overlay" id="withdrawModal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Withdraw USDT</h5>
+        <button type="button" class="btn-close" onclick="closeWithdrawModal()"></button>
+      </div>
+      <div class="modal-body">
+        <div class="balance-info mb-3">
+          <small class="text-muted">Available: $<span id="availableUSDT">0.00</span> USDT</small>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Withdrawal Address</label>
+          <input type="text" class="form-control" id="withdrawAddress" placeholder="0x..." readonly>
+          <small class="text-muted">Connected wallet address</small>
+        </div>
+        
+        <div class="mb-3">
+          <label class="form-label">Amount to Withdraw</label>
+          <input type="number" class="form-control" id="withdrawAmount" placeholder="Enter USDT amount" min="0.01" step="0.01" oninput="updateWithdrawCalculation()">
+        </div>
+        
+        <div class="withdrawal-details">
+          <div class="d-flex justify-content-between mb-2">
+            <span>Withdrawal Amount:</span>
+            <span>$<span id="withdrawAmountDisplay">0.00</span></span>
+          </div>
+          <div class="d-flex justify-content-between mb-2 text-warning">
+            <span>Network Fee (5%):</span>
+            <span id="withdrawFee">-$0.00</span>
+          </div>
+          <hr>
+          <div class="d-flex justify-content-between mb-3">
+            <strong>You Receive:</strong>
+            <strong id="withdrawTotal">$0.00</strong>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" onclick="closeWithdrawModal()">Cancel</button>
+        <button type="button" class="btn btn-success" onclick="confirmWithdrawUSDT()">Withdraw</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Styles -->
+  <style>
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .overlay.show {
+      opacity: 1;
+      visibility: visible;
+      display: flex !important;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    .overlay.show .modal-content {
+      transform: scale(1);
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: between;
+      align-items: center;
+    }
+
+    .modal-header h5 {
+      margin: 0;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      transition: all 0.2s ease;
+      margin-left: auto;
+    }
+
+    .btn-close:hover {
+      background: var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .btn-close::before {
+      content: '×';
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+    }
+
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 0.5rem;
+      justify-content: flex-end;
+    }
+
+    .balance-info, .wallet-info {
+      background: var(--secondary-bg);
+      padding: 0.75rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .conversion-details, .purchase-details, .withdrawal-details {
+      background: var(--secondary-bg);
+      padding: 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+    }
+
+    .diamond-packages .btn {
+      font-size: 0.875rem;
+      padding: 0.5rem;
+    }
+
+    .form-control {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+    }
+
+    .form-control:focus {
+      background: var(--secondary-bg);
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+      box-shadow: 0 0 0 0.2rem rgba(202, 244, 3, 0.25);
+    }
+  </style>
+</body>
+</html>

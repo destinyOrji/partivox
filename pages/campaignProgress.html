@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Campaigns - PARTIVOX</title>
+    <link rel="shortcut icon" href="../images/IconDiamond.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/enhanced-typography.css" rel="stylesheet">
+  <style>
+    :root {
+      /* === PARTIVOX DESIGN SYSTEM === */
+      
+      /* Core Background Colors */
+      --primary-bg: #0a0a0f;
+      --secondary-bg: #1a1a1f;
+      --card-bg: #1e1e24;
+      --sidebar-bg: #16161b;
+      --surface-bg: #252530;
+      --overlay-bg: rgba(10, 10, 15, 0.95);
+      
+      /* Lemon Green Brand Colors (Primary) */
+      --accent-color: #caf403; /* signature lemon green */
+      --accent-hover: #9dcf00; /* darker lemon green */
+      --accent-light: #e8ff4d; /* lighter lemon green */
+      --accent-dark: #7ba800; /* darkest lemon green */
+      --accent-rgb: 202, 244, 3;
+      
+      /* Secondary Brand Colors */
+      --primary-color: #667eea;
+      --primary-hover: #5a67d8;
+      --primary-light: #7c3aed;
+      --primary-rgb: 102, 126, 234;
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --text-inverse: #000000;
+      --text-accent: var(--accent-color);
+      
+      /* Status Colors */
+      --success-color: #10b981;
+      --success-light: #34d399;
+      --warning-color: #f59e0b;
+      --warning-light: #fbbf24;
+      --danger-color: #ef4444;
+      --danger-light: #f87171;
+      --info-color: #3b82f6;
+      --info-light: #60a5fa;
+      
+      /* Border & Divider Colors */
+      --border-color: #27272a;
+      --border-light: #374151;
+      --border-accent: var(--accent-color);
+      --divider-color: rgba(255, 255, 255, 0.1);
+      
+      /* Layout Variables */
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 60px;
+      --topbar-height: 70px;
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --border-radius-lg: 16px;
+      
+      /* Spacing Scale */
+      --space-xs: 0.25rem;    /* 4px */
+      --space-sm: 0.5rem;     /* 8px */
+      --space-md: 1rem;       /* 16px */
+      --space-lg: 1.5rem;     /* 24px */
+      --space-xl: 2rem;       /* 32px */
+      --space-2xl: 3rem;      /* 48px */
+      --space-3xl: 4rem;      /* 64px */
+      
+      /* Typography Scale */
+      --text-xs: 0.75rem;     /* 12px */
+      --text-sm: 0.875rem;    /* 14px */
+      --text-base: 1rem;      /* 16px */
+      --text-lg: 1.125rem;    /* 18px */
+      --text-xl: 1.25rem;     /* 20px */
+      --text-2xl: 1.5rem;     /* 24px */
+      --text-3xl: 1.875rem;   /* 30px */
+      --text-4xl: 2.25rem;    /* 36px */
+      
+      /* Animation & Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.2s ease;
+      --transition-slow: 0.3s ease;
+      --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+      --shadow-accent: 0 0 0 3px rgba(202, 244, 3, 0.15);
+      
+      /* Z-Index Scale */
+      --z-dropdown: 1000;
+      --z-sticky: 1020;
+      --z-fixed: 1030;
+      --z-modal-backdrop: 1040;
+      --z-modal: 1050;
+      --z-popover: 1060;
+      --z-tooltip: 1070;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f14 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background: linear-gradient(180deg, var(--sidebar-bg) 0%, #12121a 100%);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      width: 280px;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-240px);
+      width: 60px;
+    }
+
+    .sidebar.collapsed .logo h4,
+    .sidebar.collapsed .nav-section h6,
+    .sidebar.collapsed a span {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar .logo {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar .logo h4 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar .nav-section {
+      padding: 1rem 0;
+    }
+
+    .sidebar .nav-section h6 {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+      color: var(--text-secondary);
+      padding: 0.875rem 1.5rem;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sidebar a i {
+      width: 20px;
+      margin-right: 12px;
+      font-size: 1rem;
+    }
+
+    .sidebar a:hover {
+      color: var(--text-primary);
+      background: rgba(202, 244, 3, 0.1);
+    }
+
+    .sidebar a.active {
+      color: var(--accent-color);
+      background: rgba(202, 244, 3, 0.15);
+      border-right: 3px solid var(--accent-color);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+      background: transparent;
+    }
+
+    .main-content.sidebar-collapsed {
+      margin-left: 60px;
+    }
+
+    .topbar {
+      background: rgba(30, 30, 36, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--accent-color);
+      color: #000;
+      border-color: var(--accent-color);
+    }
+
+    .user-profile {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .user-details h6 {
+      font-size: 0.875rem;
+      margin: 0;
+    }
+
+    .user-details small {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    /* Campaign Upload Specific Styles */
+    .upload-label {
+      border: 2px dashed var(--border-color);
+      background: var(--secondary-bg);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .upload-label:hover {
+      border-color: var(--accent-color);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .form-control {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      border-radius: 8px;
+    }
+
+    .form-control:focus {
+      background: var(--secondary-bg);
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+      box-shadow: 0 0 0 0.2rem rgba(202, 244, 3, 0.25);
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #000;
+    }
+
+    .btn-outline-primary {
+      color: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+
+    .btn-outline-primary:hover,
+    .btn-outline-primary:focus {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    /* Card polish to match upload page */
+    .campaign-card {
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      border-radius: 16px;
+    }
+
+    .campaign-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    }
+
+    .campaign-card img.img-fluid {
+      border-radius: 12px;
+    }
+
+    .custom-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1050;
+      border-radius: 16px;
+      display: none;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1040;
+      display: none;
+    }
+
+    /* Empty State Styles */
+    .empty-state-container {
+      min-height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .empty-state-container .btn {
+      border-radius: 12px;
+      padding: 0.875rem 2rem;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+    
+    .empty-state-container .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(202, 244, 3, 0.4);
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.sidebar-collapsed {
+        margin-left: 0;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <h4>
+        <i class="fas fa-gem me-2"></i>
+        PARTIVOX
+      </h4>
+    </div>
+    
+    <div class="user-profile">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <div class="user-details">
+        <h6 id="userHandle">@username</h6>
+        <small id="walletAddress">Connect wallet</small>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <h6>Main</h6>
+      <a href="userDashboard.html">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="campaign_upload.html">
+        <i class="fas fa-plus-circle"></i>
+        <span>Create Campaign</span>
+      </a>
+      <a href="campaignProgress.html" class="active">
+        <i class="fas fa-tasks"></i>
+        <span>My Campaigns</span>
+      </a>
+      <a href="task_engage.html">
+        <i class="fas fa-bolt"></i>
+        <span>Tasks</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <h6>Account</h6>
+      <a href="Wallet.html">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="settings.html">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <div class="content">
+      <!-- Topbar -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </div>
+          <div>
+            <h5 class="mb-0">My Campaigns</h5>
+            <small class="text-muted">Monitor campaign performance, approve participant submissions, track engagement metrics, and manage campaign lifecycle</small>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-primary btn-sm" onclick="window.location.href='campaign_upload.html'">
+            <i class="fas fa-plus me-1"></i>Create Campaign
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter and Search Section -->
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-primary active" data-filter="all">All Campaigns</button>
+          <button class="btn btn-outline-secondary" data-filter="active">Active</button>
+          <button class="btn btn-outline-secondary" data-filter="pending">Pending</button>
+          <button class="btn btn-outline-secondary" data-filter="completed">Completed</button>
+        </div>
+        
+        <div class="position-relative" style="max-width: 300px;">
+          <i class="fas fa-search position-absolute" style="left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+          <input type="text" class="form-control" placeholder="Search campaigns..." id="searchInput" style="padding-left: 2.5rem; border-radius: 50px; background: var(--secondary-bg); border: 1px solid var(--border-color); color: var(--text-primary);">
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="d-flex gap-2 mb-4">
+        <button class="btn btn-primary active" id="createdTab">
+          <i class="fas fa-bullseye me-2"></i>Campaigns Created
+        </button>
+        <button class="btn btn-outline-secondary" onclick="window.location.href='task_engage.html'">
+          <i class="fas fa-bolt me-2"></i>Tasks Engaged
+        </button>
+      </div>
+
+      <!-- Campaigns Grid -->
+      <div class="row g-4" id="campaignsContainer">
+        <!-- Sample Campaign Card 1 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="content-card campaign-card">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <img src="../images/avarter2.png" alt="Avatar" class="rounded-circle" style="width: 32px; height: 32px;">
+                <span class="fw-semibold">@Endwells_codes</span>
+              </div>
+              <span class="badge bg-success">Active</span>
+            </div>
+            
+            <div class="mb-3">
+              <img src="../images/bottom1.jpg" alt="Campaign" class="img-fluid rounded mb-2" style="height: 120px; width: 100%; object-fit: cover;">
+              <p class="mb-0">Massive $100K airdrop happening soon! Retweet and spread the word!</p>
+            </div>
+            
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <small class="text-muted">Participants</small>
+                <small class="fw-semibold">50/100</small>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-success" style="width: 50%"></div>
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-1">
+                <img src="../images/IconDiamond.png" alt="Diamond" style="width: 16px; height: 16px;">
+                <span class="fw-semibold">100</span>
+              </div>
+              <button class="btn btn-outline-primary btn-sm" onclick="openProgressModal('campaign1')">
+                View Progress
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sample Campaign Card 2 -->
+        <div class="col-lg-4 col-md-6">
+          <div class="content-card campaign-card">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <img src="../images/avarter2.png" alt="Avatar" class="rounded-circle" style="width: 32px; height: 32px;">
+                <span class="fw-semibold">@Endwells_codes</span>
+              </div>
+              <span class="badge bg-warning">Pending</span>
+            </div>
+            
+            <div class="mb-3">
+              <img src="../images/bottom2.jpg" alt="Campaign" class="img-fluid rounded mb-2" style="height: 120px; width: 100%; object-fit: cover;">
+              <p class="mb-0">NFT collection launch - Join our community and get exclusive access!</p>
+            </div>
+            
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <small class="text-muted">Participants</small>
+                <small class="fw-semibold">25/75</small>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-warning" style="width: 33%"></div>
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-1">
+                <img src="../images/IconDiamond.png" alt="Diamond" style="width: 16px; height: 16px;">
+                <span class="fw-semibold">150</span>
+              </div>
+              <button class="btn btn-outline-primary btn-sm" onclick="openProgressModal('campaign2')">
+                View Progress
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Progress Modal -->
+  <div class="modal fade" id="progressModal" tabindex="-1" aria-labelledby="progressModalLabel" aria-hidden="true" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+        <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+          <h5 class="modal-title text-white" id="progressModalLabel">
+            <i class="fas fa-chart-line me-2"></i>Campaign Progress
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <p class="text-muted mb-3">
+              <i class="fas fa-info-circle me-1"></i>
+              View task completions and manage participant submissions
+            </p>
+            
+            <!-- Campaign Summary Card -->
+            <div class="card mb-4" style="background: rgba(26, 26, 26, 0.4); border: 1px solid var(--border-color);">
+              <div class="card-body">
+                <div class="row g-3">
+                  <div class="col-md-3 col-6">
+                    <div class="text-center">
+                      <div class="h4 text-success mb-1" id="completedCount">0</div>
+                      <small class="text-muted">Completed</small>
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-6">
+                    <div class="text-center">
+                      <div class="h4 text-warning mb-1" id="pendingCount">0</div>
+                      <small class="text-muted">Pending</small>
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-6">
+                    <div class="text-center">
+                      <div class="h4 text-info mb-1" id="inProgressCount">0</div>
+                      <small class="text-muted">In Progress</small>
+                    </div>
+                  </div>
+                  <div class="col-md-3 col-6">
+                    <div class="text-center">
+                      <div class="h4 text-danger mb-1" id="rejectedCount">0</div>
+                      <small class="text-muted">Rejected</small>
+                    </div>
+                  </div>
+                </div>
+                <div class="mt-3">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <small class="text-muted">Overall Progress</small>
+                    <small class="text-muted" id="progressPercentage">0%</small>
+                  </div>
+                  <div class="progress" style="height: 8px;">
+                    <div class="progress-bar bg-success" id="progressBar" style="width: 0%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Status Filter Tabs -->
+          <div class="mb-3">
+            <ul class="nav nav-pills" id="statusFilterTabs" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="all-tab" data-bs-toggle="pill" data-bs-target="#all-tasks" 
+                        type="button" role="tab" onclick="filterTasksByStatus('all')">
+                  <i class="fas fa-list me-1"></i>All Tasks
+                  <span class="badge bg-secondary ms-1" id="allCount">0</span>
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="pending-tab" data-bs-toggle="pill" data-bs-target="#pending-tasks" 
+                        type="button" role="tab" onclick="filterTasksByStatus('pending')">
+                  <i class="fas fa-hourglass-half me-1"></i>Pending
+                  <span class="badge bg-warning ms-1" id="pendingTabCount">0</span>
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="in_progress-tab" data-bs-toggle="pill" data-bs-target="#in_progress-tasks" 
+                        type="button" role="tab" onclick="filterTasksByStatus('in_progress')">
+                  <i class="fas fa-clock me-1"></i>In Progress
+                  <span class="badge bg-info ms-1" id="inProgressTabCount">0</span>
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="completed-tab" data-bs-toggle="pill" data-bs-target="#completed-tasks" 
+                        type="button" role="tab" onclick="filterTasksByStatus('completed')">
+                  <i class="fas fa-check-circle me-1"></i>Completed
+                  <span class="badge bg-success ms-1" id="completedTabCount">0</span>
+                </button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="rejected-tab" data-bs-toggle="pill" data-bs-target="#rejected-tasks" 
+                        type="button" role="tab" onclick="filterTasksByStatus('rejected')">
+                  <i class="fas fa-times-circle me-1"></i>Rejected
+                  <span class="badge bg-danger ms-1" id="rejectedTabCount">0</span>
+                </button>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Tasks List -->
+          <div id="tasksList">
+            <div class="d-flex justify-content-center py-4">
+              <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i>Close
+          </button>
+          <button type="button" class="btn btn-primary" onclick="refreshCampaignProgress()">
+            <i class="fas fa-sync-alt me-1"></i>Refresh
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Report Modal -->
+  <div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: var(--card-bg); border: 1px solid var(--border-color);">
+        <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+          <h5 class="modal-title text-white" id="reportModalLabel">
+            <i class="fas fa-exclamation-triangle me-2 text-warning"></i>Decline Task
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="alert alert-warning" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); color: var(--warning-color);">
+            <i class="fas fa-info-circle me-2"></i>
+            Please provide a reason for declining this task submission.
+          </div>
+          
+          <div class="mb-3">
+            <label for="reportReason" class="form-label text-white">Decline Reason</label>
+            <textarea 
+              class="form-control" 
+              id="reportReason" 
+              rows="4" 
+              placeholder="Explain why this task submission is being declined..." 
+              maxlength="300"
+              style="background: var(--secondary-bg); border: 1px solid var(--border-color); color: var(--text-primary); resize: vertical;">
+            </textarea>
+            <div class="form-text text-muted">
+              <span id="reasonCharCount">0</span>/300 characters
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i>Cancel
+          </button>
+          <button type="button" class="btn btn-danger" onclick="submitReport()">
+            <i class="fas fa-ban me-1"></i>Decline Task
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+  <script src="../javascript/api.js"></script>
+  <script src="../javascript/globalUser.js"></script>
+  <script>
+    // Dynamic API base URL to match current origin
+    const API_BASE_URL = window.location.origin + "/";
+    let CURRENT_USER_HANDLE = null;
+    let CURRENT_USER_ID = null;
+    let _currentCampaignId = null;
+    let _currentCampaignTasks = [];
+    // SIDEBAR TOGGLE FUNCTIONALITY
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+      function toggleSidebar() {
+        if (window.innerWidth <= 768) {
+          // Mobile behavior
+          sidebar.classList.toggle('show');
+          sidebarOverlay.style.display = sidebar.classList.contains('show') ? 'block' : 'none';
+        } else {
+          // Desktop behavior
+          sidebar.classList.toggle('collapsed');
+          mainContent.classList.toggle('sidebar-collapsed');
+        }
+      }
+
+      sidebarToggle.addEventListener('click', toggleSidebar);
+      sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('show');
+        sidebarOverlay.style.display = 'none';
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('show');
+          sidebarOverlay.style.display = 'none';
+        }
+      });
+
+      // Update user info, then load campaigns for that user
+      Promise.all([
+        updateUserProfile(),
+        loadUserAvatar()
+      ]).then(() => {
+        loadCampaigns();
+      }).catch(() => {
+        // Even if profile fails, attempt to load campaigns (will show none if filtered by owner)
+        loadCampaigns();
+      });
+      updateWalletAddress();
+      
+      // Initialize filter functionality
+      initializeFilters();
+      
+      // Initialize search functionality
+      initializeSearch();
+    });
+
+    // Load campaigns for the current user and render
+    let _allCampaigns = [];
+    async function loadCampaigns() {
+      const container = document.getElementById('campaignsContainer');
+      container.innerHTML = '<div class="text-muted">Loading campaigns...</div>';
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          container.innerHTML = '<div class="text-warning">Please log in to view your campaigns.</div>';
+          return;
+        }
+        // Fetch campaigns with proper error handling
+        console.log('🔄 Loading campaigns from API...');
+        const response = await fetch(`${API_BASE_URL}api/campaigns/list`, { 
+          headers: { 'Authorization': `Bearer ${token}` } 
+        });
+        
+        if (!response.ok) {
+          throw new Error(`API Error: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('📊 API Response:', data);
+        
+        if (data.status === 'error') {
+          throw new Error(data.message || 'API returned error status');
+        }
+        // Prefer API shape: { status, data: { items, page, limit, total } }
+        let items = (data && data.data && Array.isArray(data.data.items)) ? data.data.items
+                  : (Array.isArray(data.items) ? data.items
+                  : (Array.isArray(data.data) ? data.data : []));
+        // Safety filter: if API returns everything, filter to current user's campaigns
+        try {
+          if (Array.isArray(items) && (CURRENT_USER_HANDLE || CURRENT_USER_ID)) {
+            const handle = (CURRENT_USER_HANDLE || '').toLowerCase();
+            const uid = (CURRENT_USER_ID || '').toString();
+            const filtered = items.filter(c => {
+              const owner = (c.owner_handle || c.owner || c.created_by || '').toString().toLowerCase();
+              const ownerId = (c.owner_id || c.user_id || c.created_by_id || '').toString();
+              return (handle && owner.includes(handle)) || (uid && ownerId && ownerId === uid);
+            });
+            // If filtering produced results or items seem to include mixed owners, use filtered
+            if (filtered.length > 0) items = filtered;
+          }
+        } catch (_) { /* ignore filtering errors */ }
+        
+        // Log campaigns before filtering
+        console.log('Campaigns loaded from API:', items.length, items);
+        
+        // Additional filter to remove any demo campaigns
+        const originalCount = items.length;
+        items = items.filter(campaign => {
+          const title = (campaign.title || '').toLowerCase();
+          const description = (campaign.description || '').toLowerCase();
+          
+          // Filter out any campaigns that look like demos
+          const isDemoTitle = title.includes('follow @partivox') || 
+                             title.includes('retweet') || 
+                             title.includes('join our community') ||
+                             title.includes('demo') ||
+                             title.includes('sample') ||
+                             title.includes('test campaign');
+          
+          const isDemoDescription = description.includes('demo') ||
+                                   description.includes('sample') ||
+                                   description.includes('test');
+          
+          const isDemo = isDemoTitle || isDemoDescription;
+          if (isDemo) {
+            console.log('Filtered out demo campaign:', campaign.title, campaign);
+          }
+          
+          return !isDemo;
+        });
+        
+        console.log(`Filtered campaigns: ${originalCount} -> ${items.length}`);
+        
+        _allCampaigns = items;
+        console.log(`✅ Loaded ${_allCampaigns.length} campaigns for current user`);
+        console.log('📋 Campaigns data:', _allCampaigns);
+        
+        // Log image data for each campaign
+        _allCampaigns.forEach((campaign, index) => {
+          console.log(`Campaign ${index + 1}: ${campaign.title}`);
+          console.log('- Assets:', campaign.assets);
+          console.log('- Image Data:', campaign.image_data ? 'Present' : 'None');
+          console.log('- Image URL:', campaign.image_url || 'None');
+        });
+        
+        renderCampaigns(_allCampaigns);
+      } catch (err) {
+        console.error('Failed to load campaigns:', err);
+        container.innerHTML = `<div class="text-danger">Failed to load campaigns: ${err.message || err}</div>`;
+      }
+    }
+
+    function renderCampaigns(campaigns) {
+      const container = document.getElementById('campaignsContainer');
+      if (!campaigns.length) {
+        container.innerHTML = `
+          <div class="empty-state-container text-center py-5">
+            <div class="mb-4">
+              <i class="fas fa-bullhorn fa-4x text-muted mb-3"></i>
+              <h4 class="text-muted mb-3">No Campaigns Created Yet</h4>
+              <p class="text-muted mb-4">You haven't created any campaigns yet. Start by creating your first campaign to engage with your audience!</p>
+              <button class="btn btn-primary btn-lg" onclick="window.location.href='campaign_upload.html'">
+                <i class="fas fa-plus me-2"></i>Create Your First Campaign
+              </button>
+            </div>
+          </div>`;
+        return;
+      }
+      const html = campaigns.map(c => {
+        const id = c.id || c._id || c.campaign_id || '';
+        const owner = c.owner_handle || c.owner || c.created_by || '@you';
+        const title = c.title || c.name || 'Untitled campaign';
+        const description = c.description || c.notes || '';
+        const status = (c.status || 'pending').toLowerCase();
+        const current = c.participants_current || c.enrolled_count || c.participants || 0;
+        const total = c.participants_total || c.max_participants || c.target_participants || 0;
+        const pct = total > 0 ? Math.min(100, Math.round((current / total) * 100)) : 0;
+        const reward = c.reward || c.reward_per_task || c.budget || 0;
+        // Enhanced image handling with multiple fallbacks
+        let img = '../images/bottom1.jpg'; // Default fallback
+        
+        // Check multiple possible image sources
+        if (c.assets && c.assets[0]) {
+          if (c.assets[0].data && c.assets[0].data.trim()) {
+            img = c.assets[0].data;
+          } else if (c.assets[0].url && c.assets[0].url.trim()) {
+            img = c.assets[0].url;
+          }
+        } else if (c.image_data && c.image_data.trim()) {
+          img = c.image_data;
+        } else if (c.image_url && c.image_url.trim()) {
+          img = c.image_url;
+        } else if (c.image && c.image.trim()) {
+          img = c.image;
+        }
+        
+        // Validate image URL/data before using
+        if (img && img !== '../images/bottom1.jpg') {
+          // Check if it's a valid base64 image
+          if (img.startsWith('data:image/')) {
+            console.log('✅ Using base64 image for campaign:', title);
+          } else if (img.startsWith('http')) {
+            console.log('✅ Using URL image for campaign:', title);
+          } else {
+            console.log('⚠️ Unknown image format for campaign:', title, '- Using default');
+            img = '../images/bottom1.jpg';
+          }
+        } else {
+          console.log('📷 Using default image for campaign:', title);
+        }
+        const statusClass = status === 'active' ? 'bg-success' : (status === 'completed' ? 'bg-secondary' : (status === 'pending' ? 'bg-warning' : 'bg-info'));
+        return `
+        <div class="col-lg-4 col-md-6">
+          <div class="content-card campaign-card">
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <img src="../images/avarter2.png" alt="Avatar" class="rounded-circle" style="width: 32px; height: 32px;">
+                <span class="fw-semibold">${owner}</span>
+              </div>
+              <span class="badge ${statusClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>
+            </div>
+            <div class="mb-3">
+              <img src="${img}" alt="Campaign" class="img-fluid rounded mb-2" style="height: 120px; width: 100%; object-fit: cover;" 
+                   onerror="this.src='../images/bottom1.jpg'; console.log('Image failed to load for campaign: ${title}');"
+                   onload="console.log('Image loaded successfully for campaign: ${title}');">
+              <p class="mb-1 fw-semibold">${title}</p>
+              <p class="mb-0">${description}</p>
+            </div>
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <small class="text-muted">Participants</small>
+                <small class="fw-semibold">${current}/${total || '—'}</small>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar ${status === 'completed' ? 'bg-secondary' : (status === 'active' ? 'bg-success' : 'bg-warning')}" style="width: ${pct}%"></div>
+              </div>
+            </div>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-1">
+                <img src="../images/IconDiamond.png" alt="Diamond" style="width: 16px; height: 16px;">
+                <span class="fw-semibold">${reward}</span>
+              </div>
+              <button class="btn btn-outline-primary btn-sm" onclick="openProgressModal('${id}')">
+                View Progress
+              </button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+      container.innerHTML = html;
+    }
+
+    // Helper function to get valid token
+    async function getValidToken() {
+        let token = localStorage.getItem('authToken');
+        console.log('Current token in localStorage:', token ? 'Present' : 'Missing');
+        
+        // If we have a token, test if it's still valid
+        if (token) {
+            try {
+                const testResponse = await fetch(`${API_BASE_URL}api/settings/profile`, {
+                    method: 'HEAD', // Use HEAD to avoid loading data
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (testResponse.status === 401) {
+                    console.log('Stored token is invalid/expired, clearing it');
+                    localStorage.removeItem('authToken');
+                    token = null; // Force token refresh
+                } else if (testResponse.ok) {
+                    console.log('✅ Stored token is valid');
+                    return token;
+                }
+            } catch (error) {
+                console.log('Error testing token validity:', error);
+                // Continue to token refresh logic
+            }
+        }
+        
+        // If no JWT token or invalid token, try to get one for Twitter users
+        if (!token) {
+            try {
+                console.log('No token found, trying to get one from Twitter session...');
+                const response = await fetch(`${API_BASE_URL}api/twitter/get-token.php`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                console.log('Twitter token response status:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Twitter token response:', data);
+                    if (data.status === 'success' && data.token) {
+                        token = data.token;
+                        localStorage.setItem('authToken', token);
+                        console.log('✅ Token obtained from Twitter session');
+                        
+                        // Also store user info if available
+                        if (data.user) {
+                            localStorage.setItem('userHandle', data.user.name || '@user');
+                            localStorage.setItem('userId', data.user.id);
+                        }
+                    } else {
+                        console.log('❌ No token in Twitter response:', data.message || 'Unknown error');
+                    }
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    console.log('❌ Twitter token request failed:', response.status, errorData.message || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('Error getting token:', error);
+            }
+        }
+        
+        if (!token) {
+            console.log('❌ No authentication available');
+        } else {
+            console.log('✅ Using token for API calls');
+        }
+        
+        return token;
+    }
+
+    // Update user profile information
+    async function updateUserProfile() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}api/settings/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.twitter_handle) {
+            const userHandle = document.getElementById('userHandle');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (userHandle) {
+              userHandle.textContent = `@${data.data.twitter_handle}`;
+            }
+            
+            if (userAvatar) {
+              userAvatar.textContent = data.data.twitter_handle.charAt(0).toUpperCase();
+            }
+            // Keep for filtering campaigns
+            CURRENT_USER_HANDLE = data.data.twitter_handle;
+            if (data.data.id) {
+              CURRENT_USER_ID = data.data.id.toString();
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user profile:', error);
+      }
+    }
+
+    // Load and update user avatar
+    async function loadUserAvatar() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}api/settings/profile-picture`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.profile_picture_url) {
+            const userAvatar = document.getElementById('userAvatar');
+            if (userAvatar) {
+              userAvatar.innerHTML = `<img src="${data.data.profile_picture_url}?t=${Date.now()}" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user avatar:', error);
+      }
+    }
+
+    // Update wallet address display
+    function updateWalletAddress() {
+      const CONNECTED_EVM_KEY = 'connected_evm_wallet';
+      const localWallet = localStorage.getItem(CONNECTED_EVM_KEY);
+      const walletAddress = document.getElementById('walletAddress');
+      
+      if (walletAddress) {
+        if (localWallet && localWallet.startsWith('0x')) {
+          const shortAddress = `${localWallet.slice(0, 6)}...${localWallet.slice(-4)}`;
+          walletAddress.textContent = shortAddress;
+        } else {
+          walletAddress.textContent = 'Connect wallet';
+        }
+      }
+    }
+
+    // Initialize filter functionality
+    function initializeFilters() {
+      const filterButtons = document.querySelectorAll('[data-filter]');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          // Remove active class from all buttons
+          filterButtons.forEach(btn => {
+            btn.classList.remove('active', 'btn-primary');
+            btn.classList.add('btn-outline-secondary');
+          });
+          
+          // Add active class to clicked button
+          this.classList.remove('btn-outline-secondary');
+          this.classList.add('active', 'btn-primary');
+          
+          // Filter campaigns based on selected filter
+          const filter = this.dataset.filter;
+          filterCampaigns(filter);
+        });
+      });
+    }
+
+    // Initialize search functionality
+    function initializeSearch() {
+      const searchInput = document.getElementById('searchInput');
+      
+      searchInput.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        searchCampaigns(searchTerm);
+      });
+    }
+
+    // Filter campaigns by status
+    function filterCampaigns(filter) {
+      const campaignCards = document.querySelectorAll('#campaignsContainer .col-lg-4');
+      
+      campaignCards.forEach(card => {
+        const statusBadge = card.querySelector('.badge');
+        const status = statusBadge.textContent.toLowerCase();
+        
+        if (filter === 'all' || status === filter) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Search campaigns by text
+    function searchCampaigns(searchTerm) {
+      const campaignCards = document.querySelectorAll('#campaignsContainer .col-lg-4');
+      
+      campaignCards.forEach(card => {
+        const campaignText = card.textContent.toLowerCase();
+        
+        if (campaignText.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Bootstrap Modal functions
+    async function openProgressModal(campaignId) {
+      const modal = new bootstrap.Modal(document.getElementById('progressModal'));
+      const list = document.getElementById('tasksList');
+      
+      // Show loading state
+      list.innerHTML = `
+        <div class="d-flex justify-content-center py-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>`;
+      
+      // Reset summary stats
+      updateProgressSummary([], 0);
+      
+      // Show modal
+      modal.show();
+      
+      _currentCampaignId = campaignId;
+      
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          list.innerHTML = `
+            <div class="alert alert-warning" role="alert">
+              <i class="fas fa-exclamation-triangle me-2"></i>
+              Please log in to view campaign tasks.
+            </div>`;
+          return;
+        }
+        
+        const { res, json: data } = window.AppAPI ? 
+          await window.AppAPI.apiFetch(`api/tasks/list?campaign_id=${encodeURIComponent(campaignId)}`) : 
+          { 
+            res: await fetch(`${API_BASE_URL}api/tasks/list?campaign_id=${encodeURIComponent(campaignId)}`, { 
+              headers: { 'Authorization': `Bearer ${token}` } 
+            }),
+            json: await (await fetch(`${API_BASE_URL}api/tasks/list?campaign_id=${encodeURIComponent(campaignId)}`, { 
+              headers: { 'Authorization': `Bearer ${token}` } 
+            })).json() 
+          };
+          
+        if (!res.ok) throw new Error(data.message || `HTTP ${res.status}`);
+        
+        // API shape: {status, data: { items, page, limit, total }} OR array fallback
+        const tasks = (data && data.data && Array.isArray(data.data.items)) ? data.data.items
+                    : (Array.isArray(data.items) ? data.items
+                    : (Array.isArray(data.data) ? data.data : (data.tasks || [])));
+        
+        _currentCampaignTasks = tasks;
+        
+        // Reset filter to 'all' and update tabs
+        _currentStatusFilter = 'all';
+        document.querySelectorAll('#statusFilterTabs .nav-link').forEach(tab => {
+          tab.classList.remove('active');
+        });
+        document.getElementById('all-tab').classList.add('active');
+        
+        // Render tasks and update summary
+        renderTasksList(_currentCampaignTasks, 'all');
+        updateProgressSummary(_currentCampaignTasks, _currentCampaignTasks.length);
+        
+      } catch (err) {
+        console.error('Failed to load campaign tasks:', err);
+        list.innerHTML = `
+          <div class="alert alert-danger" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>
+            Failed to load tasks: ${err.message || err}
+          </div>`;
+      }
+    }
+
+    function renderTasksList(tasks) {
+      const list = document.getElementById('tasksList');
+      if (!tasks.length) {
+        list.innerHTML = `
+          <div class="text-center py-4">
+            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+            <h6 class="text-muted">No task submissions yet</h6>
+            <p class="text-muted small">Task submissions will appear here once participants start engaging with your campaign.</p>
+          </div>`;
+        return;
+      }
+
+      const items = tasks.map(t => {
+        const title = t.title || t.task_title || 'Task';
+        const user = (t.user_handle || t.participant || t.user || '').toString().replace(/^@/, '');
+        const status = (t.status || 'pending').toLowerCase();
+        const id = t.id || t._id || t.task_id || '';
+        const badge = status === 'completed' ? 'success'
+                     : status === 'rejected' ? 'danger'
+                     : status === 'in_progress' ? 'info'
+                     : 'warning';
+        const createdAt = t.created_at || t.submitted_at || '';
+        const ts = createdAt ? `<small class="text-muted"> • ${formatDate(createdAt)}</small>` : '';
+        
+        const statusIcon = status === 'completed' ? 'fas fa-check-circle'
+                          : status === 'rejected' ? 'fas fa-times-circle'
+                          : status === 'in_progress' ? 'fas fa-clock'
+                          : 'fas fa-hourglass-half';
+        
+        return `
+          <div class="card mb-3" style="background: rgba(26, 26, 26, 0.4); border: 1px solid var(--border-color);">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="${statusIcon} text-${badge}"></i>
+                    <h6 class="mb-0">${title}</h6>
+                    <span class="badge bg-${badge}">${status.replace('_',' ')}</span>
+                  </div>
+                  <p class="text-muted mb-1">
+                    <i class="fas fa-user me-1"></i>
+                    Submitted by @${user}${ts}
+                  </p>
+                  ${t.notes ? `<p class="text-muted small mb-0"><i class="fas fa-comment me-1"></i>${t.notes}</p>` : ''}
+                </div>
+                <div class="d-flex gap-2">
+                  <button 
+                    class="btn btn-sm btn-outline-danger" 
+                    ${status==='completed'||status==='rejected'?'disabled':''} 
+                    onclick="startDeclineTask('${id}')"
+                    title="Decline this task">
+                    <i class="fas fa-times me-1"></i>Decline
+                  </button>
+                  <button 
+                    class="btn btn-sm btn-outline-success" 
+                    ${status!=='pending'&&status!=='in_progress'?'disabled':''} 
+                    onclick="approveTask('${id}')"
+                    title="Approve this task">
+                    <i class="fas fa-check me-1"></i>Approve
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+      
+      list.innerHTML = items;
+    }
+
+    // Update progress summary in the modal header
+    function updateProgressSummary(tasks, total) {
+      const completed = tasks.filter(x => (x.status || '').toLowerCase() === 'completed').length;
+      const pending = tasks.filter(x => (x.status || '').toLowerCase() === 'pending').length;
+      const inProgress = tasks.filter(x => (x.status || '').toLowerCase() === 'in_progress').length;
+      const rejected = tasks.filter(x => (x.status || '').toLowerCase() === 'rejected').length;
+      const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+
+      // Update summary cards
+      document.getElementById('completedCount').textContent = completed;
+      document.getElementById('pendingCount').textContent = pending;
+      document.getElementById('inProgressCount').textContent = inProgress;
+      document.getElementById('rejectedCount').textContent = rejected;
+      document.getElementById('progressPercentage').textContent = `${pct}%`;
+      document.getElementById('progressBar').style.width = `${pct}%`;
+      
+      // Update tab counts
+      document.getElementById('allCount').textContent = total;
+      document.getElementById('pendingTabCount').textContent = pending;
+      document.getElementById('inProgressTabCount').textContent = inProgress;
+      document.getElementById('completedTabCount').textContent = completed;
+      document.getElementById('rejectedTabCount').textContent = rejected;
+    }
+
+    // Global variable to store current filter
+    let _currentStatusFilter = 'all';
+    
+    // Test function to verify image display
+    window.testImageDisplay = function() {
+      console.log('🧪 Testing image display functionality...');
+      console.log('📊 Current campaigns:', _allCampaigns.length);
+      
+      _allCampaigns.forEach((campaign, index) => {
+        console.log(`\n📋 Campaign ${index + 1}: ${campaign.title}`);
+        console.log('🖼️ Assets:', campaign.assets);
+        console.log('📸 Image Data:', campaign.image_data ? 'Present (' + campaign.image_data.substring(0, 30) + '...)' : 'None');
+        console.log('🔗 Image URL:', campaign.image_url || 'None');
+        
+        // Check what image would be used
+        let testImg = '../images/bottom1.jpg';
+        if (campaign.assets && campaign.assets[0]) {
+          if (campaign.assets[0].data) testImg = campaign.assets[0].data;
+          else if (campaign.assets[0].url) testImg = campaign.assets[0].url;
+        } else if (campaign.image_data) testImg = campaign.image_data;
+        else if (campaign.image_url) testImg = campaign.image_url;
+        
+        console.log('🎯 Would use image:', testImg === '../images/bottom1.jpg' ? 'Default fallback' : 'Custom image');
+      });
+      
+      console.log('\n✅ Image display test complete!');
+    };
+
+    // Filter tasks by status
+    function filterTasksByStatus(status) {
+      _currentStatusFilter = status;
+      
+      // Update active tab
+      document.querySelectorAll('#statusFilterTabs .nav-link').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      document.getElementById(`${status}-tab`).classList.add('active');
+      
+      // Filter and render tasks
+      let filteredTasks = _currentCampaignTasks;
+      if (status !== 'all') {
+        filteredTasks = _currentCampaignTasks.filter(task => 
+          (task.status || 'pending').toLowerCase() === status.toLowerCase()
+        );
+      }
+      
+      renderTasksList(filteredTasks, status);
+    }
+
+    // Enhanced renderTasksList with filter support
+    function renderTasksList(tasks, filterStatus = 'all') {
+      const list = document.getElementById('tasksList');
+      
+      if (!tasks.length) {
+        const statusText = filterStatus === 'all' ? 'task submissions' : `${filterStatus.replace('_', ' ')} tasks`;
+        list.innerHTML = `
+          <div class="text-center py-4">
+            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+            <h6 class="text-muted">No ${statusText} yet</h6>
+            <p class="text-muted small">
+              ${filterStatus === 'all' 
+                ? 'Task submissions will appear here once participants start engaging with your campaign.' 
+                : `No tasks with ${filterStatus.replace('_', ' ')} status found.`}
+            </p>
+          </div>`;
+        return;
+      }
+
+      const items = tasks.map(t => {
+        const title = t.title || t.task_title || 'Task';
+        const user = (t.user_handle || t.participant || t.user || '').toString().replace(/^@/, '');
+        const status = (t.status || 'pending').toLowerCase();
+        const id = t.id || t._id || t.task_id || '';
+        const badge = status === 'completed' ? 'success'
+                     : status === 'rejected' ? 'danger'
+                     : status === 'in_progress' ? 'info'
+                     : 'warning';
+        const createdAt = t.created_at || t.submitted_at || '';
+        const ts = createdAt ? `<small class="text-muted"> • ${formatDate(createdAt)}</small>` : '';
+        
+        const statusIcon = status === 'completed' ? 'fas fa-check-circle'
+                          : status === 'rejected' ? 'fas fa-times-circle'
+                          : status === 'in_progress' ? 'fas fa-clock'
+                          : 'fas fa-hourglass-half';
+        
+        const statusText = status === 'in_progress' ? 'In Progress' : status.charAt(0).toUpperCase() + status.slice(1);
+        
+        return `
+          <div class="card mb-3 task-item" style="background: rgba(26, 26, 26, 0.4); border: 1px solid var(--border-color);">
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-start">
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-center gap-2 mb-2">
+                    <i class="${statusIcon} text-${badge}"></i>
+                    <h6 class="mb-0 text-white">${title}</h6>
+                    <span class="badge bg-${badge}">${statusText}</span>
+                  </div>
+                  <p class="text-muted mb-1">
+                    <i class="fas fa-user me-1"></i>
+                    Submitted by @${user}${ts}
+                  </p>
+                  ${t.notes ? `<p class="text-muted small mb-0"><i class="fas fa-comment me-1"></i>${t.notes}</p>` : ''}
+                  ${t.rejection_reason ? `<p class="text-danger small mb-0"><i class="fas fa-exclamation-triangle me-1"></i>Rejection reason: ${t.rejection_reason}</p>` : ''}
+                </div>
+                <div class="d-flex gap-2">
+                  ${status !== 'completed' && status !== 'rejected' ? `
+                    <button 
+                      class="btn btn-sm btn-outline-danger" 
+                      onclick="startDeclineTask('${id}')"
+                      title="Decline this task">
+                      <i class="fas fa-times me-1"></i>Decline
+                    </button>
+                  ` : ''}
+                  ${status === 'pending' || status === 'in_progress' ? `
+                    <button 
+                      class="btn btn-sm btn-outline-success" 
+                      onclick="approveTask('${id}')"
+                      title="Approve this task">
+                      <i class="fas fa-check me-1"></i>Approve
+                    </button>
+                  ` : ''}
+                  ${status === 'rejected' ? `
+                    <button 
+                      class="btn btn-sm btn-outline-info" 
+                      onclick="moveToInProgress('${id}')"
+                      title="Move to In Progress">
+                      <i class="fas fa-redo me-1"></i>Reconsider
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            </div>
+          </div>`;
+      }).join('');
+      
+      list.innerHTML = items;
+    }
+
+    // Format date helper
+    function formatDate(dateString) {
+      try {
+        const date = new Date(dateString);
+        return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+      } catch (e) {
+        return dateString;
+      }
+    }
+
+    // Move task to In Progress status
+    async function moveToInProgress(taskId) {
+      if (!taskId) return;
+      try {
+        const token = await getValidToken();
+        const { res, json: data } = window.AppAPI ? 
+          await window.AppAPI.apiFetch('api/tasks/status', { method: 'PUT', body: { id: taskId, status: 'in_progress' } }) : 
+          { res: await fetch(`${API_BASE_URL}api/tasks/status`, { 
+              method: 'PUT', 
+              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, 
+              body: JSON.stringify({ id: taskId, status: 'in_progress' }) 
+            }), 
+            json: await (await fetch(`${API_BASE_URL}api/tasks/status`, { 
+              method: 'PUT', 
+              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, 
+              body: JSON.stringify({ id: taskId, status: 'in_progress' }) 
+            })).json() 
+          };
+        
+        if (!res.ok || data.status !== 'success') throw new Error(data.message || 'Failed to move to in progress');
+        
+        // Update local state and re-render
+        _currentCampaignTasks = _currentCampaignTasks.map(t => 
+          (t.id===taskId||t._id===taskId||t.task_id===taskId) ? {...t, status:'in_progress'} : t
+        );
+        
+        // Re-render with current filter
+        filterTasksByStatus(_currentStatusFilter);
+        updateProgressSummary(_currentCampaignTasks, _currentCampaignTasks.length);
+        showToast('Task moved to In Progress', 'info');
+      } catch (e) {
+        if (window.AppAPI) window.AppAPI.toast('Move failed: ' + (e.message || e), 'error'); 
+        else alert('Move failed: ' + (e.message || e));
+      }
+    }
+
+    // Approve/Decline actions
+    async function approveTask(taskId) {
+      if (!taskId) return;
+      try {
+        const token = await getValidToken();
+        const { res, json: data } = window.AppAPI ? 
+          await window.AppAPI.apiFetch('api/tasks/status', { method: 'PUT', body: { id: taskId, status: 'completed' } }) : 
+          { res: await fetch(`${API_BASE_URL}api/tasks/status`, { 
+              method: 'PUT', 
+              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, 
+              body: JSON.stringify({ id: taskId, status: 'completed' }) 
+            }), 
+            json: await (await fetch(`${API_BASE_URL}api/tasks/status`, { 
+              method: 'PUT', 
+              headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' }, 
+              body: JSON.stringify({ id: taskId, status: 'completed' }) 
+            })).json() 
+          };
+        
+        if (!res.ok || data.status !== 'success') throw new Error(data.message || 'Failed to approve');
+        
+        // Update local state and re-render
+        _currentCampaignTasks = _currentCampaignTasks.map(t => 
+          (t.id===taskId||t._id===taskId||t.task_id===taskId) ? {...t, status:'completed'} : t
+        );
+        
+        // Re-render with current filter
+        filterTasksByStatus(_currentStatusFilter);
+        updateProgressSummary(_currentCampaignTasks, _currentCampaignTasks.length);
+        showToast('Task approved successfully', 'success');
+      } catch (e) {
+        if (window.AppAPI) window.AppAPI.toast('Approve failed: ' + (e.message || e), 'error'); 
+        else alert('Approve failed: ' + (e.message || e));
+      }
+    }
+
+    // Decline path uses Bootstrap Report Modal to capture reason
+    let _declineTaskId = null;
+    function startDeclineTask(taskId) {
+      _declineTaskId = taskId;
+      document.getElementById('reportReason').value = '';
+      updateCharCount();
+      const modal = new bootstrap.Modal(document.getElementById('reportModal'));
+      modal.show();
+    }
+
+    async function submitReport() {
+      const reason = document.getElementById('reportReason').value.trim();
+      if (!_declineTaskId) { 
+        bootstrap.Modal.getInstance(document.getElementById('reportModal')).hide();
+        return; 
+      }
+      if (!reason) { 
+        showToast('Please provide a reason for the decline', 'warning');
+        return; 
+      }
+      
+      // Show loading state
+      const submitBtn = document.querySelector('#reportModal .btn-danger');
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Declining...';
+      submitBtn.disabled = true;
+      
+      try {
+        const token = await getValidToken();
+        const { res, json: data } = window.AppAPI ? 
+          await window.AppAPI.apiFetch('api/tasks/status', { 
+            method: 'PUT', 
+            body: { id: _declineTaskId, status: 'rejected', notes: reason } 
+          }) : 
+          { 
+            res: await fetch(`${API_BASE_URL}api/tasks/status`, { 
+              method: 'PUT', 
+              headers: { 
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json' 
+              }, 
+              body: JSON.stringify({ id: _declineTaskId, status: 'rejected', notes: reason }) 
+            }),
+            json: await (await fetch(`${API_BASE_URL}api/tasks/status`, { 
+              method: 'PUT', 
+              headers: { 
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json' 
+              }, 
+              body: JSON.stringify({ id: _declineTaskId, status: 'rejected', notes: reason }) 
+            })).json() 
+          };
+          
+        if (!res.ok || data.status !== 'success') throw new Error(data.message || 'Failed to decline');
+        
+        // Update local state and re-render
+        _currentCampaignTasks = _currentCampaignTasks.map(t => 
+          (t.id===_declineTaskId||t._id===_declineTaskId||t.task_id===_declineTaskId) ? 
+          {...t, status:'rejected', rejection_reason: reason} : t
+        );
+        
+        bootstrap.Modal.getInstance(document.getElementById('reportModal')).hide();
+        
+        // Re-render with current filter
+        filterTasksByStatus(_currentStatusFilter);
+        updateProgressSummary(_currentCampaignTasks, _currentCampaignTasks.length);
+        showToast('Task declined successfully', 'success');
+        
+      } catch (e) {
+        showToast('Decline failed: ' + (e.message || e), 'error');
+      } finally {
+        // Restore button state
+        submitBtn.innerHTML = originalText;
+        submitBtn.disabled = false;
+      }
+    }
+
+    // Refresh campaign progress
+    function refreshCampaignProgress() {
+      if (_currentCampaignId) {
+        openProgressModal(_currentCampaignId);
+      }
+    }
+
+    // Character count for textarea
+    function updateCharCount() {
+      const textarea = document.getElementById('reportReason');
+      const counter = document.getElementById('reasonCharCount');
+      if (textarea && counter) {
+        counter.textContent = textarea.value.length;
+      }
+    }
+
+    // Toast notification helper
+    function showToast(message, type = 'info') {
+      if (window.AppAPI) {
+        window.AppAPI.toast(message, type);
+      } else {
+        // Fallback for non-AppAPI environments
+        alert(message);
+      }
+    }
+
+    // Initialize event listeners when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      // Character count for report textarea
+      const reportTextarea = document.getElementById('reportReason');
+      if (reportTextarea) {
+        reportTextarea.addEventListener('input', updateCharCount);
+      }
+      
+      // Update progress summary on approve task
+      const originalApproveTask = window.approveTask;
+      window.approveTask = async function(taskId) {
+        await originalApproveTask(taskId);
+        updateProgressSummary(_currentCampaignTasks, _currentCampaignTasks.length);
+      };
+    });
+  </script>
+</body>
+</html>

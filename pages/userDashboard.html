@@ -1,0 +1,3350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - PARTIVOX</title>
+    <link rel="shortcut icon" href="../images/IconDiamond.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/enhanced-typography.css" rel="stylesheet">
+  <style>
+    :root {
+      /* === PARTIVOX DESIGN SYSTEM === */
+      
+      /* Core Background Colors */
+      --primary-bg: #0a0a0f;
+      --secondary-bg: #1a1a1f;
+      --card-bg: #1e1e24;
+      --sidebar-bg: #16161b;
+      --surface-bg: #252530;
+      --overlay-bg: rgba(10, 10, 15, 0.95);
+      
+      /* Lemon Green Brand Colors (Primary) */
+      --accent-color: #caf403; /* signature lemon green */
+      --accent-hover: #9dcf00; /* darker lemon green */
+      --accent-light: #e8ff4d; /* lighter lemon green */
+      --accent-dark: #7ba800; /* darkest lemon green */
+      --accent-rgb: 202, 244, 3;
+      
+      /* Secondary Brand Colors */
+      --primary-color: #667eea;
+      --primary-hover: #5a67d8;
+      --primary-light: #7c3aed;
+      --primary-rgb: 102, 126, 234;
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --text-inverse: #000000;
+      --text-accent: var(--accent-color);
+      
+      /* Status Colors */
+      --success-color: #10b981;
+      --success-light: #34d399;
+      --warning-color: #f59e0b;
+      --warning-light: #fbbf24;
+      --danger-color: #ef4444;
+      --danger-light: #f87171;
+      --info-color: #3b82f6;
+      --info-light: #60a5fa;
+      
+      /* Border & Divider Colors */
+      --border-color: #27272a;
+      --border-light: #374151;
+      --border-accent: var(--accent-color);
+      --divider-color: rgba(255, 255, 255, 0.1);
+      
+      /* Layout Variables */
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 60px;
+      --topbar-height: 70px;
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --border-radius-lg: 16px;
+      
+      /* Spacing Scale */
+      --space-xs: 0.25rem;    /* 4px */
+      --space-sm: 0.5rem;     /* 8px */
+      --space-md: 1rem;       /* 16px */
+      --space-lg: 1.5rem;     /* 24px */
+      --space-xl: 2rem;       /* 32px */
+      --space-2xl: 3rem;      /* 48px */
+      --space-3xl: 4rem;      /* 64px */
+      
+      /* Typography Scale */
+      --text-xs: 0.75rem;     /* 12px */
+      --text-sm: 0.875rem;    /* 14px */
+      --text-base: 1rem;      /* 16px */
+      --text-lg: 1.125rem;    /* 18px */
+      --text-xl: 1.25rem;     /* 20px */
+      --text-2xl: 1.5rem;     /* 24px */
+      --text-3xl: 1.875rem;   /* 30px */
+      --text-4xl: 2.25rem;    /* 36px */
+      
+      /* Animation & Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.2s ease;
+      --transition-slow: 0.3s ease;
+      --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+      --shadow-accent: 0 0 0 3px rgba(202, 244, 3, 0.15);
+      
+      /* Z-Index Scale */
+      --z-dropdown: 1000;
+      --z-sticky: 1020;
+      --z-fixed: 1030;
+      --z-modal-backdrop: 1040;
+      --z-modal: 1050;
+      --z-popover: 1060;
+      --z-tooltip: 1070;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f14 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background: linear-gradient(180deg, var(--sidebar-bg) 0%, #12121a 100%);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      width: 280px;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-240px);
+      width: 60px;
+    }
+
+    .sidebar.collapsed .logo h4,
+    .sidebar.collapsed .nav-section h6,
+    .sidebar.collapsed a span {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar .logo {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar .logo h4 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar .nav-section {
+      padding: 1rem 0;
+    }
+
+    .sidebar .nav-section h6 {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+      color: var(--text-secondary);
+      padding: 0.875rem 1.5rem;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sidebar a i {
+      width: 20px;
+      margin-right: 12px;
+      font-size: 1rem;
+    }
+
+    .sidebar a:hover {
+      background: rgba(202, 244, 3, 0.1);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    .sidebar a.active {
+      background: linear-gradient(90deg, var(--accent-color), transparent);
+      color: var(--text-primary);
+      border-right: 3px solid var(--accent-color);
+    }
+
+    .sidebar a.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent-color);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+    }
+
+    .main-content.sidebar-collapsed {
+      margin-left: 60px;
+    }
+
+    .sidebar-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-secondary);
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--accent-color);
+      color: white;
+      transform: scale(1.05);
+    }
+
+    .content {
+      padding: 2rem;
+      background: transparent;
+    }
+
+    .topbar {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar h4 {
+      font-weight: 700;
+      font-size: 1.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .topbar p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid var(--accent-color);
+    }
+
+    #wallet-address {
+      transition: all 0.2s ease;
+      font-size: 0.875rem;
+    }
+
+    #wallet-address:hover {
+      text-decoration: underline;
+    }
+
+    #copy-wallet {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      transition: opacity 0.2s ease;
+    }
+
+    #copy-wallet:hover {
+      opacity: 1;
+    }
+
+    .campaign-card {
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .campaign-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .campaign-stats {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+      padding: 0.75rem;
+    }
+
+    .campaign-actions .btn {
+      font-size: 0.75rem;
+      padding: 0.375rem 0.75rem;
+    }
+
+    .badge {
+      font-size: 0.625rem;
+      padding: 0.25rem 0.5rem;
+    }
+
+    .campaign-image {
+      position: relative;
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+    }
+
+    .campaign-image img {
+      transition: transform 0.3s ease;
+    }
+
+    .campaign-card:hover .campaign-image img {
+      transform: scale(1.05);
+    }
+
+    .campaign-image::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, transparent 30%, rgba(202, 244, 3, 0.1) 100%);
+      pointer-events: none;
+    }
+
+    .bg-text-success { background-color: var(--success-color) !important; }
+    .bg-text-warning { background-color: var(--warning-color) !important; }
+    .bg-text-info { background-color: #17a2b8 !important; }
+    .bg-text-muted { background-color: var(--text-muted) !important; }
+
+    .search-input {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      width: 300px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(202, 244, 3, 0.15);
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .content-card h6 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .stats-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      transition: all 0.2s ease;
+    }
+
+    .task-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+
+    /* Enhanced flexbox layout for tasks */
+    #tasksContainer {
+      display: flex !important;
+      flex-wrap: wrap !important;
+      gap: 1.5rem !important;
+      justify-content: flex-start !important;
+      align-items: stretch !important;
+      margin: 0 !important;
+    }
+
+    #tasksContainer .col-lg-4,
+    #tasksContainer .col-md-6 {
+      display: flex !important;
+      flex: 0 0 calc(33.333333% - 1rem) !important;
+      max-width: calc(33.333333% - 1rem) !important;
+      padding: 0 !important;
+    }
+
+    @media (max-width: 991.98px) {
+      #tasksContainer .col-lg-4,
+      #tasksContainer .col-md-6 {
+        flex: 0 0 calc(50% - 0.75rem) !important;
+        max-width: calc(50% - 0.75rem) !important;
+      }
+    }
+
+    @media (max-width: 767.98px) {
+      #tasksContainer .col-lg-4,
+      #tasksContainer .col-md-6 {
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+      }
+    }
+
+    .task-card {
+      width: 100% !important;
+      height: 100% !important;
+      display: flex !important;
+      flex-direction: column !important;
+      min-height: 400px !important;
+      box-sizing: border-box !important;
+    }
+
+    .stats-card h3 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--accent-color);
+      margin: 0.5rem 0;
+    }
+
+    .btn {
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #000;
+      transform: translateY(-1px);
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        width: 280px;
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.sidebar-collapsed {
+        margin-left: 0;
+      }
+
+      .topbar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch !important;
+      }
+
+      .topbar .d-flex {
+        justify-content: center;
+      }
+
+      .user-info {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .search-input {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .content-card {
+        padding: 1rem;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .topbar {
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .topbar h4 {
+        font-size: 1.125rem;
+      }
+
+      .topbar p {
+        font-size: 0.8rem;
+      }
+
+      .content {
+        padding: 0.75rem;
+      }
+
+      .content-card {
+        padding: 0.875rem;
+        margin-bottom: 1rem;
+      }
+
+      .sidebar-toggle {
+        width: 40px;
+        height: 40px;
+      }
+
+      .search-input {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+      }
+
+      .stats-card {
+        padding: 1rem;
+      }
+
+      .stats-card h3 {
+        font-size: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0.75rem;
+      }
+
+      .topbar h4 {
+        font-size: 1rem;
+      }
+
+      .content {
+        padding: 0.5rem;
+      }
+
+      .sidebar-toggle {
+        width: 36px;
+        height: 36px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <h4>
+        <img src="../images/IconDiamond.png" alt="PARTIVOX Logo" width="24" height="24" class="me-2">
+        PARTIVOX
+      </h4>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Main</h6>
+      <a href="/pages/userDashboard.html" class="active">
+        <i class="fas fa-gauge-high"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="/pages/campaignProgress.html">
+        <i class="fas fa-bullseye"></i>
+        <span>Campaigns</span>
+      </a>
+      <a href="/pages/task_engage.html">
+        <i class="fas fa-tasks"></i>
+        <span>Tasks</span>
+      </a>
+      <a href="/pages/Wallet.html">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Account</h6>
+      <a href="/pages/settings.html">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+    
+    <div class="nav-section mt-auto">
+      <a href="/api/twitter/logout.php" class="text-danger">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="content">
+      <!-- Topbar -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </div>
+          <div>
+            <h4>Dashboard</h4>
+            <p>Welcome back! Monitor your campaign performance, track earnings, and manage your PARTIVOX activities from this central hub</p>
+          </div>
+        </div>
+        <div class="user-info">
+          <input type="text" class="search-input" placeholder="Search..." />
+          <div class="user-avatar" id="userAvatar">
+            <img src="../images/avartar1.jpg" alt="User Avatar" style="width: 100%; height: 100%; border-radius: 12px; object-fit: cover;">
+          </div>
+          <div>
+            <div id="user-handle" class="fw-semibold">@username</div>
+            <div class="d-flex align-items-center">
+              <small id="wallet-address" class="text-muted">Not connected</small>
+              <button id="copy-wallet" class="btn btn-link p-0 ms-1" title="Copy address" style="display: none;">
+                <i class="fas fa-copy text-muted"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notifications Section -->
+      <div id="notificationContainer" style="display: none;">
+        <div class="content-card mb-3" style="border-left: 4px solid var(--accent-color); background: rgba(202, 244, 3, 0.05);">
+          <div class="d-flex justify-content-between align-items-start">
+            <div class="flex-grow-1">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <i class="fas fa-bell text-warning"></i>
+                <h6 class="mb-0">Campaign Notifications</h6>
+                <span id="notificationCount" class="badge bg-warning text-dark">0</span>
+              </div>
+              <div id="notificationList">
+                <!-- Notifications will be loaded here -->
+              </div>
+            </div>
+            <button class="btn btn-sm btn-outline-secondary" onclick="markAllNotificationsRead()" title="Mark all as read">
+              <i class="fas fa-check-double"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Welcome Section -->
+      <div class="content-card">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <div>
+            <h6>Welcome, <span id="welcome-handle">@username</span>!</h6>
+            <p class="text-muted mb-0">Here's your engagement overview for today.</p>
+          </div>
+          <div id="data-status" class="badge bg-success" style="font-size: 0.7rem;">
+            <i class="fas fa-database me-1"></i>Local Data
+          </div>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <div>
+            <input type="text" class="search-input" placeholder="Search campaigns..." style="width: 250px;" />
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary">+ Create Campaign</button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="window.dashboardFunctions?.addCompletedTask({title: 'Demo Task', reward: 15})" title="Demo: Complete Task">
+              <i class="fas fa-plus"></i> Task
+            </button>
+            <button class="btn btn-outline-info btn-sm" onclick="testCampaignDisplay()" title="Test Campaign Display">
+              <i class="fas fa-test-tube"></i> Test
+            </button>
+          </div>
+        </div>
+        
+        <!-- Stats Grid - Enhanced for better side-by-side display -->
+        <div class="row g-4">
+          <div class="col-6 col-lg-3">
+            <div class="stats-card">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <img src="../images/IconDiamond.png" alt="Diamond Icon" width="24" height="24" class="me-2">
+              </div>
+              <h3 id="total-diamonds">150</h3>
+              <h6 class="mb-2">Total Diamonds</h6>
+              <p class="text-success mb-0">
+                <i class="fas fa-arrow-up me-1"></i>
+                Available for campaigns
+              </p>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stats-card">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <img src="../images/speakIcon.png" alt="Campaign Icon" width="24" height="24" class="me-2">
+              </div>
+              <h3 id="total-campaigns">3</h3>
+              <h6 class="mb-2">Total Campaigns</h6>
+              <p class="text-muted mb-0">Campaigns created</p>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stats-card">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <img src="../images/checkIcon.png" alt="Task Icon" width="24" height="24" class="me-2">
+              </div>
+              <h3 id="total-tasks">18</h3>
+              <h6 class="mb-2">Tasks Completed</h6>
+              <p class="text-success mb-0">
+                <i class="fas fa-arrow-up me-1"></i>
+                Earning diamonds
+              </p>
+            </div>
+          </div>
+          <div class="col-6 col-lg-3">
+            <div class="stats-card">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <img src="../images/walletIcon.png" alt="Wallet Icon" width="24" height="24" class="me-2">
+              </div>
+              <h3 id="total-usdt">$35.10</h3>
+              <h6 class="mb-2">USDT Value</h6>
+              <p class="text-muted mb-0">
+                Rate: $0.234 <img src="../images/IconDiamond.png" alt="Diamond Icon" width="16" class="ms-1">
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Task Engagement Analytics Section -->
+      <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h6 class="mb-0">
+              <i class="fas fa-chart-line me-2 text-success"></i>Task Engagement Analytics
+            </h6>
+            <small class="text-muted">Your task participation and engagement metrics</small>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-success btn-sm" onclick="refreshTaskEngagement()" title="Refresh engagement data">
+              <i class="fas fa-sync-alt me-1"></i>Refresh
+            </button>
+            <button class="btn btn-outline-primary btn-sm" onclick="window.location.href='task_engage.html'" title="View all available tasks">
+              <i class="fas fa-tasks me-1"></i>Browse Tasks
+            </button>
+          </div>
+        </div>
+
+        <!-- Engagement Stats Grid - Enhanced for better side-by-side display -->
+        <div class="row g-3 mb-4">
+          <div class="col-6 col-lg-3">
+            <div class="stats-card text-center">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <i class="fas fa-play-circle text-primary" style="font-size: 1.5rem;"></i>
+              </div>
+              <h4 id="tasks-started" class="mb-1">0</h4>
+              <small class="text-muted">Tasks Started</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stats-card text-center">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <i class="fas fa-check-circle text-success" style="font-size: 1.5rem;"></i>
+              </div>
+              <h4 id="tasks-completed" class="mb-1">0</h4>
+              <small class="text-muted">Tasks Completed</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stats-card text-center">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <i class="fas fa-gem text-warning" style="font-size: 1.5rem;"></i>
+              </div>
+              <h4 id="diamonds-earned" class="mb-1">0</h4>
+              <small class="text-muted">Diamonds Earned</small>
+            </div>
+          </div>
+          <div class="col-6 col-md-3">
+            <div class="stats-card text-center">
+              <div class="d-flex align-items-center justify-content-center mb-2">
+                <i class="fas fa-percentage text-info" style="font-size: 1.5rem;"></i>
+              </div>
+              <h4 id="completion-rate" class="mb-1">0%</h4>
+              <small class="text-muted">Completion Rate</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Task Activity -->
+        <div class="mb-3">
+          <h6 class="mb-3">
+            <i class="fas fa-history me-2 text-info"></i>Recent Task Activity
+          </h6>
+          <div id="recent-task-activity" class="d-flex flex-column gap-2">
+            <!-- Recent activities will be loaded here -->
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="d-flex justify-content-center gap-2">
+          <button class="btn btn-primary" onclick="window.location.href='task_engage.html'">
+            <i class="fas fa-search me-2"></i>Find New Tasks
+          </button>
+          <button class="btn btn-outline-secondary" onclick="viewTaskHistory()">
+            <i class="fas fa-history me-2"></i>View History
+          </button>
+        </div>
+      </div>
+      
+      <!-- Available Tasks Section -->
+      <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h6 class="mb-0">
+              <i class="fas fa-bolt me-2 text-primary"></i>Available Tasks
+            </h6>
+            <small class="text-muted">Engage with campaigns to earn diamonds</small>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-outline-primary btn-sm" onclick="loadTasksData()" title="Refresh available tasks">
+              <i class="fas fa-sync-alt me-1"></i>Refresh
+            </button>
+            <button class="btn btn-outline-secondary btn-sm" onclick="window.location.href='campaignProgress.html'" title="View my campaigns">
+              <i class="fas fa-bullseye me-1"></i>My Campaigns
+            </button>
+          </div>
+        </div>
+        
+        <!-- Filter and Navigation Tabs -->
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary active">
+              <i class="fas fa-bolt me-2"></i>Tasks Available
+            </button>
+            <button class="btn btn-outline-secondary" onclick="window.location.href='campaignProgress.html'">
+              <i class="fas fa-bullseye me-2"></i>My Campaigns
+            </button>
+          </div>
+          
+          <div class="d-flex gap-2">
+            <select class="form-select form-select-sm" style="width: auto; border-radius: 20px;">
+              <option selected>All campaigns</option>
+              <option value="ongoing">Ongoing</option>
+              <option value="active">Active</option>
+              <option value="upcoming">Upcoming</option>
+              <option value="ended">Ended</option>
+            </select>
+            <div class="position-relative">
+              <i class="fas fa-search position-absolute" style="left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+              <input type="text" class="form-control form-control-sm" placeholder="Search campaigns..." style="padding-left: 2.5rem; border-radius: 20px; width: 200px;">
+            </div>
+          </div>
+        </div>
+
+        <!-- Available Tasks Grid -->
+        <div class="row g-4" id="tasksContainer" style="display: flex; flex-wrap: wrap; gap: 1.5rem; justify-content: flex-start; align-items: stretch;">
+          <!-- Tasks will be loaded dynamically -->
+        </div>
+        
+        <!-- Loading State -->
+        <div id="loadingState" class="text-center py-5" style="display: none;">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p class="text-muted mt-3">Loading available tasks...</p>
+        </div>
+      </div>
+
+  <!-- Task Engagement Modal -->
+  <div class="overlay" id="taskModal" style="display: none;">
+    <div class="custom-card" style="width: 800px; max-width: 90vw;">
+      <div class="p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="mb-0">
+              <i class="fas fa-rocket me-2 text-primary"></i>Start Your Engagement
+            </h4>
+            <small class="text-muted">Follow the steps below to earn your reward</small>
+          </div>
+          <button class="btn-close btn-close-white" onclick="closeTaskModal()"></button>
+        </div>
+        
+        <div class="row g-4">
+          <!-- Task Details -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <img src="../images/avarter2.png" alt="Avatar" class="rounded-circle" style="width: 32px; height: 32px;">
+                <span class="fw-semibold" id="taskCreator">@creator</span>
+              </div>
+              <img id="taskImage" src="../images/bottom1.jpg" alt="Task" class="img-fluid rounded mb-2" style="height: 200px; width: 100%; object-fit: cover;">
+              <p id="taskDescription">Task description will appear here</p>
+              <div class="mb-2">
+                <span class="badge bg-primary" id="taskStatus">Active</span>
+                <span class="badge bg-info ms-2" id="taskType">Campaign</span>
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center p-3" style="background: rgba(26, 26, 26, 0.4); border-radius: 12px;">
+              <div>
+                <small class="text-muted">Participants</small>
+                <div class="fw-semibold" id="taskParticipants">50/100</div>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <img src="../images/IconDiamond.png" alt="Diamond" style="width: 20px; height: 20px;">
+                <span class="fw-semibold" id="taskReward">100</span>
+                <small class="text-muted">Reward</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task Instructions -->
+          <div class="col-md-6">
+            <h6 class="mb-3">Instructions</h6>
+            <p class="text-muted mb-3">Complete the engagement actions and submit your username to claim reward</p>
+            
+            <!-- Engagement URLs Container -->
+            <div class="mb-4" id="engagementUrlsContainer">
+              <h6 class="mb-3">
+                <i class="fas fa-link me-2 text-primary"></i>Engagement Links:
+              </h6>
+              
+              <!-- URL groups will be populated dynamically -->
+              <div class="engagement-url-group mb-3" id="followUrlsGroup" style="display: none;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-user-plus text-primary"></i>
+                  <span class="fw-semibold">Follow These Accounts:</span>
+                </div>
+                <div id="followUrls"></div>
+              </div>
+              
+              <div class="engagement-url-group mb-3" id="likeUrlsGroup" style="display: none;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-heart text-danger"></i>
+                  <span class="fw-semibold">Like These Posts:</span>
+                </div>
+                <div id="likeUrls"></div>
+              </div>
+              
+              <div class="engagement-url-group mb-3" id="retweetUrlsGroup" style="display: none;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-retweet text-success"></i>
+                  <span class="fw-semibold">Retweet These Posts:</span>
+                </div>
+                <div id="retweetUrls"></div>
+              </div>
+              
+              <div class="engagement-url-group mb-3" id="commentUrlsGroup" style="display: none;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-comment text-info"></i>
+                  <span class="fw-semibold">Comment on These Posts:</span>
+                </div>
+                <div id="commentUrls"></div>
+              </div>
+              
+              <div class="engagement-url-group mb-3" id="generalLinkGroup" style="display: none;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-external-link-alt text-warning"></i>
+                  <span class="fw-semibold">Task Link:</span>
+                </div>
+                <div id="generalLink"></div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label fw-semibold">
+                <i class="fas fa-user me-2 text-primary"></i>Your Social Media Username:
+              </label>
+              <input type="text" class="form-control" placeholder="@yourusername (without @)" id="usernameInput" 
+                     style="background: var(--secondary-bg); border: 1px solid var(--border-color); color: var(--text-primary); padding: 0.75rem;">
+              <small class="text-muted d-block mt-1">
+                <i class="fas fa-info-circle me-1"></i>
+                Enter your exact username from the platform where you completed the engagement
+              </small>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label fw-semibold">
+                <i class="fas fa-camera me-2 text-success"></i>Proof of Completion (Optional):
+              </label>
+              <textarea class="form-control" placeholder="• Paste screenshot URL&#10;• Describe what you did&#10;• Add any additional proof..." 
+                        id="proofInput" rows="3" 
+                        style="background: var(--secondary-bg); border: 1px solid var(--border-color); color: var(--text-primary); padding: 0.75rem;"></textarea>
+            </div>
+            
+            <button class="btn btn-primary w-100" onclick="claimReward()">
+              <i class="fas fa-gem me-2"></i>Claim Reward
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="overlay" id="successModal" style="display: none;">
+    <div class="custom-card text-center" style="width: 400px; max-width: 90vw;">
+      <div class="p-4">
+        <div class="mb-3">
+          <i class="fas fa-check-circle fa-4x text-success"></i>
+        </div>
+        <h4 class="mb-3">Reward Claimed!</h4>
+        <p class="text-muted mb-3">Congratulations! You've successfully earned:</p>
+        <div class="d-flex align-items-center justify-content-center gap-2 mb-4">
+          <img src="../images/IconDiamond.png" alt="Diamond" style="width: 24px; height: 24px;">
+          <span class="fw-bold fs-4" id="claimedReward">100</span>
+          <span class="text-muted">Diamonds</span>
+        </div>
+        <button class="btn btn-primary" onclick="closeSuccessModal()">Continue</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../javascript/profileUtils.js"></script>
+  <script>
+    // API_BASE_URL is already defined in profileUtils.js
+
+    // SIDEBAR TOGGLE FUNCTIONALITY
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+
+    if (sidebarToggle && sidebar && mainContent) {
+      sidebarToggle.addEventListener('click', () => {
+        // Check if we're on mobile
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+          // On mobile, toggle the 'show' class
+          sidebar.classList.toggle('show');
+        } else {
+          // On desktop, toggle the 'collapsed' class
+          sidebar.classList.toggle('collapsed');
+          mainContent.classList.toggle('sidebar-collapsed');
+        }
+        
+        // Change icon based on state
+        const icon = sidebarToggle.querySelector('i');
+        if (isMobile) {
+          if (sidebar.classList.contains('show')) {
+            icon.className = 'fas fa-times';
+          } else {
+            icon.className = 'fas fa-bars';
+          }
+        } else {
+          if (sidebar.classList.contains('collapsed')) {
+            icon.className = 'fas fa-chevron-right';
+          } else {
+            icon.className = 'fas fa-bars';
+          }
+        }
+      });
+      
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', (e) => {
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile && sidebar.classList.contains('show')) {
+          if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('show');
+            sidebarToggle.querySelector('i').className = 'fas fa-bars';
+          }
+        }
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        const isMobile = window.innerWidth <= 768;
+        const icon = sidebarToggle.querySelector('i');
+        
+        if (!isMobile) {
+          // Reset mobile classes when switching to desktop
+          sidebar.classList.remove('show');
+          icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-bars';
+        } else {
+          // Reset desktop classes when switching to mobile
+          sidebar.classList.remove('collapsed');
+          mainContent.classList.remove('sidebar-collapsed');
+          icon.className = sidebar.classList.contains('show') ? 'fas fa-times' : 'fas fa-bars';
+        }
+      });
+    }
+
+    // Initialize wallet connection
+    function initializeWallet() {
+      // Check for existing wallet connection
+      updateWalletAddress();
+      
+      // Listen for wallet connection changes
+      if (typeof window.ethereum !== 'undefined') {
+        window.ethereum.on('accountsChanged', (accounts) => {
+          if (accounts.length > 0) {
+            localStorage.setItem('connected_evm_wallet', accounts[0]);
+            updateWalletAddress();
+            showNotification('Wallet connected successfully!', 'success');
+          } else {
+            localStorage.removeItem('connected_evm_wallet');
+            updateWalletAddress();
+            showNotification('Wallet disconnected', 'info');
+          }
+        });
+      }
+    }
+
+    // Connect wallet function
+    async function connectWallet() {
+      try {
+        if (typeof window.ethereum === 'undefined') {
+          showNotification('Please install MetaMask or another Web3 wallet', 'error');
+          return;
+        }
+
+        const accounts = await window.ethereum.request({
+          method: 'eth_requestAccounts'
+        });
+
+        if (accounts.length > 0) {
+          localStorage.setItem('connected_evm_wallet', accounts[0]);
+          updateWalletAddress();
+          showNotification('Wallet connected successfully!', 'success');
+        }
+      } catch (error) {
+        console.error('Error connecting wallet:', error);
+        showNotification('Failed to connect wallet', 'error');
+      }
+    }
+
+    // Load user data
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize default stats first
+      initializeDefaultStats();
+      
+      // Update user handle from localStorage or API
+      const userHandle = localStorage.getItem('userHandle') || '@username';
+      document.getElementById('user-handle').textContent = userHandle;
+      document.getElementById('welcome-handle').textContent = userHandle;
+      
+      // Initialize wallet
+      initializeWallet();
+      
+      // Setup interactive features
+      setupCreateCampaignButtons();
+      setupSearchFunctionality();
+      
+      // Load dashboard data
+      loadDashboardData();
+      
+      // Load task engagement data
+      refreshTaskEngagement();
+      
+      // Load available tasks
+      loadTasksData();
+      
+      // Update stats immediately with calculated values
+      updateStatsDisplay({});
+      
+      // Refresh data periodically (with notifications)
+      setInterval(() => {
+        loadDashboardData(true);
+        refreshTaskEngagement();
+        loadTasksData();
+      }, 30000); // Every 30 seconds
+      
+      // Also refresh wallet and user data less frequently
+      setInterval(() => {
+        updateUserProfile();
+      }, 60000); // Every minute
+    });
+
+    // Helper function to get valid token
+    async function getValidToken() {
+      let token = localStorage.getItem('authToken');
+      console.log('Current token in localStorage:', token ? 'Present' : 'Missing');
+      
+      // If no JWT token, try to get one for Twitter users
+      if (!token) {
+        try {
+          console.log('No token found, trying to get one from Twitter session...');
+          const response = await fetch(`${API_BASE_URL}api/twitter/get-token.php`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          console.log('Twitter token response status:', response.status);
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Twitter token response:', data);
+            if (data.status === 'success' && data.token) {
+              token = data.token;
+              localStorage.setItem('authToken', token);
+              console.log('✅ Token obtained from Twitter session');
+              
+              // Also store user info if available
+              if (data.user) {
+                localStorage.setItem('userHandle', data.user.name || '@user');
+                localStorage.setItem('userId', data.user.id);
+              }
+            } else {
+              console.log('❌ No token in Twitter response:', data.message || 'Unknown error');
+            }
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            console.log('❌ Twitter token request failed:', response.status, errorData.message || 'Unknown error');
+          }
+        } catch (error) {
+          console.error('Error getting token:', error);
+        }
+      }
+      
+      // If still no token, return null but don't show login prompt immediately
+      // Let the calling function decide what to do
+      if (!token) {
+        console.log('❌ No authentication available');
+        return null;
+      }
+      
+      console.log('✅ Using token for API calls');
+      return token;
+    }
+
+    // Show login prompt when authentication is required
+    function showLoginPrompt() {
+      // Create login prompt overlay
+      const overlay = document.createElement('div');
+      overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      `;
+      
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        background: #1e1e24;
+        border-radius: 16px;
+        padding: 2rem;
+        text-align: center;
+        max-width: 400px;
+        border: 1px solid #27272a;
+      `;
+      
+      modal.innerHTML = `
+        <h3 style="color: #fff; margin-bottom: 1rem;">Authentication Required</h3>
+        <p style="color: #a1a1aa; margin-bottom: 2rem;">Please log in to access your dashboard</p>
+        <div style="display: flex; gap: 1rem; justify-content: center;">
+          <button onclick="window.location.href='/pages/admin_dashboard/login.html'" 
+                  style="background: #caf403; color: #000; border: none; padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 500; cursor: pointer;">
+            Go to Login
+          </button>
+          <button onclick="window.location.reload()" 
+                  style="background: transparent; color: #a1a1aa; border: 1px solid #27272a; padding: 0.75rem 1.5rem; border-radius: 8px; cursor: pointer;">
+            Retry
+          </button>
+        </div>
+      `;
+      
+      overlay.appendChild(modal);
+      document.body.appendChild(overlay);
+    }
+
+    // Update user profile information
+    async function updateUserProfile() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}api/settings/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.twitter_handle) {
+            const handle = `@${data.data.twitter_handle}`;
+            document.getElementById('user-handle').textContent = handle;
+            document.getElementById('welcome-handle').textContent = handle;
+            localStorage.setItem('userHandle', handle);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user profile:', error);
+      }
+    }
+
+    // Load and update user avatar
+    async function loadUserAvatar() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}api/settings/profile-picture`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.profile_picture_url) {
+            const userAvatar = document.getElementById('userAvatar');
+            if (userAvatar) {
+              userAvatar.innerHTML = `<img src="${data.data.profile_picture_url}?t=${Date.now()}" alt="Profile" style="width: 100%; height: 100%; border-radius: 12px; object-fit: cover;">`;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user avatar:', error);
+      }
+    }
+
+    // Update wallet address display
+    function updateWalletAddress() {
+      const CONNECTED_EVM_KEY = 'connected_evm_wallet';
+      const localWallet = localStorage.getItem(CONNECTED_EVM_KEY);
+      const walletElement = document.getElementById('wallet-address');
+      const copyButton = document.getElementById('copy-wallet');
+      
+      if (walletElement) {
+        if (localWallet && localWallet.startsWith('0x')) {
+          const shortAddress = `${localWallet.slice(0, 6)}...${localWallet.slice(-4)}`;
+          walletElement.textContent = shortAddress;
+          walletElement.className = 'text-success';
+          if (copyButton) {
+            copyButton.style.display = 'block';
+            copyButton.onclick = () => copyWalletAddress(localWallet);
+          }
+          console.log('Wallet connected:', shortAddress);
+        } else {
+          walletElement.textContent = 'Connect Wallet';
+          walletElement.className = 'text-primary';
+          walletElement.style.cursor = 'pointer';
+          walletElement.onclick = connectWallet;
+          if (copyButton) {
+            copyButton.style.display = 'none';
+          }
+        }
+      }
+    }
+
+    // Copy wallet address to clipboard
+    async function copyWalletAddress(address) {
+      try {
+        await navigator.clipboard.writeText(address);
+        showNotification('Wallet address copied to clipboard!', 'success');
+      } catch (error) {
+        console.error('Failed to copy wallet address:', error);
+        showNotification('Failed to copy wallet address', 'error');
+      }
+    }
+
+    // Load dashboard statistics
+    async function loadDashboardStats() {
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          // Use calculated stats when no token
+          updateStatsDisplay({});
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}api/user/stats`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            updateStatsDisplay(data.data);
+            updateDataStatus(true, 'api');
+            return;
+          }
+        }
+        
+        // If API fails, use calculated stats
+        if (response.status === 404) {
+          console.log('Stats API not available, using calculated values');
+        }
+        updateStatsDisplay({});
+        updateDataStatus(false, 'local');
+        
+      } catch (error) {
+        // Silently fall back to calculated stats
+        console.log('Using local stats calculation (API unavailable)');
+        updateStatsDisplay({});
+        updateDataStatus(false, 'local');
+      }
+    }
+
+    // Load wallet balance and update stats
+    async function loadWalletBalance() {
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          console.log('No auth token available for wallet balance');
+          return null;
+        }
+
+        const response = await fetch(`${API_BASE_URL}api/wallet/balance`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            return data.data;
+          }
+        }
+      } catch (error) {
+        console.error('Error loading wallet balance:', error);
+      }
+      return null;
+    }
+
+    // Update stats display
+    async function updateStatsDisplay(stats) {
+      // Load wallet balance
+      const walletData = await loadWalletBalance();
+      
+      // Update Total Diamonds
+      const diamondElement = document.getElementById('total-diamonds');
+      if (diamondElement) {
+        const diamonds = walletData?.diamonds !== undefined ? walletData.diamonds : 
+                        stats.diamonds !== undefined ? stats.diamonds : calculateTotalDiamonds();
+        diamondElement.textContent = diamonds;
+      }
+      
+      // Update Total Campaigns
+      const campaignElement = document.getElementById('total-campaigns');
+      if (campaignElement) {
+        const campaigns = stats.campaigns !== undefined ? stats.campaigns : calculateTotalCampaigns();
+        campaignElement.textContent = campaigns;
+      }
+      
+      // Update Tasks Completed
+      const taskElement = document.getElementById('total-tasks');
+      if (taskElement) {
+        const tasks = stats.tasks !== undefined ? stats.tasks : calculateCompletedTasks();
+        taskElement.textContent = tasks;
+      }
+      
+      // Update USDT Value
+      const usdtElement = document.getElementById('total-usdt');
+      if (usdtElement) {
+        const usdtValue = walletData?.usdt !== undefined ? walletData.usdt : 
+                         stats.usdtValue !== undefined ? stats.usdtValue : calculateUSDTValue();
+        usdtElement.textContent = `$${usdtValue.toFixed(2)}`;
+      }
+    }
+
+    // Calculate total diamonds from campaigns and tasks
+    function calculateTotalDiamonds() {
+      try {
+        let totalDiamonds = 0;
+        
+        // Get diamonds from campaigns
+        const campaigns = JSON.parse(localStorage.getItem('userCampaigns') || '[]');
+        const campaignDiamonds = campaigns.reduce((sum, campaign) => {
+          return sum + (campaign.budget || 0);
+        }, 0);
+        
+        // Get diamonds from completed tasks (stored in localStorage)
+        const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]');
+        const taskDiamonds = completedTasks.reduce((sum, task) => {
+          return sum + (task.reward || 0);
+        }, 0);
+        
+        // Base diamonds (could be from API or default)
+        const baseDiamonds = parseInt(localStorage.getItem('baseDiamonds') || '50');
+        
+        totalDiamonds = baseDiamonds + taskDiamonds - campaignDiamonds;
+        return Math.max(0, totalDiamonds); // Ensure non-negative
+      } catch (error) {
+        console.error('Error calculating diamonds:', error);
+        return 50; // Default value
+      }
+    }
+
+    // Calculate total campaigns created
+    function calculateTotalCampaigns() {
+      try {
+        const campaigns = JSON.parse(localStorage.getItem('userCampaigns') || '[]');
+        return campaigns.length;
+      } catch (error) {
+        console.error('Error calculating campaigns:', error);
+        return 0;
+      }
+    }
+
+    // Calculate completed tasks
+    function calculateCompletedTasks() {
+      try {
+        const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]');
+        const defaultTasks = parseInt(localStorage.getItem('baseTasks') || '10');
+        return completedTasks.length + defaultTasks;
+      } catch (error) {
+        console.error('Error calculating tasks:', error);
+        return 10; // Default value
+      }
+    }
+
+    // Calculate USDT value based on diamonds
+    function calculateUSDTValue() {
+      try {
+        const totalDiamonds = calculateTotalDiamonds();
+        const diamondToUSDTRate = parseFloat(localStorage.getItem('diamondRate') || '0.234');
+        const usdtValue = (totalDiamonds * diamondToUSDTRate).toFixed(2);
+        return parseFloat(usdtValue);
+      } catch (error) {
+        console.error('Error calculating USDT value:', error);
+        return 11.70; // Default value (50 * 0.234)
+      }
+    }
+
+    // Load campaigns created by user from database
+    async function loadActiveCampaigns() {
+      try {
+        let token = await getValidToken();
+        if (!token) {
+          console.log('No auth token available');
+          renderCampaigns([]);
+          return;
+        }
+
+        // Primary endpoint for user's created campaigns
+        const campaignEndpoints = [
+          'api/campaigns/list', // User's campaigns endpoint (filters by user_id automatically)
+          'api/campaigns', // Base campaigns endpoint (returns user's campaigns when authenticated)
+        ];
+
+        let campaigns = [];
+        let apiConnected = false;
+        
+        for (const endpoint of campaignEndpoints) {
+          try {
+            console.log(`Trying to fetch campaigns from: ${endpoint}`);
+            
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+              method: 'GET',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+              },
+              credentials: 'include'
+            });
+
+            console.log(`Response from ${endpoint}:`, response.status);
+
+            if (response.ok) {
+              const data = await response.json();
+              console.log(`📊 Data from ${endpoint}:`, data);
+              
+              // Handle different response formats
+              if (data.status === 'success') {
+                if (data.data && Array.isArray(data.data)) {
+                  campaigns = data.data;
+                  apiConnected = true;
+                  console.log(`✅ Campaigns loaded from ${endpoint}:`, campaigns.length, campaigns);
+                  break;
+                } else if (data.campaigns && Array.isArray(data.campaigns)) {
+                  campaigns = data.campaigns;
+                  apiConnected = true;
+                  console.log(`✅ Campaigns loaded from ${endpoint}:`, campaigns.length, campaigns);
+                  break;
+                }
+              } else if (Array.isArray(data)) {
+                campaigns = data;
+                apiConnected = true;
+                console.log(`✅ Campaigns loaded from ${endpoint}:`, campaigns.length, campaigns);
+                break;
+              } else if (data.data && !Array.isArray(data.data)) {
+                // Single campaign object
+                campaigns = [data.data];
+                apiConnected = true;
+                console.log(`✅ Single campaign loaded from ${endpoint}:`, campaigns);
+                break;
+              }
+            } else if (response.status === 404) {
+              console.log(`❌ Endpoint ${endpoint} not found (404)`);
+              continue;
+            } else if (response.status === 401) {
+              console.log(`❌ Endpoint ${endpoint} failed with 401 - Authentication required`);
+              // Clear invalid token and try to get a new one
+              localStorage.removeItem('authToken');
+              const newToken = await getValidToken();
+              if (!newToken) {
+                console.log('❌ Could not obtain valid authentication, stopping campaign load');
+                break; // Stop trying other endpoints if auth fails
+              }
+              // Update token for next iteration
+              token = newToken;
+              continue;
+            } else {
+              console.log(`❌ Endpoint ${endpoint} failed with status:`, response.status);
+            }
+          } catch (endpointError) {
+            console.log(`❌ Endpoint ${endpoint} error:`, endpointError.message);
+            continue;
+          }
+        }
+
+        // Update data status
+        updateDataStatus(apiConnected, apiConnected ? 'api' : 'local');
+
+        // If no API data found, don't use sample data - show empty state
+        if (!apiConnected) {
+          console.log('📊 No campaign API available, showing empty state');
+          campaigns = [];
+        }
+
+        // Filter campaigns to show only user's created campaigns
+        if (campaigns.length > 0) {
+          const userHandle = localStorage.getItem('userHandle') || '@username';
+          const userHandleClean = userHandle.replace('@', '');
+          const originalCampaigns = [...campaigns]; // Keep reference to original
+          
+          console.log(`🔍 Filtering campaigns for user: ${userHandle}`);
+          console.log(`📊 Total campaigns before filtering:`, campaigns.length);
+          console.log(`🔍 Sample campaign structure:`, campaigns[0]);
+          
+          const userCampaigns = campaigns.filter(campaign => {
+            const isUserCampaign = 
+              campaign.creator === userHandle || 
+              campaign.creator === userHandleClean ||
+              campaign.user_id === userHandle ||
+              campaign.user_id === userHandleClean ||
+              campaign.twitter_handle === userHandle ||
+              campaign.twitter_handle === userHandleClean ||
+              campaign.author === userHandle ||
+              campaign.author === userHandleClean ||
+              (campaign.user && campaign.user.twitter_handle === userHandleClean) ||
+              (campaign.user && campaign.user.handle === userHandleClean);
+            
+            if (isUserCampaign) {
+              console.log(`✅ User campaign found:`, campaign.title || campaign.id);
+            }
+            
+            return isUserCampaign;
+          });
+          
+          campaigns = userCampaigns;
+          console.log(`📊 User campaigns after filtering:`, campaigns.length);
+          
+          // If no user-specific campaigns found, show all campaigns for debugging
+          if (campaigns.length === 0) {
+            console.log(`⚠️ No user-specific campaigns found. Showing all campaigns for debugging.`);
+            campaigns = originalCampaigns; // Show all campaigns for now
+          }
+        }
+
+        renderCampaigns(campaigns);
+      } catch (error) {
+        console.error('Error loading campaigns:', error);
+        updateDataStatus(false, 'local');
+        renderCampaigns([]);
+      }
+    }
+
+    // Render campaigns in the UI with images
+    function renderCampaigns(campaigns) {
+      const container = document.getElementById('campaigns-container');
+      if (!container) return;
+
+      if (!campaigns || campaigns.length === 0) {
+        container.innerHTML = `
+          <div class="col-12 text-center py-4">
+            <i class="fas fa-bullseye fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No Campaigns Created Yet</h5>
+            <p class="text-muted">Create your first campaign to get started!</p>
+            <button class="btn btn-primary" onclick="window.location.href='campaign_upload.html'">Create Campaign</button>
+          </div>
+        `;
+        return;
+      }
+
+      const campaignCards = campaigns.map((campaign, index) => {
+        // Handle different status formats
+        const status = campaign.status || 'draft';
+        const statusClass = status === 'active' ? 'bg-success' : 
+                           status === 'pending' ? 'bg-warning' : 
+                           status === 'draft' ? 'bg-secondary' :
+                           status === 'completed' ? 'bg-info' : 'bg-muted';
+        
+        // Handle different date formats
+        const createdDate = campaign.created_at || campaign.start_date || campaign.timestamp || new Date().toISOString();
+        const formattedDate = new Date(createdDate).toLocaleDateString();
+        
+        // Handle different budget/diamond formats
+        const budget = campaign.budget || campaign.diamonds || 0;
+        
+        // Handle participant data
+        const participants = campaign.participants || campaign.participant_count || 0;
+        const maxParticipants = campaign.max_participants || campaign.target_participants || 
+                               (campaign.meta && campaign.meta.participants) || 100;
+        
+        // Handle campaign image
+        let campaignImage = '';
+        if (campaign.image_url) {
+          campaignImage = campaign.image_url;
+        } else if (campaign.assets && campaign.assets.length > 0) {
+          // Handle base64 images from campaign creation
+          const asset = campaign.assets[0];
+          if (asset.data && asset.data.startsWith('data:image/')) {
+            campaignImage = asset.data;
+          }
+        } else if (campaign.image_data) {
+          campaignImage = campaign.image_data;
+        }
+        
+        // Handle tweet URL
+        const tweetUrl = campaign.tweet_url || (campaign.meta && campaign.meta.tweet_url) || '';
+        
+        return `
+          <div class="col-md-6 col-lg-4">
+            <div class="stats-card campaign-card" data-campaign-id="${campaign.id || campaign._id || index}">
+              ${campaignImage ? `
+                <div class="campaign-image mb-3" style="height: 150px; overflow: hidden; border-radius: 8px;">
+                  <img src="${campaignImage}" alt="Campaign Image" 
+                       style="width: 100%; height: 100%; object-fit: cover;" 
+                       onerror="this.style.display='none'">
+                </div>
+              ` : ''}
+              
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <h6 class="mb-0" style="flex: 1; margin-right: 10px;">
+                  ${campaign.title || `Campaign #${index + 1}`}
+                </h6>
+                <span class="badge ${statusClass}" style="font-size: 0.65rem;">
+                  ${status.charAt(0).toUpperCase() + status.slice(1)}
+                </span>
+              </div>
+              
+              <p class="text-muted mb-3" style="font-size: 0.875rem; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">
+                ${campaign.description || campaign.notes || 'No description available'}
+              </p>
+              
+              ${tweetUrl ? `
+                <div class="mb-3">
+                  <small class="text-muted">
+                    <i class="fab fa-twitter me-1"></i>
+                    <a href="${tweetUrl}" target="_blank" class="text-decoration-none">View Tweet</a>
+                  </small>
+                </div>
+              ` : ''}
+              
+              <div class="campaign-stats mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <small class="text-muted">Participants</small>
+                  <small class="fw-semibold">${participants}/${maxParticipants}</small>
+                </div>
+                
+                <div class="progress mb-2" style="height: 4px;">
+                  <div class="progress-bar bg-success" style="width: ${maxParticipants > 0 ? (participants/maxParticipants)*100 : 0}%"></div>
+                </div>
+                
+                <div class="d-flex justify-content-between align-items-center">
+                  <small class="text-muted">
+                    <i class="fas fa-gem me-1"></i>
+                    ${budget} Diamonds
+                  </small>
+                  <small class="text-muted">${formattedDate}</small>
+                </div>
+              </div>
+              
+              <div class="campaign-actions d-flex gap-2">
+                <button class="btn btn-sm btn-outline-primary flex-fill" onclick="viewCampaign('${campaign.id || campaign._id || index}')">
+                  <i class="fas fa-eye me-1"></i>View
+                </button>
+                <button class="btn btn-sm btn-outline-secondary flex-fill" onclick="editCampaign('${campaign.id || campaign._id || index}')">
+                  <i class="fas fa-edit me-1"></i>Edit
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = campaignCards;
+      
+      // Update the section title to show count
+      const sectionTitle = document.querySelector('.content-card h6');
+      if (sectionTitle && (sectionTitle.textContent.includes('My Campaigns') || sectionTitle.textContent.includes('Active Campaigns'))) {
+        sectionTitle.textContent = `My Campaigns (${campaigns.length})`;
+      }
+      
+      console.log(`✅ Rendered ${campaigns.length} campaigns with images`);
+      
+      if (campaigns.length > 0) {
+        showNotification(`Loaded ${campaigns.length} campaign${campaigns.length > 1 ? 's' : ''}`, 'success');
+      }
+    }
+
+    // View campaign details
+    function viewCampaign(campaignId) {
+      // Navigate to campaign progress page with the campaign ID
+      window.location.href = `/pages/campaignProgress.html?id=${campaignId}`;
+    }
+
+    // Edit campaign
+    function editCampaign(campaignId) {
+      // Navigate to campaign upload page with edit mode
+      window.location.href = `/pages/campaign_upload.html?edit=${campaignId}`;
+    }
+
+    // Debug function to test campaign display
+    function testCampaignDisplay() {
+      const testCampaign = {
+        id: 'test_' + Date.now(),
+        title: 'Test Campaign',
+        description: 'This is a test campaign to verify the display functionality',
+        status: 'active',
+        budget: 100,
+        participants: 5,
+        max_participants: 50,
+        created_at: new Date().toISOString(),
+        image_url: 'https://via.placeholder.com/300x150/6366f1/ffffff?text=Test+Campaign',
+        tweet_url: 'https://twitter.com/test/status/123456789'
+      };
+      
+      renderCampaigns([testCampaign]);
+      showNotification('Test campaign displayed', 'info');
+    }
+
+    // Force reload campaigns from API
+    async function reloadCampaigns() {
+      console.log('🔄 Manually reloading campaigns...');
+      showNotification('Reloading campaigns...', 'info');
+      await loadActiveCampaigns();
+    }
+
+    // Save campaign to localStorage
+    function saveCampaignToLocal(campaign) {
+      try {
+        const existingCampaigns = JSON.parse(localStorage.getItem('userCampaigns') || '[]');
+        existingCampaigns.push(campaign);
+        localStorage.setItem('userCampaigns', JSON.stringify(existingCampaigns));
+        console.log('Campaign saved locally:', campaign);
+        
+        // Refresh the campaign display and stats
+        loadActiveCampaigns();
+        updateStatsDisplay({});
+      } catch (error) {
+        console.error('Error saving campaign locally:', error);
+      }
+    }
+
+    // Clear sample campaigns (for testing)
+    function clearSampleCampaigns() {
+      localStorage.removeItem('userCampaigns');
+      loadActiveCampaigns();
+      updateStatsDisplay({});
+      showNotification('Sample campaigns cleared', 'info');
+    }
+
+    // Add completed task
+    function addCompletedTask(taskData) {
+      try {
+        const completedTasks = JSON.parse(localStorage.getItem('completedTasks') || '[]');
+        const newTask = {
+          id: 'task_' + Date.now(),
+          title: taskData.title || 'Task Completed',
+          reward: taskData.reward || 10,
+          completed_at: new Date().toISOString(),
+          ...taskData
+        };
+        
+        completedTasks.push(newTask);
+        localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+        
+        // Update stats display
+        updateStatsDisplay({});
+        showNotification(`Task completed! +${newTask.reward} diamonds`, 'success');
+        
+        return newTask;
+      } catch (error) {
+        console.error('Error saving completed task:', error);
+      }
+    }
+
+    // Update diamond balance
+    function updateDiamondBalance(amount, reason = '') {
+      try {
+        const currentDiamonds = parseInt(localStorage.getItem('baseDiamonds') || '50');
+        const newBalance = Math.max(0, currentDiamonds + amount);
+        localStorage.setItem('baseDiamonds', newBalance.toString());
+        
+        updateStatsDisplay({});
+        
+        const message = amount > 0 ? 
+          `+${amount} diamonds earned${reason ? ' from ' + reason : ''}!` :
+          `${Math.abs(amount)} diamonds spent${reason ? ' on ' + reason : ''}`;
+        
+        showNotification(message, amount > 0 ? 'success' : 'info');
+      } catch (error) {
+        console.error('Error updating diamond balance:', error);
+      }
+    }
+
+    // Initialize default values
+    function initializeDefaultStats() {
+      // Set default values if not already set
+      if (!localStorage.getItem('baseDiamonds')) {
+        localStorage.setItem('baseDiamonds', '150');
+      }
+      if (!localStorage.getItem('baseTasks')) {
+        localStorage.setItem('baseTasks', '15');
+      }
+      if (!localStorage.getItem('diamondRate')) {
+        localStorage.setItem('diamondRate', '0.234');
+      }
+      
+      // Create some sample completed tasks if none exist
+      if (!localStorage.getItem('completedTasks')) {
+        const sampleTasks = [
+          { id: 'task_sample_1', title: 'Twitter Retweet', reward: 5, completed_at: new Date(Date.now() - 24*60*60*1000).toISOString() },
+          { id: 'task_sample_2', title: 'Follow Account', reward: 3, completed_at: new Date(Date.now() - 48*60*60*1000).toISOString() },
+          { id: 'task_sample_3', title: 'Like Tweet', reward: 2, completed_at: new Date(Date.now() - 72*60*60*1000).toISOString() }
+        ];
+        localStorage.setItem('completedTasks', JSON.stringify(sampleTasks));
+      }
+    }
+
+    // Add new campaign from campaign creation page
+    function addNewCampaign(campaignData) {
+      const newCampaign = {
+        id: 'camp_' + Date.now(),
+        title: campaignData.title || 'New Campaign',
+        description: campaignData.description || campaignData.notes || 'No description',
+        status: 'active',
+        budget: campaignData.budget || 0,
+        participants: 0,
+        max_participants: campaignData.participants || 100,
+        created_at: new Date().toISOString(),
+        creator: localStorage.getItem('userHandle') || '@username',
+        tweet_url: campaignData.tweet_url || '',
+        ...campaignData
+      };
+      
+      saveCampaignToLocal(newCampaign);
+      showNotification('Campaign created successfully!', 'success');
+      return newCampaign;
+    }
+
+    // Handle Create Campaign button clicks
+    function setupCreateCampaignButtons() {
+      console.log('🔧 Setting up Create Campaign buttons...');
+      
+      // Find all buttons that contain "Create Campaign" text
+      const campaignButtons = document.querySelectorAll('button');
+      let buttonCount = 0;
+      
+      campaignButtons.forEach(btn => {
+        if (btn.textContent.includes('Create Campaign')) {
+          buttonCount++;
+          console.log(`✅ Found Create Campaign button #${buttonCount}:`, btn.textContent.trim());
+          
+          // Remove any existing click handlers
+          btn.onclick = null;
+          
+          // Add new click handler
+          btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            console.log('🚀 Create Campaign button clicked!');
+            console.log('🔄 Redirecting to campaign upload page...');
+            
+            // Use relative path from pages directory
+            window.location.href = 'campaign_upload.html';
+          });
+          
+          // Also set onclick as backup
+          btn.onclick = function(e) {
+            e.preventDefault();
+            console.log('🚀 Create Campaign button clicked (onclick)!');
+            window.location.href = 'campaign_upload.html';
+          };
+        }
+      });
+      
+      console.log(`🎯 Setup complete! Found ${buttonCount} Create Campaign buttons`);
+      
+      // Also setup the + Create Campaign button specifically
+      const plusButton = document.querySelector('button.btn-primary');
+      if (plusButton && plusButton.textContent.includes('+ Create Campaign')) {
+        console.log('🔧 Setting up + Create Campaign button specifically');
+        plusButton.onclick = function(e) {
+          e.preventDefault();
+          console.log('🚀 + Create Campaign clicked!');
+          window.location.href = 'campaign_upload.html';
+        };
+      }
+    }
+
+    // TASK ENGAGEMENT FUNCTIONALITY
+    let _tasks = [];
+    let _selectedTaskId = null;
+
+    // Global engagement tracking
+    let engagementTracker = {
+      taskId: null,
+      completedActions: {},
+      startTime: null,
+      urls: {}
+    };
+
+    // Load tasks data from API
+    async function loadTasksData() {
+      console.log('📋 Loading tasks data...');
+      
+      const loadingState = document.getElementById('loadingState');
+      const tasksContainer = document.getElementById('tasksContainer');
+      
+      // Show loading state
+      if (loadingState) loadingState.style.display = 'block';
+      if (tasksContainer) tasksContainer.style.display = 'none';
+      
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          console.log('❌ No token available for tasks');
+          showTasksError('Please login to view available tasks');
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}api/tasks/available`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          console.log('📋 Tasks API response:', data);
+          
+          if (data.status === 'success' && data.data) {
+            _tasks = Array.isArray(data.data) ? data.data : [];
+            console.log(`📋 Loaded ${_tasks.length} tasks`);
+            renderTaskCards();
+          } else {
+            console.log('📋 No tasks data in response');
+            showTasksError('No tasks available at the moment');
+          }
+        } else {
+          console.error('📋 Tasks API error:', response.status);
+          showTasksError('Failed to load tasks. Please try again.');
+        }
+      } catch (error) {
+        console.error('📋 Error loading tasks:', error);
+        showTasksError('Network error. Please check your connection.');
+      } finally {
+        if (loadingState) loadingState.style.display = 'none';
+        if (tasksContainer) tasksContainer.style.display = 'block';
+      }
+    }
+
+    // Show tasks error message
+    function showTasksError(message) {
+      const tasksContainer = document.getElementById('tasksContainer');
+      if (tasksContainer) {
+        tasksContainer.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+            <h5 class="text-light mb-2">${message}</h5>
+            <button class="btn btn-primary mt-3" onclick="loadTasksData()">
+              <i class="fas fa-refresh me-1"></i>Try Again
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    // Render task cards
+    function renderTaskCards() {
+      const container = document.getElementById('tasksContainer');
+      if (!container) return;
+
+      if (!_tasks || _tasks.length === 0) {
+        container.innerHTML = `
+          <div class="col-12 text-center py-5">
+            <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
+            <h5 class="text-muted">No Tasks Available</h5>
+            <p class="text-muted">Check back later for new engagement opportunities!</p>
+          </div>
+        `;
+        return;
+      }
+
+      const cardsHtml = _tasks.map((task, index) => {
+        const img = task.image || task.assets?.[0]?.url || '../images/bottom1.jpg';
+        const current = task.participants_current || task.enrolled_count || 0;
+        const total = task.participants_total || task.max_participants || 0;
+        const progress = total > 0 ? Math.round((current / total) * 100) : 0;
+        
+        return `
+          <div class="col-md-6 col-lg-4">
+            <div class="campaign-card" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; height: 100%;">
+              <div class="campaign-image" style="height: 180px; overflow: hidden;">
+                <img src="${img}" alt="Task" style="width: 100%; height: 100%; object-fit: cover;" 
+                     onerror="this.src='../images/bottom1.jpg'">
+              </div>
+              
+              <div class="p-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <img src="../images/avarter2.png" alt="Creator" class="rounded-circle" style="width: 24px; height: 24px;">
+                  <small class="text-muted">${task.owner || task.creator || '@creator'}</small>
+                  <span class="badge bg-success ms-auto">${task.reward || 0} 💎</span>
+                </div>
+                
+                <h6 class="mb-2" style="color: var(--text-primary); font-weight: 600; line-height: 1.3;">
+                  ${task.title || task.description || 'Engagement Task'}
+                </h6>
+                
+                <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.4;">
+                  ${(task.description || task.title || 'Complete engagement actions to earn rewards').substring(0, 100)}${(task.description || task.title || '').length > 100 ? '...' : ''}
+                </p>
+                
+                <div class="campaign-stats mb-3">
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <small class="text-muted">Progress</small>
+                    <small class="text-muted">${current}/${total || '∞'} participants</small>
+                  </div>
+                  <div class="progress" style="height: 6px; background: rgba(255,255,255,0.1);">
+                    <div class="progress-bar bg-primary" style="width: ${progress}%"></div>
+                  </div>
+                </div>
+                
+                <div class="campaign-actions d-flex gap-2">
+                  <button class="btn btn-primary btn-sm flex-grow-1" onclick="openTaskModal(${index})">
+                    <i class="fas fa-play me-1"></i>Start
+                  </button>
+                  <button class="btn btn-outline-secondary btn-sm" onclick="viewTaskDetails(${index})" title="Quick view">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="btn btn-outline-info btn-sm" onclick="previewTask(${index})" title="Preview">
+                    <i class="fas fa-external-link-alt"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = cardsHtml;
+      console.log(`📋 Rendered ${_tasks.length} task cards`);
+    }
+
+    // Open task modal
+    function openTaskModal(taskIndex) {
+      const modal = document.getElementById('taskModal');
+      if (!modal) return;
+      
+      const task = _tasks[taskIndex];
+      if (!task) return;
+      
+      // Show modal
+      modal.style.display = 'flex';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+      modal.classList.add('show');
+      
+      _selectedTaskId = task.id || task._id || task.task_id || null;
+      
+      // Update task details
+      document.getElementById('taskImage').src = task.image || '../images/bottom1.jpg';
+      document.getElementById('taskDescription').textContent = task.description || task.title || '';
+      document.getElementById('taskCreator').textContent = task.owner || task.creator || '@creator';
+      
+      const current = task.participants_current || task.enrolled_count || 0;
+      const total = task.participants_total || task.max_participants || 0;
+      document.getElementById('taskParticipants').textContent = `${current}/${total || '—'}`;
+      document.getElementById('taskReward').textContent = task.reward || task.reward_per_task || 0;
+      
+      // Populate engagement URLs
+      populateEngagementUrls(task);
+      
+      // Clear inputs
+      document.getElementById('usernameInput').value = '';
+      document.getElementById('proofInput').value = '';
+    }
+
+    // Close task modal
+    function closeTaskModal() {
+      const modal = document.getElementById('taskModal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+      }
+    }
+
+    // Populate engagement URLs
+    function populateEngagementUrls(task) {
+      console.log('📋 Populating engagement URLs for task:', task.title);
+      
+      // Hide all URL groups initially
+      document.getElementById('followUrlsGroup').style.display = 'none';
+      document.getElementById('likeUrlsGroup').style.display = 'none';
+      document.getElementById('retweetUrlsGroup').style.display = 'none';
+      document.getElementById('commentUrlsGroup').style.display = 'none';
+      document.getElementById('generalLinkGroup').style.display = 'none';
+      
+      let hasAnyUrls = false;
+      
+      // Handle actions from campaign data
+      if (task.actions && typeof task.actions === 'object') {
+        if (task.actions.follow && Array.isArray(task.actions.follow) && task.actions.follow.length > 0) {
+          populateUrlGroup('followUrls', task.actions.follow, 'follow');
+          document.getElementById('followUrlsGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+        
+        if (task.actions.like && Array.isArray(task.actions.like) && task.actions.like.length > 0) {
+          populateUrlGroup('likeUrls', task.actions.like, 'like');
+          document.getElementById('likeUrlsGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+        
+        if (task.actions.retweet && Array.isArray(task.actions.retweet) && task.actions.retweet.length > 0) {
+          populateUrlGroup('retweetUrls', task.actions.retweet, 'retweet');
+          document.getElementById('retweetUrlsGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+        
+        if (task.actions.comment && Array.isArray(task.actions.comment) && task.actions.comment.length > 0) {
+          populateUrlGroup('commentUrls', task.actions.comment, 'comment');
+          document.getElementById('commentUrlsGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+      }
+      
+      // Fallback to general task link
+      if (!hasAnyUrls) {
+        const generalLink = task.link || task.url || task.reference_link || '';
+        if (generalLink) {
+          populateUrlGroup('generalLink', [generalLink], 'general');
+          document.getElementById('generalLinkGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+      }
+      
+      // Show message if no URLs available
+      if (!hasAnyUrls) {
+        document.getElementById('generalLink').innerHTML = `
+          <div class="alert alert-warning d-flex align-items-center gap-2">
+            <i class="fas fa-exclamation-triangle text-warning"></i>
+            <span>No specific engagement links provided. Contact the campaign creator for instructions.</span>
+          </div>
+        `;
+        document.getElementById('generalLinkGroup').style.display = 'block';
+      }
+    }
+
+    // Helper function to populate URL groups
+    function populateUrlGroup(containerId, urls, actionType) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      
+      const urlsHtml = urls.map((url, index) => {
+        if (!url || !url.trim()) return '';
+        
+        const cleanUrl = url.trim();
+        const urlId = `${actionType}_${index}`;
+        const isTwitterUrl = isTwitterOrXUrl(cleanUrl);
+        const actionInfo = getActionInfo(actionType, isTwitterUrl);
+        
+        return `
+          <div class="url-item mb-2 p-2 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <div class="flex-grow-1">
+                <input type="text" class="form-control form-control-sm" value="${cleanUrl}" readonly 
+                       style="background: transparent; border: none; color: var(--text-primary); font-size: 0.85rem;">
+              </div>
+              <button class="btn btn-outline-primary btn-sm" onclick="copyUrl('${cleanUrl}')" title="Copy URL">
+                <i class="fas fa-copy"></i>
+              </button>
+            </div>
+            
+            ${isTwitterUrl ? `
+              <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-sm ${actionInfo.buttonClass}" onclick="openAndTrackUrl('${cleanUrl}', '${actionType}', ${index})" title="${actionInfo.title}">
+                  <i class="${actionInfo.icon} me-1"></i>${actionInfo.text}
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="openAndTrackUrl('${cleanUrl}', '${actionType}', ${index})" title="Open in X">
+                  <i class="fab fa-x-twitter me-1"></i>Open in X
+                </button>
+              </div>
+            ` : `
+              <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-outline-success btn-sm" onclick="openAndTrackUrl('${cleanUrl}', '${actionType}', ${index})" title="Open Link">
+                  <i class="fas fa-external-link-alt me-1"></i>Open Link
+                </button>
+              </div>
+            `}
+            
+            <div class="engagement-status mt-1" id="status_${urlId}" style="font-size: 0.75rem; color: var(--text-muted);">
+              <i class="fas fa-clock me-1"></i>Click to ${actionInfo.actionText} and track completion
+            </div>
+          </div>
+        `;
+      }).filter(html => html).join('');
+      
+      container.innerHTML = urlsHtml;
+    }
+
+    // Check if URL is Twitter/X URL
+    function isTwitterOrXUrl(url) {
+      const twitterDomains = ['twitter.com', 'x.com', 'mobile.twitter.com', 'm.twitter.com'];
+      try {
+        const urlObj = new URL(url);
+        return twitterDomains.some(domain => urlObj.hostname.includes(domain));
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // Get action-specific information
+    function getActionInfo(actionType, isTwitterUrl) {
+      const actionMap = {
+        follow: {
+          icon: 'fas fa-user-plus',
+          text: isTwitterUrl ? 'Follow on X' : 'Follow',
+          buttonClass: 'btn-primary',
+          title: isTwitterUrl ? 'Follow this account on X' : 'Follow this account',
+          actionText: 'follow'
+        },
+        like: {
+          icon: 'fas fa-heart',
+          text: isTwitterUrl ? 'Like on X' : 'Like',
+          buttonClass: 'btn-danger',
+          title: isTwitterUrl ? 'Like this post on X' : 'Like this post',
+          actionText: 'like'
+        },
+        retweet: {
+          icon: 'fas fa-retweet',
+          text: isTwitterUrl ? 'Retweet on X' : 'Share',
+          buttonClass: 'btn-success',
+          title: isTwitterUrl ? 'Retweet this post on X' : 'Share this post',
+          actionText: 'retweet'
+        },
+        comment: {
+          icon: 'fas fa-comment',
+          text: isTwitterUrl ? 'Reply on X' : 'Comment',
+          buttonClass: 'btn-info',
+          title: isTwitterUrl ? 'Reply to this post on X' : 'Comment on this post',
+          actionText: 'comment'
+        },
+        general: {
+          icon: 'fas fa-external-link-alt',
+          text: 'Open Link',
+          buttonClass: 'btn-outline-success',
+          title: 'Open this link',
+          actionText: 'engage'
+        }
+      };
+      
+      return actionMap[actionType] || actionMap.general;
+    }
+
+    // Copy URL function
+    function copyUrl(url) {
+      navigator.clipboard.writeText(url).then(() => {
+        showNotification('URL copied to clipboard!', 'success');
+      }).catch(() => {
+        showNotification('Failed to copy URL', 'error');
+      });
+    }
+
+    // Open and track URL engagement
+    function openAndTrackUrl(url, actionType, index) {
+      if (!url) return;
+      
+      // Initialize tracking
+      if (!engagementTracker.taskId || engagementTracker.taskId !== _selectedTaskId) {
+        engagementTracker = {
+          taskId: _selectedTaskId,
+          completedActions: {},
+          startTime: new Date().toISOString(),
+          urls: {}
+        };
+      }
+      
+      // Track this URL engagement
+      const urlId = `${actionType}_${index}`;
+      engagementTracker.completedActions[urlId] = {
+        url: url,
+        actionType: actionType,
+        timestamp: new Date().toISOString(),
+        status: 'opened'
+      };
+      
+      // Update UI
+      const statusElement = document.getElementById(`status_${urlId}`);
+      const isTwitterUrl = isTwitterOrXUrl(url);
+      
+      if (statusElement) {
+        if (isTwitterUrl) {
+          const actionEmoji = { follow: '👤', like: '❤️', retweet: '🔄', comment: '💬' };
+          statusElement.innerHTML = `
+            <i class="fab fa-x-twitter text-info me-1"></i>
+            <span class="text-info">Opened on X - ${actionEmoji[actionType] || '🔗'} Complete the ${actionType} and return</span>
+          `;
+        } else {
+          statusElement.innerHTML = `
+            <i class="fas fa-external-link-alt text-info me-1"></i>
+            <span class="text-info">Opened - Complete the action and return</span>
+          `;
+        }
+      }
+      
+      // Open URL
+      window.open(url, '_blank');
+      
+      const actionText = actionType.charAt(0).toUpperCase() + actionType.slice(1);
+      if (isTwitterUrl) {
+        showNotification(`${actionText} on X opened! Complete the ${actionType} action and return to claim your reward.`, 'info');
+      } else {
+        showNotification(`${actionText} link opened! Complete the action and return.`, 'info');
+      }
+      
+      // Save tracking data
+      localStorage.setItem('engagementTracker', JSON.stringify(engagementTracker));
+    }
+
+    // View task details
+    function viewTaskDetails(taskIndex) {
+      const task = _tasks[taskIndex];
+      if (!task) return;
+      
+      showNotification(`Task: ${task.title || 'Engagement Task'} - Reward: ${task.reward || 0} diamonds`, 'info');
+    }
+
+    // Preview task
+    function previewTask(taskIndex) {
+      const task = _tasks[taskIndex];
+      if (!task) return;
+      
+      if (task.link && task.link.trim()) {
+        window.open(task.link, '_blank');
+        showNotification('Task link opened in new tab', 'info');
+      } else {
+        showNotification('No preview link available for this task', 'warning');
+      }
+    }
+
+    // Claim reward
+    async function claimReward() {
+      const username = document.getElementById('usernameInput').value.trim();
+      const proof = document.getElementById('proofInput').value.trim();
+      
+      if (!username) {
+        showNotification('Please enter your social media username', 'warning');
+        return;
+      }
+
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          showNotification('Please login to claim rewards', 'warning');
+          return;
+        }
+
+        if (!_selectedTaskId) {
+          showNotification('No task selected. Please try again.', 'warning');
+          return;
+        }
+
+        // Include engagement tracking data
+        const engagementData = engagementTracker.taskId === _selectedTaskId ? {
+          completedActions: engagementTracker.completedActions,
+          startTime: engagementTracker.startTime,
+          totalActions: Object.keys(engagementTracker.completedActions).length,
+          completedCount: Object.values(engagementTracker.completedActions)
+            .filter(action => action.status === 'completed').length
+        } : null;
+
+        const requestData = {
+          task_id: _selectedTaskId,
+          username: username,
+          proof: proof || null,
+          engagement_tracking: engagementData,
+          submission_time: new Date().toISOString()
+        };
+
+        const response = await fetch(`${API_BASE_URL}api/tasks/claim-reward`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            const currentTask = _tasks.find(t => t.id === _selectedTaskId);
+            const rewardAmount = data.data?.reward_amount || currentTask?.reward || 100;
+            document.getElementById('claimedReward').textContent = rewardAmount;
+            
+            closeTaskModal();
+            showSuccessModal();
+            
+            // Refresh tasks
+            setTimeout(() => {
+              loadTasksData();
+            }, 2000);
+          } else {
+            showNotification(data.message || 'Failed to claim reward', 'error');
+          }
+        } else {
+          showNotification('Failed to claim reward. Please try again.', 'error');
+        }
+      } catch (error) {
+        console.error('Error claiming reward:', error);
+        showNotification('Network error. Please try again.', 'error');
+      }
+    }
+
+    // Show success modal
+    function showSuccessModal() {
+      const modal = document.getElementById('successModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.classList.add('show');
+      }
+    }
+
+    // Close success modal
+    function closeSuccessModal() {
+      const modal = document.getElementById('successModal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+      }
+    }
+
+    // Show notification
+    function showNotification(message, type = 'info') {
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `alert alert-${type === 'error' ? 'danger' : type} position-fixed`;
+      notification.style.cssText = `
+        top: 20px;
+        right: 20px;
+        z-index: 10000;
+        min-width: 300px;
+        animation: slideIn 0.3s ease;
+      `;
+      notification.innerHTML = `
+        <div class="d-flex align-items-center">
+          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} me-2"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Auto remove after 3 seconds
+      setTimeout(() => {
+        if (notification.parentElement) {
+          notification.remove();
+        }
+      }, 3000);
+    }
+
+    // Initialize tasks on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 Dashboard initializing...');
+      
+      // Load tasks data
+      loadTasksData();
+      
+      // Setup create campaign buttons
+      setupCreateCampaignButtons();
+      
+      // Load notifications
+      loadNotifications();
+    });
+
+    // Test function to manually trigger campaign creation
+    window.testCampaignButton = function() {
+      console.log('🧪 Testing campaign button navigation...');
+      console.log('🔄 Redirecting to campaign upload page...');
+      window.location.href = 'campaign_upload.html';
+    };
+
+    // Notification functions
+    async function loadNotifications() {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+
+        const response = await fetch('/api/notification', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            displayNotifications(data.data.notifications, data.data.unread_count);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading notifications:', error);
+      }
+    }
+
+    function displayNotifications(notifications, unreadCount) {
+      const container = document.getElementById('notificationContainer');
+      const list = document.getElementById('notificationList');
+      const countBadge = document.getElementById('notificationCount');
+
+      if (notifications.length === 0) {
+        container.style.display = 'none';
+        return;
+      }
+
+      container.style.display = 'block';
+      countBadge.textContent = unreadCount;
+
+      list.innerHTML = notifications.slice(0, 5).map(notification => {
+        const isUnread = !notification.read;
+        const timeAgo = formatTimeAgo(notification.created_at);
+        const statusIcon = notification.status === 'approved' ? 'check-circle text-success' : 'times-circle text-danger';
+        
+        return `
+          <div class="notification-item d-flex align-items-start gap-3 p-2 rounded mb-2 ${isUnread ? 'bg-warning bg-opacity-10' : 'bg-secondary bg-opacity-10'}">
+            <i class="fas fa-${statusIcon} mt-1"></i>
+            <div class="flex-grow-1">
+              <div class="fw-semibold">${notification.title}</div>
+              <div class="text-muted small">${notification.message}</div>
+              <div class="text-muted" style="font-size: 0.7rem;">${timeAgo}</div>
+            </div>
+            ${isUnread ? '<div class="badge bg-warning text-dark">New</div>' : ''}
+          </div>
+        `;
+      }).join('');
+
+      if (notifications.length > 5) {
+        list.innerHTML += `
+          <div class="text-center mt-2">
+            <button class="btn btn-sm btn-outline-secondary" onclick="viewAllNotifications()">
+              View all ${notifications.length} notifications
+            </button>
+          </div>
+        `;
+      }
+    }
+
+    function formatTimeAgo(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diffInSeconds = Math.floor((now - date) / 1000);
+
+      if (diffInSeconds < 60) return 'Just now';
+      if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)}m ago`;
+      if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)}h ago`;
+      return `${Math.floor(diffInSeconds / 86400)}d ago`;
+    }
+
+    async function markAllNotificationsRead() {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+
+        const response = await fetch('/api/notification/mark-all-read', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          loadNotifications(); // Reload notifications
+          showNotification('All notifications marked as read', 'success');
+        }
+      } catch (error) {
+        console.error('Error marking notifications as read:', error);
+      }
+    }
+
+    function viewAllNotifications() {
+      // Could redirect to a dedicated notifications page
+      alert('View all notifications feature coming soon!');
+    }
+
+    // Debug function to check button setup
+    window.debugCampaignButtons = function() {
+      console.log('🔍 Debugging Create Campaign buttons...');
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach((btn, index) => {
+        if (btn.textContent.includes('Create Campaign')) {
+          console.log(`Button ${index + 1}:`, {
+            text: btn.textContent.trim(),
+            onclick: btn.onclick ? 'Present' : 'Missing',
+            classList: btn.className,
+            element: btn
+          });
+        }
+      });
+    };
+
+    // Task Engagement Analytics Functions
+    async function refreshTaskEngagement() {
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          showNotification('Please log in to view task engagement data', 'warning');
+          return;
+        }
+
+        // Load task engagement data
+        const response = await fetch(`${API_BASE_URL}api/tasks/engagement-stats`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            updateTaskEngagementStats(data.data);
+            loadRecentTaskActivity();
+            showNotification('Task engagement data refreshed', 'success');
+          }
+        } else {
+          // Use demo data if API not available
+          updateTaskEngagementStats({
+            tasks_started: 12,
+            tasks_completed: 8,
+            diamonds_earned: 240,
+            completion_rate: 67
+          });
+          loadRecentTaskActivity(true); // Use demo data
+        }
+      } catch (error) {
+        console.error('Error loading task engagement:', error);
+        // Use demo data on error
+        updateTaskEngagementStats({
+          tasks_started: 12,
+          tasks_completed: 8,
+          diamonds_earned: 240,
+          completion_rate: 67
+        });
+        loadRecentTaskActivity(true);
+      }
+    }
+
+    function updateTaskEngagementStats(stats) {
+      document.getElementById('tasks-started').textContent = stats.tasks_started || 0;
+      document.getElementById('tasks-completed').textContent = stats.tasks_completed || 0;
+      document.getElementById('diamonds-earned').textContent = stats.diamonds_earned || 0;
+      document.getElementById('completion-rate').textContent = `${stats.completion_rate || 0}%`;
+    }
+
+    async function loadRecentTaskActivity(useDemo = false) {
+      const container = document.getElementById('recent-task-activity');
+      
+      if (useDemo) {
+        // Demo task activity data
+        const demoActivities = [
+          {
+            title: 'Follow @TechStartup',
+            status: 'completed',
+            reward: 30,
+            time: '2 hours ago',
+            icon: 'fas fa-user-plus',
+            color: 'success'
+          },
+          {
+            title: 'Retweet Product Launch',
+            status: 'completed',
+            reward: 25,
+            time: '5 hours ago',
+            icon: 'fas fa-retweet',
+            color: 'success'
+          },
+          {
+            title: 'Like Community Post',
+            status: 'pending',
+            reward: 15,
+            time: '1 day ago',
+            icon: 'fas fa-heart',
+            color: 'warning'
+          }
+        ];
+        
+        renderTaskActivity(demoActivities);
+        return;
+      }
+
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}api/tasks/recent-activity`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            renderTaskActivity(data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading recent task activity:', error);
+      }
+    }
+
+    function renderTaskActivity(activities) {
+      const container = document.getElementById('recent-task-activity');
+      
+      if (!activities || activities.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-3 text-muted">
+            <i class="fas fa-inbox fa-2x mb-2"></i>
+            <p class="mb-0">No recent task activity</p>
+            <small>Start engaging with tasks to see your activity here</small>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = activities.map(activity => `
+        <div class="d-flex align-items-center gap-3 p-2 rounded" style="background: rgba(255,255,255,0.02);">
+          <div class="flex-shrink-0">
+            <div class="bg-${activity.color} rounded-circle d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+              <i class="${activity.icon} fa-sm text-white"></i>
+            </div>
+          </div>
+          <div class="flex-grow-1">
+            <div class="fw-medium">${activity.title}</div>
+            <small class="text-muted">${activity.time}</small>
+          </div>
+          <div class="flex-shrink-0 text-end">
+            <div class="fw-bold text-warning">+${activity.reward} 💎</div>
+            <small class="badge bg-${activity.color}">${activity.status}</small>
+            <small class="text-muted ms-2">${activity.time}</small>
+          </div>
+        </div>
+      }).join('');
+    }
+
+    function viewTaskHistory() {
+      showNotification('Task history feature coming soon!', 'info');
+      // Could redirect to a dedicated task history page
+      window.location.href = 'task_history.html';
+      // window.location.href = 'task_history.html';
+    }
+
+    // Load available tasks for engagement
+    async function loadTasksData() {
+      const container = document.getElementById('tasksContainer');
+      const loadingState = document.getElementById('loadingState');
+      
+      // Show loading state
+      container.style.display = 'none';
+      loadingState.style.display = 'block';
+      
+      try {
+        const token = await getValidToken();
+        
+        // Load campaigns as tasks (same as task_engage.html)
+        let tasks = [];
+        if (token) {
+          try {
+            tasks = await loadCampaignsAsTasks(token);
+            console.log(`Dashboard: Loaded ${tasks.length} campaigns as tasks`);
+          } catch (error) {
+            console.error('Error fetching campaigns as tasks:', error);
+          }
+        }
+        
+        // If no campaigns found, show empty state (no demo tasks)
+        if (tasks.length === 0) {
+          console.log('Dashboard: No campaigns found. Users need to create campaigns to see tasks.');
+        }
+        
+        renderAvailableTasks(tasks);
+        
+      } catch (error) {
+        console.error('Error loading tasks:', error);
+        // Show empty state on error
+        renderAvailableTasks([]);
+      } finally {
+        // Hide loading state
+        loadingState.style.display = 'none';
+        container.style.display = 'block';
+      }
+    }
+
+    // Fetch campaigns from API and convert to tasks (same as task_engage.html)
+    async function loadCampaignsAsTasks(token) {
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      const url = `${API_BASE_URL}api/campaigns/list-all?limit=50`;
+      
+      try {
+        const res = await fetch(url, { headers });
+        
+        if (!res.ok) { 
+          console.error('API Error:', res.status, res.statusText);
+          return []; 
+        }
+        
+        const data = await res.json();
+        console.log('Dashboard: Campaigns API Response:', data);
+        
+        if (data.status === 'success' && data.data && Array.isArray(data.data.items)) {
+          return data.data.items.map(campaign => {
+            // Enhanced image handling
+            let campaignImage = '../images/bottom1.jpg';
+            
+            // Check for campaign assets (from our new image upload feature)
+            if (campaign.assets && campaign.assets[0]) {
+              if (campaign.assets[0].data && campaign.assets[0].data.trim()) {
+                campaignImage = campaign.assets[0].data;
+              } else if (campaign.assets[0].url && campaign.assets[0].url.trim()) {
+                campaignImage = campaign.assets[0].url;
+              }
+            }
+            
+            // Check other image fields
+            const imageFields = [
+              campaign.image_url,
+              campaign.image_data, 
+              campaign.image,
+              campaign.imageUrl,
+              campaign.imageData,
+              campaign.campaign_image
+            ];
+            
+            for (const field of imageFields) {
+              if (field && field.trim()) {
+                campaignImage = field;
+                break;
+              }
+            }
+            
+            // Extract creator information
+            let creatorName = '@creator';
+            if (campaign.creator) {
+              if (typeof campaign.creator === 'string') {
+                creatorName = campaign.creator.startsWith('@') ? campaign.creator : `@${campaign.creator}`;
+              } else if (typeof campaign.creator === 'object') {
+                const nameFields = [
+                  campaign.creator.username,
+                  campaign.creator.handle,
+                  campaign.creator.twitter_handle,
+                  campaign.creator.name,
+                  campaign.creator.display_name
+                ];
+                
+                for (const field of nameFields) {
+                  if (field && typeof field === 'string' && field.trim()) {
+                    creatorName = field.startsWith('@') ? field : `@${field}`;
+                    break;
+                  }
+                }
+              }
+            }
+            
+            // Calculate reward and participants from budget
+            const budget = campaign.budget || 100;
+            let rewardPerParticipant = 50; // Default
+            let maxParticipants = Math.floor(budget / rewardPerParticipant);
+            
+            if (campaign.max_participants && campaign.max_participants > 0) {
+              maxParticipants = campaign.max_participants;
+              rewardPerParticipant = Math.floor(budget / maxParticipants);
+            } else if (campaign.reward_per_participant && campaign.reward_per_participant > 0) {
+              rewardPerParticipant = campaign.reward_per_participant;
+              maxParticipants = Math.floor(budget / rewardPerParticipant);
+            }
+            
+            // Ensure minimum values
+            rewardPerParticipant = Math.max(1, rewardPerParticipant);
+            maxParticipants = Math.max(1, maxParticipants);
+            
+            return {
+              id: campaign.id || campaign._id,
+              title: campaign.title || 'Campaign Task',
+              description: campaign.description || 'Complete this campaign to earn rewards',
+              creator: creatorName,
+              reward: rewardPerParticipant,
+              image: campaignImage,
+              participants_current: campaign.participants || campaign.participant_count || 0,
+              participants_total: maxParticipants,
+              status: campaign.status || 'active',
+              budget: budget,
+              actions: campaign.actions || {}
+            };
+          });
+        } else if (data.status === 'success' && Array.isArray(data.data)) {
+          // Handle direct array response
+          return data.data.map(campaign => {
+            const budget = campaign.budget || 100;
+            const rewardPerParticipant = Math.max(1, Math.floor(budget / Math.max(1, campaign.max_participants || 2)));
+            
+            return {
+              id: campaign.id || campaign._id,
+              title: campaign.title || 'Campaign Task',
+              description: campaign.description || 'Complete this campaign to earn rewards',
+              creator: campaign.creator || '@creator',
+              reward: rewardPerParticipant,
+              image: campaign.assets?.[0]?.data || campaign.image || '../images/bottom1.jpg',
+              participants_current: campaign.participants || 0,
+              participants_total: campaign.max_participants || Math.floor(budget / rewardPerParticipant),
+              status: campaign.status || 'active',
+              budget: budget,
+              actions: campaign.actions || {}
+            };
+          });
+        }
+        
+        return [];
+      } catch (error) {
+        console.error('Error loading campaigns as tasks:', error);
+        return [];
+      }
+    }
+
+    function renderAvailableTasks(tasks) {
+      const container = document.getElementById('tasksContainer');
+      
+      if (!tasks || tasks.length === 0) {
+        container.innerHTML = `
+          <div class="col-12">
+            <div class="text-center py-5">
+              <i class="fas fa-rocket fa-3x text-muted mb-3"></i>
+              <h5 class="text-muted mb-2">No Campaigns Available Yet</h5>
+              <p class="text-muted">Tasks will appear here when users create campaigns. Be the first to create an engaging campaign!</p>
+              <div class="d-flex gap-2 justify-content-center mt-4">
+                <button class="btn btn-primary" onclick="window.location.href='campaign_upload.html'">
+                  <i class="fas fa-plus me-2"></i>Create Campaign
+                </button>
+                <button class="btn btn-outline-secondary" onclick="loadTasksData()">
+                  <i class="fas fa-sync-alt me-2"></i>Refresh
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = tasks.map(task => {
+        const progress = task.participants_total > 0 ? 
+          Math.round((task.participants_current / task.participants_total) * 100) : 0;
+        
+        const actionIcons = getActionIcons(task.actions);
+        const statusClass = task.status === 'active' ? 'success' : 
+                           task.status === 'upcoming' ? 'warning' : 'secondary';
+        
+        return `
+          <div class="col-lg-4 col-md-6">
+            <div class="content-card h-100 task-card" style="transition: transform 0.2s ease, box-shadow 0.2s ease; display: flex; flex-direction: column;">
+              <!-- Task Header -->
+              <div class="d-flex justify-content-between align-items-start mb-3">
+                <div class="d-flex align-items-center gap-2">
+                  <img src="../images/avarter2.png" alt="Creator" class="rounded-circle" style="width: 32px; height: 32px;">
+                  <span class="fw-semibold">${task.creator}</span>
+                </div>
+                <span class="badge bg-${statusClass}">${task.status.charAt(0).toUpperCase() + task.status.slice(1)}</span>
+              </div>
+              
+              <!-- Task Image -->
+              <div class="mb-3">
+                <img src="${task.image}" alt="Task" class="img-fluid rounded mb-2" style="height: 120px; width: 100%; object-fit: cover;">
+                <h6 class="fw-bold mb-1">${task.title}</h6>
+                <p class="text-muted small mb-0" style="line-height: 1.4;">${task.description}</p>
+              </div>
+              
+              <!-- Action Icons -->
+              <div class="mb-3">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <small class="text-muted">Actions:</small>
+                  ${actionIcons}
+                </div>
+              </div>
+              
+              <!-- Progress -->
+              <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <small class="text-muted">Progress</small>
+                  <small class="fw-semibold">${task.participants_current}/${task.participants_total}</small>
+                </div>
+                <div class="progress" style="height: 6px;">
+                  <div class="progress-bar bg-success" style="width: ${progress}%"></div>
+                </div>
+              </div>
+              
+              <!-- Reward and Action -->
+              <div class="d-flex justify-content-between align-items-center mt-auto">
+                <div class="d-flex align-items-center gap-1">
+                  <img src="../images/IconDiamond.png" alt="Diamond" style="width: 16px; height: 16px;">
+                  <span class="fw-bold text-warning">${task.reward}</span>
+                  <small class="text-muted">Diamonds</small>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="startTask('${task.id}')">
+                  <i class="fas fa-play me-1"></i>Start Task
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      
+      console.log(`✅ Rendered ${tasks.length} tasks in flexbox layout`);
+      
+      // Add hover effects
+      setTimeout(() => {
+        document.querySelectorAll('.task-card').forEach(card => {
+          card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-4px)';
+            this.style.boxShadow = '0 8px 25px rgba(0,0,0,0.15)';
+          });
+          
+          card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = '';
+          });
+        });
+      }, 100);
+    }
+
+    function getActionIcons(actions) {
+      const icons = [];
+      
+      if (actions && typeof actions === 'object') {
+        if (actions.follow && actions.follow.length > 0) {
+          icons.push('<i class="fas fa-user-plus text-primary" title="Follow"></i>');
+        }
+        if (actions.like && actions.like.length > 0) {
+          icons.push('<i class="fas fa-heart text-danger" title="Like"></i>');
+        }
+        if (actions.retweet && actions.retweet.length > 0) {
+          icons.push('<i class="fas fa-retweet text-success" title="Retweet"></i>');
+        }
+        if (actions.comment && actions.comment.length > 0) {
+          icons.push('<i class="fas fa-comment text-info" title="Comment"></i>');
+        }
+      }
+      
+      return icons.length > 0 ? icons.join(' ') : '<i class="fas fa-bullseye text-warning" title="Campaign Task"></i>';
+    }
+
+    function startTask(taskId) {
+      showNotification(`Starting task ${taskId}...`, 'info');
+      // Could redirect to task_engage.html with the specific task
+      window.location.href = `task_engage.html?task=${taskId}`;
+    }
+
+    // Setup search functionality
+    function setupSearchFunctionality() {
+      const searchInputs = document.querySelectorAll('.search-input');
+      
+      searchInputs.forEach(input => {
+        input.addEventListener('input', (e) => {
+          const searchTerm = e.target.value.toLowerCase();
+          
+          // If it's the campaign search input
+          if (input.placeholder.includes('campaigns')) {
+            filterCampaigns(searchTerm);
+          } else {
+            // General search - could redirect to search page
+            if (searchTerm.length > 2) {
+              console.log('Searching for:', searchTerm);
+              // Could implement global search here
+            }
+          }
+        });
+      });
+    }
+
+    // Filter campaigns based on search term
+    function filterCampaigns(searchTerm) {
+      const campaignCards = document.querySelectorAll('#campaigns-container .col-md-6, #campaigns-container .col-lg-4');
+      
+      campaignCards.forEach(card => {
+        const title = card.querySelector('h6')?.textContent.toLowerCase() || '';
+        const description = card.querySelector('p')?.textContent.toLowerCase() || '';
+        
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Add loading states
+    function showLoadingState() {
+      const statsCards = document.querySelectorAll('.stats-card h3');
+      statsCards.forEach(card => {
+        card.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+      });
+    }
+
+    // Show notification toast
+    function showNotification(message, type = 'info') {
+      // Create toast element
+      const toast = document.createElement('div');
+      toast.className = `alert alert-${type} position-fixed`;
+      toast.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+      toast.innerHTML = `
+        <div class="d-flex align-items-center">
+          <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'} me-2"></i>
+          ${message}
+        </div>
+      `;
+      
+      document.body.appendChild(toast);
+      
+      // Auto remove after 3 seconds
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.parentNode.removeChild(toast);
+        }
+      }, 3000);
+    }
+
+    // Update data status indicator
+    function updateDataStatus(isApiConnected = false, source = 'local') {
+      const statusElement = document.getElementById('data-status');
+      if (statusElement) {
+        if (isApiConnected) {
+          statusElement.className = 'badge bg-primary';
+          statusElement.innerHTML = '<i class="fas fa-cloud me-1"></i>API Connected';
+        } else {
+          statusElement.className = 'badge bg-success';
+          statusElement.innerHTML = '<i class="fas fa-database me-1"></i>Local Data';
+        }
+      }
+    }
+
+    // Load all dashboard data
+    async function loadDashboardData(showNotifications = false) {
+      try {
+        console.log('Loading dashboard data...');
+        if (showNotifications) showLoadingState();
+        
+        // Load user profile and stats
+        await Promise.all([
+          updateUserProfile(),
+          loadUserAvatar(),
+          loadDashboardStats(),
+          loadActiveCampaigns()
+        ]);
+        
+        // Update wallet address
+        updateWalletAddress();
+        
+        console.log('Dashboard data loaded successfully');
+        if (showNotifications) {
+          showNotification('Dashboard updated successfully', 'success');
+        }
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+        if (showNotifications) {
+          showNotification('Failed to load dashboard data', 'error');
+        }
+      }
+    }
+
+    // Initialize dashboard when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 User Dashboard initializing...');
+      
+      // Update user profile and stats
+      updateUserProfile();
+      loadDashboardStats();
+      
+      // Load user's campaigns
+      loadActiveCampaigns();
+      
+      console.log('✅ User Dashboard initialized');
+    });
+
+    // Export functions for debugging
+    window.userDashboard = {
+      clearSampleCampaigns,
+      loadActiveCampaigns,
+      reloadCampaigns,
+      showNotification,
+      connectWallet,
+      updateWalletAddress,
+      addCompletedTask,
+      updateDiamondBalance,
+      updateStatsDisplay,
+      updateDataStatus,
+      calculateTotalDiamonds,
+      calculateTotalCampaigns,
+      calculateCompletedTasks,
+      calculateUSDTValue,
+      testCampaignDisplay,
+      renderCampaigns
+    };
+  </script>
+</body>
+</html>

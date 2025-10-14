@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Campaigns - Partivox</title>
+  <link rel="shortcut icon" href="../../images/IconDiamond.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/enhanced-typography.css" rel="stylesheet">
+  <style>
+    :root {
+      /* === PARTIVOX DESIGN SYSTEM === */
+      
+      /* Core Background Colors */
+      --primary-bg: #0a0a0f;
+      --secondary-bg: #1a1a1f;
+      --card-bg: #1e1e24;
+      --sidebar-bg: #16161b;
+      --surface-bg: #252530;
+      --overlay-bg: rgba(10, 10, 15, 0.95);
+      
+      /* Lemon Green Brand Colors (Primary) */
+      --accent-color: #caf403; /* signature lemon green */
+      --accent-hover: #9dcf00; /* darker lemon green */
+      --accent-light: #e8ff4d; /* lighter lemon green */
+      --accent-dark: #7ba800; /* darkest lemon green */
+      --accent-rgb: 202, 244, 3;
+      
+      /* Secondary Brand Colors */
+      --primary-color: #667eea;
+      --primary-hover: #5a67d8;
+      --primary-light: #7c3aed;
+      --primary-rgb: 102, 126, 234;
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --text-inverse: #000000;
+      --text-accent: var(--accent-color);
+      
+      /* Status Colors */
+      --success-color: #10b981;
+      --success-light: #34d399;
+      --warning-color: #f59e0b;
+      --warning-light: #fbbf24;
+      --danger-color: #ef4444;
+      --danger-light: #f87171;
+      --info-color: #3b82f6;
+      --info-light: #60a5fa;
+      
+      /* Border & Divider Colors */
+      --border-color: #27272a;
+      --border-light: #374151;
+      --border-accent: var(--accent-color);
+      --divider-color: rgba(255, 255, 255, 0.1);
+      
+      /* Layout Variables */
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 60px;
+      --topbar-height: 70px;
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --border-radius-lg: 16px;
+      
+      /* Spacing Scale */
+      --space-xs: 0.25rem;    /* 4px */
+      --space-sm: 0.5rem;     /* 8px */
+      --space-md: 1rem;       /* 16px */
+      --space-lg: 1.5rem;     /* 24px */
+      --space-xl: 2rem;       /* 32px */
+      --space-2xl: 3rem;      /* 48px */
+      --space-3xl: 4rem;      /* 64px */
+      
+      /* Typography Scale */
+      --text-xs: 0.75rem;     /* 12px */
+      --text-sm: 0.875rem;    /* 14px */
+      --text-base: 1rem;      /* 16px */
+      --text-lg: 1.125rem;    /* 18px */
+      --text-xl: 1.25rem;     /* 20px */
+      --text-2xl: 1.5rem;     /* 24px */
+      --text-3xl: 1.875rem;   /* 30px */
+      --text-4xl: 2.25rem;    /* 36px */
+      
+      /* Animation & Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.2s ease;
+      --transition-slow: 0.3s ease;
+      --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+      --shadow-accent: 0 0 0 3px rgba(202, 244, 3, 0.15);
+      
+      /* Z-Index Scale */
+      --z-dropdown: 1000;
+      --z-sticky: 1020;
+      --z-fixed: 1030;
+      --z-modal-backdrop: 1040;
+      --z-modal: 1050;
+      --z-popover: 1060;
+      --z-tooltip: 1070;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f14 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background: linear-gradient(180deg, var(--sidebar-bg) 0%, #12121a 100%);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      width: 280px;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-240px);
+      width: 60px;
+    }
+
+    .sidebar.collapsed .logo h4,
+    .sidebar.collapsed .nav-section h6,
+    .sidebar.collapsed a span {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar .logo {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar .logo h4 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar .nav-section {
+      padding: 1rem 0;
+    }
+
+    .sidebar .nav-section h6 {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sidebar a i {
+      width: 20px;
+      margin-right: 12px;
+      font-size: 1rem;
+    }
+
+    .sidebar a:hover {
+      background: rgba(202, 244, 3, 0.1);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    .sidebar a.active {
+      background: linear-gradient(90deg, var(--accent-color), transparent);
+      color: var(--text-primary);
+      border-right: 3px solid var(--accent-color);
+    }
+
+    .sidebar a.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent-color);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+    }
+
+    .main-content.sidebar-collapsed {
+      margin-left: 60px;
+    }
+
+    .sidebar-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-secondary);
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--accent-color);
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .content {
+      padding: 2rem;
+      background: transparent;
+    }
+
+    .topbar {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar h4 {
+      font-weight: 700;
+      font-size: 1.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .topbar p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid var(--accent-color);
+    }
+
+    .search-input {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      width: 300px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(202, 244, 3, 0.15);
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .content-card h6 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .table {
+      color: var(--text-secondary);
+      background: transparent;
+    }
+
+    .table th {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 0.75rem;
+    }
+
+    .table td {
+      border-bottom: 1px solid rgba(39, 39, 42, 0.5);
+      padding: 1rem 0.75rem;
+      vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+      background: rgba(202, 244, 3, 0.05);
+    }
+
+    .btn {
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #000;
+      transform: translateY(-1px);
+    }
+
+    .badge {
+      padding: 0.375rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success-color);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-warning {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning-color);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-secondary {
+      background: rgba(113, 113, 122, 0.2);
+      color: var(--text-muted);
+      border: 1px solid rgba(113, 113, 122, 0.3);
+    }
+
+    .loading-skeleton {
+      background: linear-gradient(90deg, var(--card-bg) 25%, var(--border-color) 50%, var(--card-bg) 75%);
+      background-size: 200% 100%;
+      animation: loading 1.5s infinite;
+    }
+
+    @keyframes loading {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        width: 280px;
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.sidebar-collapsed {
+        margin-left: 0;
+      }
+
+      .topbar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch !important;
+      }
+
+      .topbar .d-flex {
+        justify-content: center;
+      }
+
+      .user-info {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .search-input {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .content-card {
+        padding: 1rem;
+      }
+
+      .table-responsive {
+        font-size: 0.875rem;
+      }
+
+      .d-flex.gap-2 {
+        flex-direction: column;
+        gap: 0.5rem !important;
+      }
+
+      .d-flex.gap-2 .form-select,
+      .d-flex.gap-2 .search-input,
+      .d-flex.gap-2 .btn {
+        width: 100% !important;
+        max-width: none !important;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .topbar {
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .topbar h4 {
+        font-size: 1.125rem;
+      }
+
+      .topbar p {
+        font-size: 0.8rem;
+      }
+
+      .content {
+        padding: 0.75rem;
+      }
+
+      .table th,
+      .table td {
+        padding: 0.375rem 0.25rem;
+        font-size: 0.7rem;
+      }
+
+      .user-avatar {
+        width: 28px;
+        height: 28px;
+      }
+
+      .btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      .content-card {
+        padding: 0.875rem;
+        margin-bottom: 1rem;
+      }
+
+      .content-card h6 {
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .badge {
+        font-size: 0.625rem;
+        padding: 0.25rem 0.5rem;
+      }
+
+      .sidebar-toggle {
+        width: 40px;
+        height: 40px;
+      }
+
+      .search-input {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0.75rem;
+      }
+
+      .topbar h4 {
+        font-size: 1rem;
+      }
+
+      .content {
+        padding: 0.5rem;
+      }
+
+      .table th,
+      .table td {
+        padding: 0.25rem 0.125rem;
+        font-size: 0.65rem;
+      }
+
+      .user-avatar {
+        width: 24px;
+        height: 24px;
+      }
+
+      .sidebar-toggle {
+        width: 36px;
+        height: 36px;
+      }
+
+      .btn {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.8rem;
+      }
+    }
+
+    .badge-success {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .badge-warning {
+      background: var(--warning-color);
+      color: white;
+    }
+
+    .badge-danger {
+      background: var(--danger-color);
+      color: white;
+    }
+
+    .badge-info {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .badge-secondary {
+      background: var(--text-muted);
+      color: white;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+
+    /* Campaign action button styles */
+    .btn-approve {
+      background: var(--success-color);
+      border: 1px solid var(--success-color);
+      color: white;
+    }
+
+    .btn-approve:hover {
+      background: #059669;
+      border-color: #059669;
+      color: white;
+    }
+
+    .btn-reject {
+      background: var(--danger-color);
+      border: 1px solid var(--danger-color);
+      color: white;
+    }
+
+    .btn-reject:hover {
+      background: #dc2626;
+      border-color: #dc2626;
+      color: white;
+    }
+
+    .btn-suspend {
+      background: var(--warning-color);
+      border: 1px solid var(--warning-color);
+      color: white;
+    }
+
+    .btn-suspend:hover {
+      background: #d97706;
+      border-color: #d97706;
+      color: white;
+    }
+
+    .btn-activate {
+      background: var(--success-color);
+      border: 1px solid var(--success-color);
+      color: white;
+    }
+
+    .btn-activate:hover {
+      background: #059669;
+      border-color: #059669;
+      color: white;
+    }
+
+    .btn-view {
+      background: var(--accent-color);
+      border: 1px solid var(--accent-color);
+      color: #000;
+    }
+
+    .btn-view:hover,
+    .btn-view:focus {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <h4>
+        <img src="../../images/IconDiamond.png" alt="" width="24" height="24" class="me-2">
+        PARTIVOX
+      </h4>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Main</h6>
+      <a href="/pages/admin_dashboard/dashboard1.html">
+        <i class="fas fa-chart-line"></i>
+        <span>Overview</span>
+      </a>
+      <a href="/pages/admin_dashboard/user.html">
+        <i class="fas fa-users"></i>
+        <span>Users</span>
+      </a>
+      <a href="/pages/admin_dashboard/campaigns.html" class="active">
+        <i class="fas fa-bullhorn"></i>
+        <span>Campaigns</span>
+      </a>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Management</h6>
+      <a href="/pages/admin_dashboard/transactions.html">
+        <i class="fas fa-credit-card"></i>
+        <span>Transactions</span>
+      </a>
+      <a href="/pages/admin_dashboard/reports.html">
+        <i class="fas fa-chart-bar"></i>
+        <span>Reports</span>
+      </a>
+      <a href="/pages/admin_dashboard/settings.html">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+    
+    <div class="nav-section mt-auto">
+      <a href="#" class="text-danger" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="content">
+      <!-- Topbar -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </div>
+          <div>
+            <h4>Campaign Management</h4>
+            <p>Complete campaign oversight: approve/reject submissions, monitor performance metrics, manage campaign lifecycle, and ensure quality control across all platform campaigns</p>
+          </div>
+        </div>
+        <div class="user-info">
+          <input type="text" class="search-input" placeholder="Search campaigns..." />
+          <img src="../../images/avartar1.jpg" class="user-avatar" alt="avatar" />
+          <div>
+            <div id="adminName" class="fw-semibold">Admin</div>
+            <small class="text-muted">Administrator</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campaign Management Content -->
+      <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6>Campaign Management</h6>
+          <div class="d-flex gap-2">
+            <select id="statusFilter" class="form-select bg-dark text-light border-secondary" style="width: 150px;" onchange="filterCampaigns()">
+              <option value="all">All campaigns</option>
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+              <option value="draft">Draft</option>
+              <option value="pending">Pending</option>
+              <option value="rejected">Rejected</option>
+            </select>
+            <input type="text" id="campaignSearch" class="search-input" placeholder="Search campaigns..." style="width: 250px;" onkeyup="searchCampaigns()">
+            <button class="btn btn-outline-light" id="refreshBtn" title="Refresh list">
+              <i class="fas fa-rotate-right me-1"></i>
+              Refresh
+            </button>
+            <button class="btn btn-primary" id="createCampaignBtn">
+              <i class="fas fa-plus me-1"></i>
+              Create Campaign
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table" id="campaignTable">
+            <thead>
+              <tr>
+                <th>Campaign</th>
+                <th>Creator</th>
+                <th>Budget</th>
+                <th>Status</th>
+                <th>Created</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="6" class="text-center py-4">
+                  <div class="loading-skeleton" style="height: 20px; border-radius: 4px;"></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Campaign Modal -->
+  <div class="modal fade" id="createCampaignModal" tabindex="-1" aria-labelledby="createCampaignModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px;">
+        <div class="modal-header" style="border-bottom: 1px solid var(--border-color);">
+          <h5 class="modal-title text-light" id="createCampaignModalLabel">
+            <i class="fas fa-bullhorn me-2"></i>
+            Create New Campaign
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="createCampaignForm">
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label text-light">Campaign Title</label>
+                  <input type="text" class="form-control bg-dark text-light border-secondary" name="name" placeholder="Enter campaign title..." required />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label text-light">Target User</label>
+                  <input type="text" class="form-control bg-dark text-light border-secondary" name="user" placeholder="@username or email..." required />
+                </div>
+              </div>
+            </div>
+            
+            <div class="row">
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label text-light">Budget (Diamonds)</label>
+                  <input type="number" class="form-control bg-dark text-light border-secondary" name="diamonds" placeholder="100" required min="1" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="mb-3">
+                  <label class="form-label text-light">Status</label>
+                  <select class="form-select bg-dark text-light border-secondary" name="status">
+                    <option value="draft">Draft</option>
+                    <option value="active">Active</option>
+                    <option value="suspended">Suspended</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-light">Campaign Description</label>
+              <textarea class="form-control bg-dark text-light border-secondary" name="instructions" rows="3" placeholder="Describe what users need to do..."></textarea>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-light">Reference Link (Optional)</label>
+              <input type="url" class="form-control bg-dark text-light border-secondary" name="tweet" placeholder="https://twitter.com/..." />
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label text-light">Campaign Assets (Optional)</label>
+              <input type="file" class="form-control bg-dark text-light border-secondary" name="file" id="campaignFile" accept="image/*,video/*" />
+              <small class="text-muted">Upload images or videos for the campaign</small>
+            </div>
+          </div>
+          <div class="modal-footer" style="border-top: 1px solid var(--border-color);">
+            <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">
+              <i class="fas fa-times me-1"></i>
+              Cancel
+            </button>
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-plus me-1"></i>
+              Create Campaign
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- View Campaign Modal -->
+  <div class="modal fade" id="viewCampaignModal" tabindex="-1" aria-labelledby="viewCampaignLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px;">
+        <div class="modal-header border-bottom border-secondary">
+          <h5 id="viewCampaignLabel" class="text-white mb-0">Campaign Details</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-white p-4">
+          <div class="row">
+            <div class="col-md-8">
+              <h4 id="campaignTitle" class="text-white mb-2">Campaign Title</h4>
+              <p id="campaignDescription" class="text-muted mb-3">Campaign description...</p>
+              
+              <div class="row g-3 mb-4">
+                <div class="col-4">
+                  <div class="content-card text-center">
+                    <h4 id="campaignBudget" class="text-warning mb-1">0 💎</h4>
+                    <small class="text-muted">Budget</small>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="content-card text-center">
+                    <h4 id="campaignMaxParticipants" class="text-success mb-1">0</h4>
+                    <small class="text-muted">Max Participants</small>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div class="content-card text-center">
+                    <h4 id="campaignRewardPerTask" class="text-info mb-1">0 💎</h4>
+                    <small class="text-muted">Per Task</small>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Participant Calculation Details -->
+              <div class="mb-4">
+                <div class="content-card" style="background: rgba(202, 244, 3, 0.05); border: 1px solid rgba(202, 244, 3, 0.2);">
+                  <div class="d-flex align-items-center justify-content-between mb-2">
+                    <h6 class="text-warning mb-0">
+                      <i class="fas fa-calculator me-2"></i>Participant Calculation
+                    </h6>
+                    <small class="text-muted">Based on Diamond Budget</small>
+                  </div>
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <small class="text-muted">Current Participants:</small>
+                      <div id="campaignCurrentParticipants" class="text-white fw-semibold">0</div>
+                    </div>
+                    <div class="col-6">
+                      <small class="text-muted">Remaining Slots:</small>
+                      <div id="campaignRemainingSlots" class="text-success fw-semibold">0</div>
+                    </div>
+                    <div class="col-12 mt-2">
+                      <div class="progress" style="height: 8px;">
+                        <div id="campaignParticipantProgress" class="progress-bar bg-success" style="width: 0%"></div>
+                      </div>
+                      <small class="text-muted mt-1 d-block">
+                        <span id="campaignProgressText">0% filled</span>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <h6 class="text-white mb-2">Campaign Information</h6>
+                <div class="row">
+                  <div class="col-6">
+                    <small class="text-muted">Creator:</small>
+                    <div id="campaignCreator" class="text-white">Unknown</div>
+                  </div>
+                  <div class="col-6">
+                    <small class="text-muted">Status:</small>
+                    <div id="campaignStatusBadge"><span class="badge badge-secondary">Draft</span></div>
+                  </div>
+                  <div class="col-6 mt-2">
+                    <small class="text-muted">Created:</small>
+                    <div id="campaignCreated" class="text-white">-</div>
+                  </div>
+                  <div class="col-6 mt-2">
+                    <small class="text-muted">Reference Link:</small>
+                    <div id="campaignLink" class="text-white">None</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer border-top border-secondary">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i>
+            Close
+          </button>
+          <button type="button" id="approveCampaignBtn" class="btn btn-success" onclick="approveCampaign()" style="display: none;">
+            <i class="fas fa-check me-1"></i>
+            Approve & Notify
+          </button>
+          <button type="button" id="rejectCampaignBtn" class="btn btn-danger" onclick="showRejectModal()" style="display: none;">
+            <i class="fas fa-ban me-1"></i>
+            Reject Campaign
+          </button>
+          <button type="button" id="editCampaignBtn" class="btn btn-primary" onclick="editCampaign()">
+            <i class="fas fa-edit me-1"></i>
+            Edit
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reject Campaign Modal -->
+  <div class="modal fade" id="rejectCampaignModal" tabindex="-1" aria-labelledby="rejectCampaignLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px;">
+        <div class="modal-header border-bottom border-secondary">
+          <h5 id="rejectCampaignLabel" class="text-white mb-0">Reject Campaign</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-white p-4">
+          <div class="text-center mb-4">
+            <i class="fas fa-times-circle text-danger" style="font-size: 3rem;"></i>
+          </div>
+          <h6 class="text-center mb-3">Reject Campaign</h6>
+          <div class="alert alert-warning d-flex align-items-center mb-4" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3);">
+            <i class="fas fa-info-circle me-2"></i>
+            <div>
+              <strong>Important:</strong> The campaign creator will be notified of this rejection and the reason you provide.
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label text-white fw-semibold">
+              <i class="fas fa-comment-alt me-2 text-warning"></i>
+              Reason for rejection (required):
+            </label>
+            <textarea id="rejectReason" class="form-control" rows="4" placeholder="Please provide a clear reason for rejection. This will help the user understand what needs to be improved..." style="background: var(--secondary-bg); border: 1px solid var(--border-color); color: var(--text-primary); resize: vertical;" required></textarea>
+            <small class="text-muted mt-1">
+              <i class="fas fa-lightbulb me-1"></i>
+              Tip: Be specific and constructive to help the user improve their campaign.
+            </small>
+          </div>
+        </div>
+        <div class="modal-footer border-top border-secondary">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+            <i class="fas fa-times me-1"></i>
+            Cancel
+          </button>
+          <button type="button" class="btn btn-danger" onclick="confirmRejectCampaign()">
+            <i class="fas fa-ban me-1"></i>
+            Reject & Notify User
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Environment-agnostic API base
+    // Dynamic API base URL to match current origin
+    if (typeof API_BASE_URL === 'undefined') {
+      const API_BASE_URL = window.location.origin + "/";
+      window.API_BASE_URL = API_BASE_URL;
+    }
+
+    // SIDEBAR TOGGLE FUNCTIONALITY
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    
+    if (sidebarToggle && sidebar && mainContent) {
+      sidebarToggle.addEventListener('click', () => {
+        // Check if we're on mobile
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+          // On mobile, toggle the 'show' class
+          sidebar.classList.toggle('show');
+        } else {
+          // On desktop, toggle the 'collapsed' class
+          sidebar.classList.toggle('collapsed');
+          mainContent.classList.toggle('sidebar-collapsed');
+        }
+        
+        // Change icon based on state
+        const icon = sidebarToggle.querySelector('i');
+        if (isMobile) {
+          if (sidebar.classList.contains('show')) {
+            icon.className = 'fas fa-times';
+          } else {
+            icon.className = 'fas fa-bars';
+          }
+        } else {
+          if (sidebar.classList.contains('collapsed')) {
+            icon.className = 'fas fa-chevron-right';
+          } else {
+            icon.className = 'fas fa-bars';
+          }
+        }
+      });
+      
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', (e) => {
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile && sidebar.classList.contains('show')) {
+          if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('show');
+            sidebarToggle.querySelector('i').className = 'fas fa-bars';
+          }
+        }
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        const isMobile = window.innerWidth <= 768;
+        const icon = sidebarToggle.querySelector('i');
+        
+        if (!isMobile) {
+          // Reset mobile classes when switching to desktop
+          sidebar.classList.remove('show');
+          icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-bars';
+        } else {
+          // Reset desktop classes when switching to mobile
+          sidebar.classList.remove('collapsed');
+          mainContent.classList.remove('sidebar-collapsed');
+          icon.className = sidebar.classList.contains('show') ? 'fas fa-times' : 'fas fa-bars';
+        }
+      });
+    }
+
+    // LOGOUT FUNCTIONALITY
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('authToken');
+        window.location.href = '/pages/admin_dashboard/login.html';
+      });
+    }
+
+    // Get user name from token
+    function getUserNameFromToken() {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.data && payload.data.name ? payload.data.name : (payload.data && payload.data.email ? payload.data.email.split('@')[0] : 'Admin');
+      }
+      return 'Admin';
+    }
+
+    // Initialize page
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('adminName').textContent = getUserNameFromToken();
+      loadCampaigns();
+      initializeNotificationSystem();
+
+      // Manual refresh
+      const refreshBtn = document.getElementById('refreshBtn');
+      if (refreshBtn) {
+        refreshBtn.addEventListener('click', async () => {
+          try {
+            await loadCampaigns();
+            showNotification('📊 Campaigns refreshed successfully', 'success');
+          } catch (_) {
+            showNotification('Failed to refresh campaigns', 'danger');
+          }
+        });
+      }
+
+      // Auto-refresh every 30 seconds
+      setInterval(() => {
+        loadCampaigns();
+      }, 30000);
+      
+      // Show welcome message
+      setTimeout(() => {
+        showNotification('👋 Welcome to Campaign Management! Approve or reject campaigns to notify users.', 'info');
+      }, 1000);
+    });
+    // Helper: Safely format dates to prevent "Invalid Date" errors
+    function formatDate(dateString) {
+      if (!dateString) return '-';
+      
+      console.log('Formatting date:', dateString, 'Type:', typeof dateString);
+      
+      try {
+        // Handle different date formats
+        let date;
+        
+        // If it's already a Date object
+        if (dateString instanceof Date) {
+          date = dateString;
+        }
+        // If it's a MongoDB UTCDateTime object
+        else if (dateString && typeof dateString === 'object' && dateString.$date) {
+          date = new Date(dateString.$date);
+        }
+        // If it's a MongoDB ObjectId timestamp (has toHexString method)
+        else if (dateString && typeof dateString === 'object' && dateString.toHexString) {
+          // Extract timestamp from ObjectId (first 4 bytes represent timestamp)
+          const timestamp = parseInt(dateString.toHexString().substring(0, 8), 16) * 1000;
+          date = new Date(timestamp);
+        }
+        // If it's a string or number timestamp
+        else if (typeof dateString === 'string' || typeof dateString === 'number') {
+          date = new Date(dateString);
+        }
+        // If it's an object with other date properties
+        else if (dateString && typeof dateString === 'object') {
+          // Try common date object properties
+          if (dateString.toDate && typeof dateString.toDate === 'function') {
+            date = dateString.toDate();
+          } else if (dateString.seconds) {
+            // Firestore timestamp format
+            date = new Date(dateString.seconds * 1000);
+          } else {
+            date = new Date(dateString);
+          }
+        }
+        else {
+          date = new Date(dateString);
+        }
+        
+        // Check if date is valid
+        if (isNaN(date.getTime())) {
+          console.warn('Invalid date format:', dateString);
+          return 'Unknown Date';
+        }
+        
+        // Format the date with time for more detail
+        return date.toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+        
+      } catch (error) {
+        console.error('Error formatting date:', dateString, error);
+        return 'Invalid Date';
+      }
+    }
+
+    // Helper: Calculate participants from budget (same logic as campaign_upload.html)
+    function calculateParticipantsFromBudget(budget, rewardPerTask = 50) {
+      if (!budget || budget <= 0) {
+        return {
+          maxParticipants: 0,
+          rewardPerTask: rewardPerTask,
+          totalCost: 0
+        };
+      }
+      
+      const maxParticipants = Math.floor(budget / rewardPerTask);
+      const totalCost = maxParticipants * rewardPerTask;
+      
+      return {
+        maxParticipants: maxParticipants,
+        rewardPerTask: rewardPerTask,
+        totalCost: totalCost,
+        remainingBudget: budget - totalCost
+      };
+    }
+
+    // Helper: Show notification
+    function showNotification(message, type = 'success') {
+      const notif = document.createElement('div');
+      notif.className = `alert alert-${type} alert-dismissible fade show`;
+      notif.style.position = 'fixed';
+      notif.style.top = '20px';
+      notif.style.right = '20px';
+      notif.style.zIndex = 9999;
+      notif.style.minWidth = '300px';
+      notif.style.maxWidth = '500px';
+      notif.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      `;
+      document.body.appendChild(notif);
+      setTimeout(() => {
+        if (notif.parentNode) {
+          notif.remove();
+        }
+      }, 5000);
+    }
+
+    // Send notification to user about campaign status change
+    async function sendUserNotification(campaignId, status, message) {
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${API_BASE_URL}api/notifications/send`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            campaign_id: campaignId,
+            type: 'campaign_status_change',
+            status: status,
+            message: message,
+            title: `Campaign ${status.charAt(0).toUpperCase() + status.slice(1)}`,
+            priority: status === 'approved' ? 'high' : 'medium'
+          })
+        });
+        
+        if (res.ok) {
+          console.log('✅ User notification sent successfully');
+        } else {
+          console.warn('⚠️ Failed to send user notification');
+        }
+      } catch (error) {
+        console.error('Error sending user notification:', error);
+        // Don't show error to admin - this is a background operation
+      }
+    }
+
+    // Enhanced notification system for real-time updates
+    function initializeNotificationSystem() {
+      // Check for campaign status updates every 30 seconds
+      setInterval(async () => {
+        try {
+          const token = localStorage.getItem('authToken');
+          const res = await fetch(`${API_BASE_URL}api/admin/campaigns/recent-updates`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+          });
+          
+          if (res.ok) {
+            const data = await res.json();
+            if (data.status === 'success' && data.data.length > 0) {
+              // Show notification about recent campaign updates
+              const count = data.data.length;
+              showNotification(`📢 ${count} campaign${count > 1 ? 's' : ''} updated recently`, 'info');
+            }
+          }
+        } catch (error) {
+          // Silently fail - this is a background check
+        }
+      }, 30000);
+    }
+
+    // Current campaign being viewed/managed
+    let currentCampaign = null;
+
+    // Search functionality
+    let searchTimeout;
+    function searchCampaigns() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        loadCampaigns();
+      }, 300);
+    }
+
+    // Filter functionality
+    function filterCampaigns() {
+      loadCampaigns();
+    }
+
+    // Enhanced loadCampaigns with search and filter
+    async function loadCampaigns() {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          showNotification('Please log in to access admin panel', 'danger');
+          window.location.href = '/pages/admin_dashboard/login.html';
+          return;
+        }
+
+        const searchTerm = document.getElementById('campaignSearch').value;
+        const statusFilter = document.getElementById('statusFilter').value;
+        
+        let url = `${API_BASE_URL}api/admin/campaigns`;
+        const params = new URLSearchParams();
+        
+        if (searchTerm) {
+          params.append('search', searchTerm);
+        }
+        if (statusFilter && statusFilter !== 'all') {
+          params.append('status', statusFilter);
+        }
+        
+        if (params.toString()) {
+          url += '?' + params.toString();
+        }
+        
+        const res = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if (res.status === 401) {
+          showNotification('Authentication failed. Please log in again.', 'danger');
+          localStorage.removeItem('authToken');
+          window.location.href = '/pages/admin_dashboard/login.html';
+          return;
+        }
+        
+        const data = await res.json();
+        
+        if (data.status !== 'success') {
+          throw new Error(data.message || 'Failed to fetch campaigns');
+        }
+        
+        const campaigns = Array.isArray(data.data) ? data.data : [];
+        const tbody = document.querySelector('#campaignTable tbody');
+        tbody.innerHTML = '';
+        
+        if (campaigns.length > 0) {
+          campaigns.forEach((campaign) => {
+            // Extract ObjectId string properly
+            let id = '';
+            if (campaign._id) {
+              if (typeof campaign._id === 'string') {
+                id = campaign._id;
+              } else if (campaign._id.$oid) {
+                id = campaign._id.$oid;
+              } else if (campaign._id.toString) {
+                id = campaign._id.toString();
+              }
+            } else if (campaign.id) {
+              id = campaign.id;
+            }
+            
+            console.log('Campaign ID for table:', id, 'Type:', typeof id, 'Full campaign:', campaign);
+            const status = campaign.status || 'draft';
+            const createdAt = formatDate(campaign.created_at);
+            
+            // Determine badge class with enhanced styling
+            let badgeClass = 'badge-secondary';
+            let statusIcon = 'fas fa-circle';
+            if (status === 'active') {
+              badgeClass = 'badge-success';
+              statusIcon = 'fas fa-check-circle';
+            } else if (status === 'suspended') {
+              badgeClass = 'badge-warning';
+              statusIcon = 'fas fa-pause-circle';
+            } else if (status === 'rejected') {
+              badgeClass = 'badge-danger';
+              statusIcon = 'fas fa-times-circle';
+            } else if (status === 'pending') {
+              badgeClass = 'badge-info';
+              statusIcon = 'fas fa-clock';
+            } else if (status === 'draft') {
+              badgeClass = 'badge-secondary';
+              statusIcon = 'fas fa-edit';
+            }
+            
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td>
+                <div class="fw-semibold">${campaign.title || campaign.name || 'Untitled Campaign'}</div>
+                <small class="text-muted">${campaign.description || campaign.instructions || 'No description available'}</small>
+              </td>
+              <td>
+                <div class="fw-semibold">${campaign.user_name || campaign.user || 'Unknown'}</div>
+                <small class="text-muted">${campaign.user_email || ''}</small>
+              </td>
+              <td>
+                <span class="fw-semibold">${campaign.diamonds || campaign.budget || 0}</span>
+                <small class="text-muted d-block">💎 Diamonds</small>
+              </td>
+              <td>
+                <span class="badge ${badgeClass} d-flex align-items-center gap-1" style="width: fit-content;">
+                  <i class="${statusIcon}" style="font-size: 0.8rem;"></i>
+                  ${status.charAt(0).toUpperCase() + status.slice(1)}
+                </span>
+                ${status === 'rejected' ? '<br><small class="text-danger"><i class="fas fa-info-circle me-1"></i>User notified</small>' : ''}
+                ${status === 'active' ? '<br><small class="text-success"><i class="fas fa-check me-1"></i>Approved</small>' : ''}
+              </td>
+              <td>
+                <small class="text-muted">${createdAt}</small>
+              </td>
+              <td>
+                <button class="btn btn-sm btn-outline-light me-1" onclick="viewCampaignDetails('${id}')" title="View Campaign Details" data-campaign-id="${id}">
+                  <i class="fas fa-eye me-1"></i>View
+                </button>
+                ${status === 'draft' || status === 'pending' ? 
+                  `<button class="btn btn-sm btn-success me-1" onclick="approveCampaignQuick('${id}')" title="Approve Campaign" data-campaign-id="${id}">
+                    <i class="fas fa-check me-1"></i>Approve
+                  </button>
+                  <button class="btn btn-sm btn-danger" onclick="rejectCampaignQuick('${id}')" title="Reject Campaign" data-campaign-id="${id}">
+                    <i class="fas fa-times me-1"></i>Reject
+                  </button>` :
+                  `<button class="btn btn-sm ${status === 'active' ? 'btn-outline-warning' : 'btn-outline-success'}" 
+                          onclick="toggleCampaignStatus('${id}', '${status}')" title="${status === 'active' ? 'Suspend Campaign' : 'Activate Campaign'}" data-campaign-id="${id}">
+                    <i class="fas fa-${status === 'active' ? 'pause' : 'play'} me-1"></i>${status === 'active' ? 'Suspend' : 'Activate'}
+                  </button>`
+                }
+              </td>
+            `;
+            tbody.appendChild(tr);
+          });
+        } else {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="text-center py-4">
+                <i class="fas fa-bullhorn fa-2x text-muted mb-2"></i>
+                <div class="text-muted">No campaigns found</div>
+                <small class="text-muted">Create your first campaign to get started</small>
+              </td>
+            </tr>
+          `;
+        }
+        
+      } catch (err) {
+        console.error('Error loading campaigns:', err);
+        showNotification('Failed to load campaigns: ' + err.message, 'danger');
+        
+        // Show error state in table
+        const tbody = document.querySelector('#campaignTable tbody');
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-4">
+              <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+              <div class="text-warning">Failed to load campaigns</div>
+              <small class="text-muted">${err.message}</small>
+            </td>
+          </tr>
+        `;
+      }
+    }
+    
+    // View campaign details
+    async function viewCampaignDetails(campaignId) {
+      // Extract ObjectId string if needed
+      if (typeof campaignId === 'object' && campaignId.$oid) {
+        campaignId = campaignId.$oid;
+      } else if (typeof campaignId === 'object' && campaignId.toString) {
+        campaignId = campaignId.toString();
+      }
+      
+      console.log('Viewing campaign details for ID:', campaignId, 'Type:', typeof campaignId);
+      
+      if (!campaignId || campaignId === 'undefined') {
+        showNotification('Invalid campaign ID', 'danger');
+        return;
+      }
+      
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${window.API_BASE_URL || API_BASE_URL}api/admin/campaigns/view?id=${campaignId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const result = await res.json();
+        
+        if (result.status === 'success') {
+          currentCampaign = result.data;
+          populateCampaignModal(result.data);
+          const modal = new bootstrap.Modal(document.getElementById('viewCampaignModal'));
+          modal.show();
+        } else {
+          showNotification(result.message || 'Failed to load campaign details', 'danger');
+        }
+      } catch (error) {
+        console.error('Error loading campaign details:', error);
+        showNotification('Network error', 'danger');
+      }
+    }
+
+    // Populate campaign modal with data
+    function populateCampaignModal(campaign) {
+      document.getElementById('campaignTitle').textContent = campaign.title || campaign.name || 'Untitled Campaign';
+      document.getElementById('campaignDescription').textContent = campaign.description || campaign.instructions || 'No description available';
+      
+      // Calculate participant information based on diamond budget
+      const budget = campaign.diamonds || campaign.budget || 0;
+      const rewardPerTask = campaign.reward_per_task || campaign.reward_per_participant || 50; // Default 50 diamonds per task
+      const calculation = calculateParticipantsFromBudget(budget, rewardPerTask);
+      const currentParticipants = campaign.participants_count || campaign.participants || 0;
+      const remainingSlots = Math.max(0, calculation.maxParticipants - currentParticipants);
+      const progressPercentage = calculation.maxParticipants > 0 ? Math.round((currentParticipants / calculation.maxParticipants) * 100) : 0;
+      
+      // Update budget and participant calculations
+      document.getElementById('campaignBudget').textContent = `${budget} 💎`;
+      document.getElementById('campaignMaxParticipants').textContent = calculation.maxParticipants.toString();
+      document.getElementById('campaignRewardPerTask').textContent = `${rewardPerTask} 💎`;
+      document.getElementById('campaignCurrentParticipants').textContent = currentParticipants.toString();
+      document.getElementById('campaignRemainingSlots').textContent = remainingSlots.toString();
+      
+      // Update progress bar
+      const progressBar = document.getElementById('campaignParticipantProgress');
+      const progressText = document.getElementById('campaignProgressText');
+      progressBar.style.width = `${progressPercentage}%`;
+      progressText.textContent = `${progressPercentage}% filled (${currentParticipants}/${calculation.maxParticipants})`;
+      
+      // Update other fields
+      document.getElementById('campaignCreator').textContent = campaign.user_name || campaign.user || 'Unknown';
+      document.getElementById('campaignCreated').textContent = formatDate(campaign.created_at);
+      
+      console.log('💎 Campaign Budget Calculation:', {
+        budget: budget,
+        rewardPerTask: rewardPerTask,
+        maxParticipants: calculation.maxParticipants,
+        currentParticipants: currentParticipants,
+        remainingSlots: remainingSlots,
+        progressPercentage: progressPercentage,
+        totalCost: calculation.totalCost,
+        remainingBudget: calculation.remainingBudget
+      });
+      
+      // Status badge
+      const status = campaign.status || 'draft';
+      let badgeClass = 'badge-secondary';
+      if (status === 'active') badgeClass = 'badge-success';
+      else if (status === 'suspended') badgeClass = 'badge-warning';
+      else if (status === 'rejected') badgeClass = 'badge-danger';
+      else if (status === 'pending') badgeClass = 'badge-info';
+      
+      document.getElementById('campaignStatusBadge').innerHTML = `<span class="badge ${badgeClass}">${status.charAt(0).toUpperCase() + status.slice(1)}</span>`;
+      
+      // Reference link
+      const link = campaign.tweet || campaign.reference_link;
+      if (link) {
+        document.getElementById('campaignLink').innerHTML = `<a href="${link}" target="_blank" class="text-primary">${link.length > 30 ? link.substring(0, 30) + '...' : link}</a>`;
+      } else {
+        document.getElementById('campaignLink').textContent = 'None';
+      }
+      
+      // Show/hide action buttons based on status
+      const approveBtn = document.getElementById('approveCampaignBtn');
+      const rejectBtn = document.getElementById('rejectCampaignBtn');
+      
+      if (status === 'draft' || status === 'pending') {
+        approveBtn.style.display = 'inline-block';
+        rejectBtn.style.display = 'inline-block';
+      } else {
+        approveBtn.style.display = 'none';
+        rejectBtn.style.display = 'none';
+      }
+    }
+
+    // Quick approve campaign from table
+    async function approveCampaignQuick(campaignId) {
+      // Extract ObjectId string if needed
+      if (typeof campaignId === 'object' && campaignId.$oid) {
+        campaignId = campaignId.$oid;
+      } else if (typeof campaignId === 'object' && campaignId.toString) {
+        campaignId = campaignId.toString();
+      }
+      
+      console.log('Approving campaign with ID:', campaignId, 'Type:', typeof campaignId);
+      
+      if (!campaignId || campaignId === 'undefined') {
+        showNotification('Invalid campaign ID', 'danger');
+        return;
+      }
+      
+      if (!confirm('Are you sure you want to approve this campaign?\n\nThe campaign creator will be notified of the approval.')) return;
+      
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/campaigns/approve`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ 
+            campaign_id: String(campaignId),
+            admin_notes: 'Campaign approved by admin',
+            notify_user: true
+          })
+        });
+        const result = await res.json();
+        console.log('Approve API response:', result);
+        
+        if (result.status === 'success') {
+          showNotification('✅ Campaign approved successfully! User has been notified.', 'success');
+          loadCampaigns();
+          
+          // Send user notification
+          await sendUserNotification(campaignId, 'approved', 'Your campaign has been approved and is now active!');
+        } else {
+          console.error('Approve failed:', result);
+          showNotification(result.message || 'Failed to approve campaign', 'danger');
+        }
+      } catch (error) {
+        console.error('Error approving campaign:', error);
+        showNotification('Network error: ' + error.message, 'danger');
+      }
+    }
+
+    // Quick reject campaign from table
+    async function rejectCampaignQuick(campaignId) {
+      // Extract ObjectId string if needed
+      if (typeof campaignId === 'object' && campaignId.$oid) {
+        campaignId = campaignId.$oid;
+      } else if (typeof campaignId === 'object' && campaignId.toString) {
+        campaignId = campaignId.toString();
+      }
+      
+      console.log('Rejecting campaign with ID:', campaignId, 'Type:', typeof campaignId);
+      
+      if (!campaignId || campaignId === 'undefined') {
+        showNotification('Invalid campaign ID', 'danger');
+        return;
+      }
+      
+      const reason = prompt('Enter reason for rejection:\n\n(This will be sent to the campaign creator)');
+      if (reason === null) return; // User cancelled
+      
+      if (!reason.trim()) {
+        showNotification('Please provide a reason for rejection', 'warning');
+        return;
+      }
+      
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/campaigns/reject`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ 
+            campaign_id: String(campaignId), 
+            reason: reason,
+            notify_user: true
+          })
+        });
+        const result = await res.json();
+        console.log('Reject API response:', result);
+        
+        if (result.status === 'success') {
+          showNotification('❌ Campaign rejected successfully! User has been notified.', 'warning');
+          loadCampaigns();
+          
+          // Send user notification
+          await sendUserNotification(campaignId, 'rejected', `Your campaign has been rejected. Reason: ${reason}`);
+        } else {
+          console.error('Reject failed:', result);
+          showNotification(result.message || 'Failed to reject campaign', 'danger');
+        }
+      } catch (error) {
+        console.error('Error rejecting campaign:', error);
+        showNotification('Network error: ' + error.message, 'danger');
+      }
+    }
+
+    // Approve campaign from modal
+    async function approveCampaign() {
+      if (!currentCampaign) return;
+      
+      if (!confirm(`Approve campaign "${currentCampaign.title || 'Untitled'}"?\n\nThe campaign creator will be notified and the campaign will become active.`)) return;
+      
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/campaigns/approve`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ 
+            campaign_id: String(currentCampaign._id || currentCampaign.id),
+            admin_notes: 'Campaign approved by admin',
+            notify_user: true
+          })
+        });
+        const result = await res.json();
+        
+        if (result.status === 'success') {
+          showNotification('✅ Campaign approved successfully! User has been notified.', 'success');
+          bootstrap.Modal.getInstance(document.getElementById('viewCampaignModal')).hide();
+          loadCampaigns();
+          
+          // Send user notification
+          await sendUserNotification(currentCampaign._id, 'approved', 'Your campaign has been approved and is now active!');
+        } else {
+          showNotification(result.message || 'Failed to approve campaign', 'danger');
+        }
+      } catch (error) {
+        console.error('Error approving campaign:', error);
+        showNotification('Network error', 'danger');
+      }
+    }
+
+    // Show reject modal
+    function showRejectModal() {
+      const modal = new bootstrap.Modal(document.getElementById('rejectCampaignModal'));
+      modal.show();
+    }
+
+    // Confirm reject campaign
+    async function confirmRejectCampaign() {
+      if (!currentCampaign) return;
+      
+      const reason = document.getElementById('rejectReason').value;
+      
+      if (!reason.trim()) {
+        showNotification('Please provide a reason for rejection', 'warning');
+        return;
+      }
+      
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/campaigns/reject`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ 
+            campaign_id: String(currentCampaign._id || currentCampaign.id), 
+            reason: reason,
+            notify_user: true
+          })
+        });
+        const result = await res.json();
+        
+        if (result.status === 'success') {
+          showNotification('❌ Campaign rejected successfully! User has been notified.', 'warning');
+          
+          // Close modals
+          bootstrap.Modal.getInstance(document.getElementById('rejectCampaignModal')).hide();
+          bootstrap.Modal.getInstance(document.getElementById('viewCampaignModal')).hide();
+          
+          // Clear form
+          document.getElementById('rejectReason').value = '';
+          
+          // Send user notification
+          await sendUserNotification(currentCampaign._id, 'rejected', `Your campaign has been rejected. Reason: ${reason}`);
+          
+          // Reload campaigns
+          loadCampaigns();
+        } else {
+          showNotification(result.message || 'Failed to reject campaign', 'danger');
+        }
+      } catch (error) {
+        console.error('Error rejecting campaign:', error);
+        showNotification('Network error', 'danger');
+      }
+    }
+
+    // Edit campaign (placeholder)
+    function editCampaign() {
+      showNotification('Campaign editing feature coming soon!', 'info');
+    }
+
+    // Legacy view campaign function (for compatibility)
+    function viewCampaign(campaignId) {
+      viewCampaignDetails(campaignId);
+    }
+
+    // Toggle campaign status
+    async function toggleCampaignStatus(campaignId, currentStatus) {
+      const newStatus = currentStatus === 'active' ? 'suspended' : 'active';
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${API_BASE_URL}api/admin/campaigns/status`, {
+          method: 'PUT',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ campaign_id: String(campaignId), status: newStatus })
+        });
+        const data = await res.json();
+        if (res.ok && data.status === 'success') {
+          showNotification(`Campaign ${newStatus === 'suspended' ? 'suspended' : 'activated'} successfully!`);
+          loadCampaigns();
+        } else {
+          showNotification(data.message || 'Action failed', 'danger');
+        }
+      } catch (err) {
+        showNotification('Network error', 'danger');
+      }
+    }
+
+    // Attach suspend/activate and view handlers
+    function attachActionHandlers(campaigns) {
+      document.querySelectorAll('.btn-suspend, .btn-activate').forEach(btn => {
+        btn.addEventListener('click', async function() {
+          const id = btn.getAttribute('data-id');
+          const willSuspend = btn.classList.contains('btn-suspend');
+          const newStatus = willSuspend ? 'suspended' : 'active';
+          try {
+            const token = localStorage.getItem('authToken');
+            const res = await fetch(`${API_BASE_URL}api/admin/campaigns/status`, {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+              body: JSON.stringify({ campaign_id: String(id), status: newStatus })
+            });
+            const data = await res.json();
+            if (res.ok && data.status === 'success') {
+              showNotification(`Campaign ${newStatus}`);
+              loadCampaigns();
+            } else {
+              showNotification(data.message || 'Action failed', 'danger');
+            }
+          } catch (err) {
+            showNotification('Network error', 'danger');
+          }
+        });
+      });
+    }
+
+    // Create Campaign Modal logic
+    document.getElementById('createCampaignBtn').addEventListener('click', function() {
+      const modal = new bootstrap.Modal(document.getElementById('createCampaignModal'));
+      modal.show();
+    });
+
+    document.getElementById('createCampaignForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+      const payload = Object.fromEntries(formData.entries());
+      
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`${API_BASE_URL}api/admin/campaigns/create`, {
+          method: 'POST',
+          headers: { 
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        
+        if (res.ok && data.status === 'success') {
+          showNotification('Campaign created successfully!');
+          bootstrap.Modal.getInstance(document.getElementById('createCampaignModal')).hide();
+          form.reset();
+          loadCampaigns();
+        } else {
+          showNotification(data.message || 'Failed to create campaign', 'danger');
+        }
+      } catch (err) {
+        showNotification('Network error', 'danger');
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="../../images/IconDiamond.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/enhanced-typography.css" rel="stylesheet">
+  <style>
+    :root {
+      /* === PARTIVOX DESIGN SYSTEM === */
+      
+      /* Core Background Colors */
+      --primary-bg: #0a0a0f;
+      --secondary-bg: #1a1a1f;
+      --card-bg: #1e1e24;
+      --sidebar-bg: #16161b;
+      --surface-bg: #252530;
+      --overlay-bg: rgba(10, 10, 15, 0.95);
+      
+      /* Lemon Green Brand Colors (Primary) */
+      --accent-color: #caf403; /* signature lemon green */
+      --accent-hover: #9dcf00; /* darker lemon green */
+      --accent-light: #e8ff4d; /* lighter lemon green */
+      --accent-dark: #7ba800; /* darkest lemon green */
+      --accent-rgb: 202, 244, 3;
+      
+      /* Secondary Brand Colors */
+      --primary-color: #667eea;
+      --primary-hover: #5a67d8;
+      --primary-light: #7c3aed;
+      --primary-rgb: 102, 126, 234;
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --text-inverse: #000000;
+      --text-accent: var(--accent-color);
+      
+      /* Status Colors */
+      --success-color: #10b981;
+      --success-light: #34d399;
+      --warning-color: #f59e0b;
+      --warning-light: #fbbf24;
+      --danger-color: #ef4444;
+      --danger-light: #f87171;
+      --info-color: #3b82f6;
+      --info-light: #60a5fa;
+      
+      /* Border & Divider Colors */
+      --border-color: #27272a;
+      --border-light: #374151;
+      --border-accent: var(--accent-color);
+      --divider-color: rgba(255, 255, 255, 0.1);
+      
+      /* Layout Variables */
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 60px;
+      --topbar-height: 70px;
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --border-radius-lg: 16px;
+      
+      /* Spacing Scale */
+      --space-xs: 0.25rem;    /* 4px */
+      --space-sm: 0.5rem;     /* 8px */
+      --space-md: 1rem;       /* 16px */
+      --space-lg: 1.5rem;     /* 24px */
+      --space-xl: 2rem;       /* 32px */
+      --space-2xl: 3rem;      /* 48px */
+      --space-3xl: 4rem;      /* 64px */
+      
+      /* Typography Scale */
+      --text-xs: 0.75rem;     /* 12px */
+      --text-sm: 0.875rem;    /* 14px */
+      --text-base: 1rem;      /* 16px */
+      --text-lg: 1.125rem;    /* 18px */
+      --text-xl: 1.25rem;     /* 20px */
+      --text-2xl: 1.5rem;     /* 24px */
+      --text-3xl: 1.875rem;   /* 30px */
+      --text-4xl: 2.25rem;    /* 36px */
+      
+      /* Animation & Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.2s ease;
+      --transition-slow: 0.3s ease;
+      --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+      --shadow-accent: 0 0 0 3px rgba(202, 244, 3, 0.15);
+      
+      /* Z-Index Scale */
+      --z-dropdown: 1000;
+      --z-sticky: 1020;
+      --z-fixed: 1030;
+      --z-modal-backdrop: 1040;
+      --z-modal: 1050;
+      --z-popover: 1060;
+      --z-tooltip: 1070;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f14 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background: linear-gradient(180deg, var(--sidebar-bg) 0%, #12121a 100%);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      width: 280px;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-240px);
+      width: 60px;
+    }
+
+    .sidebar.collapsed .logo h4,
+    .sidebar.collapsed .nav-section h6,
+    .sidebar.collapsed a span {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar .logo {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar .logo h4 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar .nav-section {
+      padding: 1rem 0;
+    }
+
+    .sidebar .nav-section h6 {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sidebar a i {
+      width: 20px;
+      margin-right: 12px;
+      font-size: 1rem;
+    }
+
+    .sidebar a:hover {
+      background: rgba(202, 244, 3, 0.1);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    .sidebar a.active {
+      background: linear-gradient(90deg, var(--accent-color), transparent);
+      color: var(--text-primary);
+      border-right: 3px solid var(--accent-color);
+    }
+
+    .sidebar a.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent-color);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+    }
+
+    .main-content.sidebar-collapsed {
+      margin-left: 60px;
+    }
+
+    .sidebar-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-secondary);
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--accent-color);
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .content {
+      padding: 2rem;
+      background: transparent;
+    }
+
+    .topbar {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar h4 {
+      font-weight: 700;
+      font-size: 1.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .topbar p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      border: 2px solid var(--accent-color);
+    }
+
+    .search-input {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      width: 300px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(202, 244, 3, 0.15);
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .content-card h6 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .table {
+      color: var(--text-secondary);
+      background: transparent;
+    }
+
+    .table th {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 0.75rem;
+    }
+
+    .table td {
+      border-bottom: 1px solid rgba(39, 39, 42, 0.5);
+      padding: 1rem 0.75rem;
+      vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+      background: rgba(202, 244, 3, 0.05);
+    }
+
+    .tab-button {
+      background: var(--secondary-bg);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      padding: 0.5rem 1rem;
+      margin-right: 0.5rem;
+      border: 1px solid var(--border-color);
+      transition: all 0.2s ease;
+    }
+
+    .tab-button.active {
+      background: var(--accent-color);
+      color: #000;
+      border-color: var(--accent-color);
+    }
+
+    .tab-button:hover {
+      background: rgba(202, 244, 3, 0.1);
+      color: var(--text-primary);
+    }
+
+    .badge {
+      padding: 0.375rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-resolved {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success-color);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-pending {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning-color);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-secondary {
+      background: rgba(113, 113, 122, 0.2);
+      color: var(--text-muted);
+      border: 1px solid rgba(113, 113, 122, 0.3);
+    }
+
+    .badge-danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger-color);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .btn {
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #000;
+      transform: translateY(-1px);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        width: 280px;
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.sidebar-collapsed {
+        margin-left: 0;
+      }
+
+      .topbar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch !important;
+      }
+
+      .topbar .d-flex {
+        justify-content: center;
+      }
+
+      .user-info {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .search-input {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .content-card {
+        padding: 1rem;
+      }
+
+      .table-responsive {
+        font-size: 0.875rem;
+      }
+
+      .tab-button {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+      }
+
+      .d-flex.gap-2 {
+        flex-direction: column;
+        gap: 0.5rem !important;
+      }
+
+      .d-flex.gap-2 .form-select,
+      .d-flex.gap-2 .search-input {
+        width: 100% !important;
+        max-width: none !important;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .topbar {
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .topbar h4 {
+        font-size: 1.125rem;
+      }
+
+      .topbar p {
+        font-size: 0.8rem;
+      }
+
+      .content {
+        padding: 0.75rem;
+      }
+
+      .table th,
+      .table td {
+        padding: 0.375rem 0.25rem;
+        font-size: 0.7rem;
+      }
+
+      .user-avatar {
+        width: 28px;
+        height: 28px;
+      }
+
+      .btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      .content-card {
+        padding: 0.875rem;
+        margin-bottom: 1rem;
+      }
+
+      .content-card h6 {
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .badge {
+        font-size: 0.625rem;
+        padding: 0.25rem 0.5rem;
+      }
+
+      .sidebar-toggle {
+        width: 40px;
+        height: 40px;
+      }
+
+      .search-input {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+      }
+
+      .tab-button {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
+        margin-right: 0.25rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .d-flex > .tab-button:first-child {
+        flex-wrap: wrap;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0.75rem;
+      }
+
+      .topbar h4 {
+        font-size: 1rem;
+      }
+
+      .content {
+        padding: 0.5rem;
+      }
+
+      .table th,
+      .table td {
+        padding: 0.25rem 0.125rem;
+        font-size: 0.65rem;
+      }
+
+      .user-avatar {
+        width: 24px;
+        height: 24px;
+      }
+
+      .sidebar-toggle {
+        width: 36px;
+        height: 36px;
+      }
+
+      .btn {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.8rem;
+      }
+
+      .tab-button {
+        font-size: 0.7rem;
+        padding: 0.2rem 0.4rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <h4>
+        <img src="../../images/IconDiamond.png" alt="" width="24" height="24" class="me-2">
+        PARTIVOX
+      </h4>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Main</h6>
+      <a href="/pages/admin_dashboard/dashboard1.html">
+        <i class="fas fa-chart-line"></i>
+        <span>Overview</span>
+      </a>
+      <a href="/pages/admin_dashboard/user.html">
+        <i class="fas fa-users"></i>
+        <span>Users</span>
+      </a>
+      <a href="/pages/admin_dashboard/campaigns.html">
+        <i class="fas fa-bullhorn"></i>
+        <span>Campaigns</span>
+      </a>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Management</h6>
+      <a href="/pages/admin_dashboard/transactions.html">
+        <i class="fas fa-credit-card"></i>
+        <span>Transactions</span>
+      </a>
+      <a href="/pages/admin_dashboard/reports.html" class="active">
+        <i class="fas fa-chart-bar"></i>
+        <span>Reports</span>
+      </a>
+      <a href="/pages/admin_dashboard/settings.html">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+    
+    <div class="nav-section mt-auto">
+      <a href="#" class="text-danger" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="content">
+      <!-- Topbar -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </div>
+          <div>
+            <h4>Reports & Analytics</h4>
+            <p>Comprehensive reporting system: review flagged content, investigate user reports, monitor campaign compliance, resolve disputes, and maintain platform quality standards</p>
+          </div>
+        </div>
+        <div class="user-info">
+          <input type="text" class="search-input" placeholder="Search reports..." />
+          <img src="../../images/avartar1.jpg" class="user-avatar" alt="avatar" />
+          <div>
+            <div id="adminName" class="fw-semibold">Admin</div>
+            <small class="text-muted">Administrator</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reports Content -->
+      <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <button class="tab-button active">Campaign Reports</button>
+            <button class="tab-button">Task Reports</button>
+            <button class="tab-button">User Reports</button>
+          </div>
+          <div class="d-flex gap-2">
+            <select class="form-select bg-dark text-light border-secondary" style="width: 150px;">
+              <option>All status</option>
+              <option>Pending</option>
+              <option>Resolved</option>
+            </select>
+            <input type="text" class="search-input" placeholder="Search reports..." style="width: 250px;">
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Reporter</th>
+                <th>Subject</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="reportsTableBody">
+              <tr>
+                <td>
+                  <div class="fw-semibold">@Lord_Knightmare</div>
+                  <small class="text-muted">essendivine@gmail.com</small>
+                </td>
+                <td>
+                  <div class="fw-semibold">Fake task completion</div>
+                  <small class="text-muted">User submitted fake proof of task completion</small>
+                </td>
+                <td>
+                  <span class="badge badge-secondary">Task Report</span>
+                </td>
+                <td>
+                  <span class="badge badge-pending">Pending</span>
+                </td>
+                <td>
+                  <small class="text-muted">2025-01-20</small>
+                </td>
+                <td>
+                  <button class="btn btn-sm btn-outline-light me-1">
+                    <i class="fas fa-eye"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-success">
+                    <i class="fas fa-check"></i>
+                  </button>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="6" class="text-center py-4">
+                  <i class="fas fa-chart-bar fa-2x text-muted mb-2"></i>
+                  <div class="text-muted">No additional reports found</div>
+                  <small class="text-muted">Reports will appear here as they are submitted</small>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // SIDEBAR TOGGLE FUNCTIONALITY
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const mainContent = document.querySelector('.main-content');
+    
+    if (sidebarToggle && sidebar && mainContent) {
+      sidebarToggle.addEventListener('click', () => {
+        // Check if we're on mobile
+        const isMobile = window.innerWidth <= 768;
+        
+        if (isMobile) {
+          // On mobile, toggle the 'show' class
+          sidebar.classList.toggle('show');
+        } else {
+          // On desktop, toggle the 'collapsed' class
+          sidebar.classList.toggle('collapsed');
+          mainContent.classList.toggle('sidebar-collapsed');
+        }
+        
+        // Change icon based on state
+        const icon = sidebarToggle.querySelector('i');
+        if (isMobile) {
+          if (sidebar.classList.contains('show')) {
+            icon.className = 'fas fa-times';
+          } else {
+            icon.className = 'fas fa-bars';
+          }
+        } else {
+          if (sidebar.classList.contains('collapsed')) {
+            icon.className = 'fas fa-chevron-right';
+          } else {
+            icon.className = 'fas fa-bars';
+          }
+        }
+      });
+      
+      // Close sidebar when clicking outside on mobile
+      document.addEventListener('click', (e) => {
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile && sidebar.classList.contains('show')) {
+          if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+            sidebar.classList.remove('show');
+            sidebarToggle.querySelector('i').className = 'fas fa-bars';
+          }
+        }
+      });
+      
+      // Handle window resize
+      window.addEventListener('resize', () => {
+        const isMobile = window.innerWidth <= 768;
+        const icon = sidebarToggle.querySelector('i');
+        
+        if (!isMobile) {
+          // Reset mobile classes when switching to desktop
+          sidebar.classList.remove('show');
+          icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-bars';
+        } else {
+          // Reset desktop classes when switching to mobile
+          sidebar.classList.remove('collapsed');
+          mainContent.classList.remove('sidebar-collapsed');
+          icon.className = sidebar.classList.contains('show') ? 'fas fa-times' : 'fas fa-bars';
+        }
+      });
+    }
+
+    // LOGOUT FUNCTIONALITY
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        localStorage.removeItem('authToken');
+        window.location.href = '/pages/admin_dashboard/login.html';
+      });
+    }
+
+    // Get user name from token
+    function getUserNameFromToken() {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        return payload.data && payload.data.name ? payload.data.name : (payload.data && payload.data.email ? payload.data.email.split('@')[0] : 'Admin');
+      }
+      return 'Admin';
+    }
+
+    // Initialize page
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('adminName').textContent = getUserNameFromToken();
+      loadReports();
+    });
+
+    // Current filter state
+    let currentTab = 'campaign';
+    let currentStatus = 'all';
+    let currentSearch = '';
+
+    // Tab switching functionality
+    document.querySelectorAll('.tab-button').forEach(button => {
+      button.addEventListener('click', (e) => {
+        // Remove active class from all tabs
+        document.querySelectorAll('.tab-button').forEach(tab => tab.classList.remove('active'));
+        // Add active class to clicked tab
+        e.target.classList.add('active');
+        
+        // Update current tab
+        const tabText = e.target.textContent.toLowerCase();
+        if (tabText.includes('campaign')) currentTab = 'campaign';
+        else if (tabText.includes('task')) currentTab = 'task';
+        else if (tabText.includes('user')) currentTab = 'user';
+        
+        // Reload reports with new filter
+        loadReports();
+      });
+    });
+
+    // Status filter functionality
+    document.querySelector('select').addEventListener('change', (e) => {
+      currentStatus = e.target.value.toLowerCase().replace(' ', '_');
+      loadReports();
+    });
+
+    // Search functionality
+    document.querySelectorAll('.search-input').forEach(input => {
+      input.addEventListener('input', (e) => {
+        currentSearch = e.target.value;
+        // Debounce search
+        clearTimeout(window.searchTimeout);
+        window.searchTimeout = setTimeout(() => {
+          loadReports();
+        }, 300);
+      });
+    });
+
+    // Load reports function
+    async function loadReports() {
+      try {
+        const token = localStorage.getItem('authToken');
+        const params = new URLSearchParams({
+          type: currentTab,
+          status: currentStatus !== 'all' ? currentStatus : '',
+          search: currentSearch
+        });
+        
+        const res = await fetch(`/api/admin/reports?${params}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+          renderReportsTable(data.data || []);
+        } else {
+          console.error('Failed to load reports:', data.message);
+          renderReportsTable([]);
+        }
+      } catch (error) {
+        console.error('Error loading reports:', error);
+        renderReportsTable([]);
+      }
+    }
+
+    // Render reports table
+    function renderReportsTable(reports) {
+      const tableBody = document.getElementById('reportsTableBody');
+      
+      if (reports.length === 0) {
+        tableBody.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center py-4">
+              <i class="fas fa-chart-bar fa-2x text-muted mb-2"></i>
+              <div class="text-muted">No reports found</div>
+              <small class="text-muted">Reports will appear here as they are submitted</small>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      tableBody.innerHTML = reports.map(report => `
+        <tr>
+          <td>
+            <div class="fw-semibold">@${report.reporter_username || 'Unknown'}</div>
+            <small class="text-muted">${report.reporter_email || 'No email'}</small>
+          </td>
+          <td>
+            <div class="fw-semibold">${report.subject || 'No subject'}</div>
+            <small class="text-muted">${report.description || 'No description'}</small>
+          </td>
+          <td>
+            <span class="badge badge-secondary">${getReportTypeLabel(report.type)}</span>
+          </td>
+          <td>
+            <span class="badge ${getStatusBadgeClass(report.status)}">${getStatusLabel(report.status)}</span>
+          </td>
+          <td>
+            <small class="text-muted">${formatDate(report.created_at)}</small>
+          </td>
+          <td>
+            <button class="btn btn-sm btn-outline-light me-1" onclick="viewReport('${report._id}')">
+              <i class="fas fa-eye"></i>
+            </button>
+            ${report.status === 'pending' ? `
+              <button class="btn btn-sm btn-outline-success" onclick="resolveReport('${report._id}')">
+                <i class="fas fa-check"></i>
+              </button>
+            ` : ''}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // Helper functions
+    function getReportTypeLabel(type) {
+      const types = {
+        'campaign': 'Campaign Report',
+        'task': 'Task Report', 
+        'user': 'User Report'
+      };
+      return types[type] || 'Unknown';
+    }
+
+    function getStatusBadgeClass(status) {
+      const classes = {
+        'pending': 'badge-pending',
+        'resolved': 'badge-resolved',
+        'rejected': 'badge-danger'
+      };
+      return classes[status] || 'badge-secondary';
+    }
+
+    function getStatusLabel(status) {
+      const labels = {
+        'pending': 'Pending',
+        'resolved': 'Resolved',
+        'rejected': 'Rejected'
+      };
+      return labels[status] || 'Unknown';
+    }
+
+    function formatDate(dateString) {
+      if (!dateString) return 'Unknown';
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      });
+    }
+
+    // Action handlers
+    async function viewReport(reportId) {
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`/api/admin/reports/${reportId}`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+          showReportModal(data.data);
+        } else {
+          showNotification('Failed to load report details', 'danger');
+        }
+      } catch (error) {
+        console.error('Error loading report:', error);
+        showNotification('Error loading report details', 'danger');
+      }
+    }
+
+    async function resolveReport(reportId) {
+      if (!confirm('Are you sure you want to resolve this report?')) return;
+      
+      try {
+        const token = localStorage.getItem('authToken');
+        const res = await fetch(`/api/admin/reports/${reportId}/resolve`, {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        
+        if (data.status === 'success') {
+          showNotification('Report resolved successfully');
+          loadReports(); // Reload the table
+        } else {
+          showNotification(data.message || 'Failed to resolve report', 'danger');
+        }
+      } catch (error) {
+        console.error('Error resolving report:', error);
+        showNotification('Error resolving report', 'danger');
+      }
+    }
+
+    function showReportModal(report) {
+      // Simple alert for now - can be enhanced with a proper modal
+      alert(`Report Details:\n\nReporter: ${report.reporter_username}\nSubject: ${report.subject}\nDescription: ${report.description}\nStatus: ${report.status}\nDate: ${formatDate(report.created_at)}`);
+    }
+
+    // Helper: Show notification
+    function showNotification(message, type = 'success') {
+      const notif = document.createElement('div');
+      notif.className = `alert alert-${type} alert-dismissible fade show`;
+      notif.style.position = 'fixed';
+      notif.style.top = '20px';
+      notif.style.right = '20px';
+      notif.style.zIndex = '9999';
+      notif.style.minWidth = '300px';
+      notif.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" onclick="this.parentElement.remove()"></button>
+      `;
+      document.body.appendChild(notif);
+      setTimeout(() => notif.remove(), 5000);
+    }
+  </script>
+  <script src=/pages/admin_dashboard/js/admin-auth.js></script>
+</body>
+</html>

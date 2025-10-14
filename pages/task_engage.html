@@ -1,0 +1,4166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Engagement - PARTIVOX</title>
+    <link rel="shortcut icon" href="../images/IconDiamond.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/enhanced-typography.css" rel="stylesheet">
+  <style>
+    :root {
+      /* === PARTIVOX DESIGN SYSTEM === */
+      
+      /* Core Background Colors */
+      --primary-bg: #0a0a0f;
+      --secondary-bg: #1a1a1f;
+      --card-bg: #1e1e24;
+      --sidebar-bg: #16161b;
+      --surface-bg: #252530;
+      --overlay-bg: rgba(10, 10, 15, 0.95);
+      
+      /* Lemon Green Brand Colors (Primary) */
+      --accent-color: #caf403; /* signature lemon green */
+      --accent-hover: #9dcf00; /* darker lemon green */
+      --accent-light: #e8ff4d; /* lighter lemon green */
+      --accent-dark: #7ba800; /* darkest lemon green */
+      --accent-rgb: 202, 244, 3;
+      
+      /* Secondary Brand Colors */
+      --primary-color: #667eea;
+      --primary-hover: #5a67d8;
+      --primary-light: #7c3aed;
+      --primary-rgb: 102, 126, 234;
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --text-inverse: #000000;
+      --text-accent: var(--accent-color);
+      
+      /* Status Colors */
+      --success-color: #10b981;
+      --success-light: #34d399;
+      --warning-color: #f59e0b;
+      --warning-light: #fbbf24;
+      --danger-color: #ef4444;
+      --danger-light: #f87171;
+      --info-color: #3b82f6;
+      --info-light: #60a5fa;
+      
+      /* Border & Divider Colors */
+      --border-color: #27272a;
+      --border-light: #374151;
+      --border-accent: var(--accent-color);
+      --divider-color: rgba(255, 255, 255, 0.1);
+      
+      /* Layout Variables */
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 60px;
+      --topbar-height: 70px;
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --border-radius-lg: 16px;
+      
+      /* Spacing Scale */
+      --space-xs: 0.25rem;    /* 4px */
+      --space-sm: 0.5rem;     /* 8px */
+      --space-md: 1rem;       /* 16px */
+      --space-lg: 1.5rem;     /* 24px */
+      --space-xl: 2rem;       /* 32px */
+      --space-2xl: 3rem;      /* 48px */
+      --space-3xl: 4rem;      /* 64px */
+      
+      /* Typography Scale */
+      --text-xs: 0.75rem;     /* 12px */
+      --text-sm: 0.875rem;    /* 14px */
+      --text-base: 1rem;      /* 16px */
+      --text-lg: 1.125rem;    /* 18px */
+      --text-xl: 1.25rem;     /* 20px */
+      --text-2xl: 1.5rem;     /* 24px */
+      --text-3xl: 1.875rem;   /* 30px */
+      --text-4xl: 2.25rem;    /* 36px */
+      
+      /* Animation & Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.2s ease;
+      --transition-slow: 0.3s ease;
+      --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+      --shadow-accent: 0 0 0 3px rgba(202, 244, 3, 0.15);
+      
+      /* Z-Index Scale */
+      --z-dropdown: 1000;
+      --z-sticky: 1020;
+      --z-fixed: 1030;
+      --z-modal-backdrop: 1040;
+      --z-modal: 1050;
+      --z-popover: 1060;
+      --z-tooltip: 1070;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f14 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background: linear-gradient(180deg, var(--sidebar-bg) 0%, #12121a 100%);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      width: 280px;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-240px);
+      width: 60px;
+    }
+
+    .sidebar.collapsed .logo h4,
+    .sidebar.collapsed .nav-section h6,
+    .sidebar.collapsed a span {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar .logo {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar .logo h4 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar .nav-section {
+      padding: 1rem 0;
+    }
+
+    .sidebar .nav-section h6 {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+      color: var(--text-secondary);
+      padding: 0.875rem 1.5rem;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sidebar a i {
+      width: 20px;
+      margin-right: 12px;
+      font-size: 1rem;
+    }
+
+    .sidebar a:hover {
+      color: var(--text-primary);
+      background: rgba(202, 244, 3, 0.1);
+    }
+
+    .sidebar a.active {
+      color: var(--accent-color);
+      background: rgba(202, 244, 3, 0.15);
+      border-right: 3px solid var(--accent-color);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+      background: transparent;
+    }
+
+    .main-content.sidebar-collapsed {
+      margin-left: 60px;
+    }
+
+    .topbar {
+      background: rgba(30, 30, 36, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+    }
+
+    /* Enhanced task card styling - Optimized for performance */
+    .task-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      overflow: hidden;
+      min-height: 420px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      /* Removed will-change to prevent layout thrashing */
+    }
+    
+    .task-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+    
+    .task-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+      border-color: rgba(202, 244, 3, 0.3);
+      /* Add will-change only during hover */
+      will-change: transform;
+    }
+    
+    .task-card:not(:hover) {
+      will-change: auto; /* Remove will-change when not hovering */
+    }
+    
+    .task-card:hover::before {
+      opacity: 1;
+    }
+    
+    .task-card .btn {
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      font-weight: 600;
+    }
+    
+    .task-card .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(202, 244, 3, 0.3);
+      will-change: transform;
+    }
+    
+    .task-card .btn:not(:hover) {
+      will-change: auto;
+    }
+    
+    /* Optimized text rendering */
+    .task-card * {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Improve text rendering and prevent layout shifts */
+    .task-card h6, .task-card p, .task-card small {
+      text-rendering: optimizeLegibility;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+    
+    /* Ensure consistent form field styling */
+    .form-control {
+      font-family: inherit;
+      line-height: 1.5;
+      word-wrap: break-word;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      box-shadow: 0 0 0 0.2rem rgba(202, 244, 3, 0.25) !important;
+    }
+    
+    /* === PARTIVOX COMPONENT LIBRARY === */
+    
+    /* Button System with Lemon Green Theme */
+    .btn {
+      padding: var(--space-sm) var(--space-md);
+      border-radius: var(--border-radius-sm);
+      font-weight: 500;
+      font-size: var(--text-sm);
+      transition: all var(--transition-fast);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-xs);
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    /* Primary Button - Lemon Green */
+    .btn-primary {
+      background: var(--accent-color);
+      color: var(--text-inverse);
+      font-weight: 600;
+    }
+    
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      color: var(--text-inverse);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    /* Secondary Button */
+    .btn-secondary {
+      background: var(--card-bg);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+    
+    .btn-secondary:hover {
+      background: var(--surface-bg);
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+    }
+    
+    /* Success Button */
+    .btn-success {
+      background: var(--success-color);
+      color: white;
+    }
+    
+    .btn-success:hover {
+      background: var(--success-light);
+      color: white;
+    }
+    
+    /* Danger Button */
+    .btn-danger {
+      background: var(--danger-color);
+      color: white;
+    }
+    
+    .btn-danger:hover {
+      background: var(--danger-light);
+      color: white;
+    }
+    
+    /* Button Sizes */
+    .btn-sm {
+      padding: var(--space-xs) var(--space-sm);
+      font-size: var(--text-xs);
+      border-radius: var(--border-radius-sm);
+    }
+    
+    .btn-lg {
+      padding: var(--space-md) var(--space-lg);
+      font-size: var(--text-lg);
+      border-radius: var(--border-radius);
+    }
+    
+    /* Button States */
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    .btn-outline-primary {
+      background: transparent;
+      color: var(--accent-color);
+      border: 1px solid var(--accent-color);
+    }
+    
+    .btn-outline-primary:hover {
+      background: var(--accent-color);
+      color: var(--text-inverse);
+    }
+    
+    /* Form Controls with Lemon Green Focus */
+    .form-control {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius-sm);
+      padding: var(--space-sm) var(--space-md);
+      color: var(--text-primary);
+      font-size: var(--text-sm);
+      transition: all var(--transition-fast);
+      width: 100%;
+    }
+    
+    .form-control:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: var(--shadow-accent);
+      background: var(--card-bg);
+    }
+    
+    .form-control::placeholder {
+      color: var(--text-muted);
+    }
+    
+    /* Form Validation States */
+    .form-control.is-valid {
+      border-color: var(--success-color);
+    }
+    
+    .form-control.is-invalid {
+      border-color: var(--danger-color);
+    }
+    
+    /* Card System */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      padding: var(--space-lg);
+      transition: all var(--transition-base);
+    }
+    
+    .card-hover:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-xl);
+      border-color: var(--border-light);
+    }
+    
+    .card-interactive {
+      cursor: pointer;
+    }
+    
+    .card-highlighted {
+      border-color: var(--accent-color);
+      background: linear-gradient(135deg, var(--card-bg) 0%, rgba(202, 244, 3, 0.05) 100%);
+    }
+    
+    /* Badge System */
+    .badge {
+      padding: var(--space-xs) var(--space-sm);
+      border-radius: var(--border-radius-sm);
+      font-size: var(--text-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.025em;
+    }
+    
+    .badge-primary {
+      background: var(--accent-color);
+      color: var(--text-inverse);
+    }
+    
+    .badge-success {
+      background: var(--success-color);
+      color: white;
+    }
+    
+    .badge-warning {
+      background: var(--warning-color);
+      color: white;
+    }
+    
+    .badge-danger {
+      background: var(--danger-color);
+      color: white;
+    }
+    
+    .badge-secondary {
+      background: var(--surface-bg);
+      color: var(--text-secondary);
+    }
+    
+    /* Typography Utilities */
+    .text-display { font-size: var(--text-4xl); font-weight: 700; line-height: 1.1; }
+    .text-heading { font-size: var(--text-3xl); font-weight: 600; line-height: 1.2; }
+    .text-title { font-size: var(--text-2xl); font-weight: 600; line-height: 1.3; }
+    .text-subtitle { font-size: var(--text-xl); font-weight: 500; line-height: 1.4; }
+    .text-body { font-size: var(--text-base); font-weight: 400; line-height: 1.6; }
+    .text-caption { font-size: var(--text-sm); font-weight: 400; line-height: 1.5; }
+    .text-small { font-size: var(--text-xs); font-weight: 400; line-height: 1.4; }
+    
+    /* Color Utilities */
+    .text-accent { color: var(--accent-color); }
+    .text-primary { color: var(--text-primary); }
+    .text-secondary { color: var(--text-secondary); }
+    .text-muted { color: var(--text-muted); }
+    .text-success { color: var(--success-color); }
+    .text-warning { color: var(--warning-color); }
+    .text-danger { color: var(--danger-color); }
+    
+    /* Spacing Utilities */
+    .p-xs { padding: var(--space-xs); }
+    .p-sm { padding: var(--space-sm); }
+    .p-md { padding: var(--space-md); }
+    .p-lg { padding: var(--space-lg); }
+    .p-xl { padding: var(--space-xl); }
+    
+    .m-xs { margin: var(--space-xs); }
+    .m-sm { margin: var(--space-sm); }
+    .m-md { margin: var(--space-md); }
+    .m-lg { margin: var(--space-lg); }
+    .m-xl { margin: var(--space-xl); }
+    
+    /* Animation Classes */
+    .fade-in {
+      animation: fadeIn var(--transition-base);
+    }
+    
+    .slide-up {
+      animation: slideUp var(--transition-base);
+    }
+    
+    .scale-in {
+      animation: scaleIn var(--transition-bounce);
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    
+    @keyframes scaleIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    /* Enhanced flexbox layout for task cards - optimized side-by-side display */
+    #tasksContainer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: flex-start;
+      align-items: stretch;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .task-card-wrapper {
+      display: flex;
+      flex-direction: column;
+      flex: 0 0 calc(33.333% - 1rem);
+      max-width: calc(33.333% - 1rem);
+      min-width: 300px;
+    }
+    
+    .task-card {
+      flex: 1;
+      min-height: 480px;
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px;
+      overflow: hidden;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    
+    .task-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* === ENHANCED MOBILE-FIRST RESPONSIVE DESIGN === */
+    
+    /* Large Desktop (1400px+) */
+    @media (min-width: 1400px) {
+      .task-card-wrapper {
+        flex: 0 0 calc(25% - 1.125rem);
+        max-width: calc(25% - 1.125rem);
+      }
+      
+      .main-content {
+        padding: var(--space-2xl);
+      }
+    }
+    
+    /* Desktop (1200px - 1399px) */
+    @media (max-width: 1399px) and (min-width: 1200px) {
+      .task-card-wrapper {
+        flex: 0 0 calc(33.333% - 1rem);
+        max-width: calc(33.333% - 1rem);
+      }
+    }
+    
+    /* Large Tablet (992px - 1199px) */
+    @media (max-width: 1199px) and (min-width: 992px) {
+      .task-card-wrapper {
+        flex: 0 0 calc(50% - 0.75rem);
+        max-width: calc(50% - 0.75rem);
+      }
+      
+      .main-content {
+        padding: var(--space-xl);
+      }
+    }
+    
+    /* Tablet (768px - 991px) */
+    @media (max-width: 991px) and (min-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        z-index: var(--z-modal);
+      }
+      
+      .sidebar.show {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+        padding: var(--space-lg);
+      }
+      
+      .task-card-wrapper {
+        flex: 0 0 calc(50% - 0.75rem);
+        max-width: calc(50% - 0.75rem);
+        min-width: 280px;
+      }
+      
+      .topbar {
+        flex-direction: column;
+        gap: var(--space-sm);
+        padding: var(--space-md);
+      }
+    }
+    
+    /* Mobile Large (576px - 767px) */
+    @media (max-width: 767px) and (min-width: 576px) {
+      .task-card-wrapper {
+        flex: 0 0 100%;
+        max-width: 100%;
+        min-width: unset;
+      }
+      
+      #tasksContainer {
+        gap: var(--space-md);
+      }
+      
+      .main-content {
+        padding: var(--space-md);
+      }
+      
+      .task-card {
+        min-height: 400px;
+      }
+      
+      .btn {
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--text-sm);
+        min-height: 44px; /* Touch-friendly */
+      }
+      
+      .card {
+        padding: var(--space-md);
+      }
+      
+      /* Typography scaling for mobile */
+      .text-display { font-size: var(--text-3xl); }
+      .text-heading { font-size: var(--text-2xl); }
+      .text-title { font-size: var(--text-xl); }
+    }
+    
+    /* Mobile (320px - 575px) */
+    @media (max-width: 575px) {
+      .main-content {
+        padding: var(--space-sm);
+      }
+      
+      .topbar {
+        padding: var(--space-xs) var(--space-sm);
+      }
+      
+      .card {
+        padding: var(--space-sm);
+        border-radius: var(--border-radius-sm);
+      }
+      
+      .task-card {
+        min-height: 380px;
+      }
+      
+      .task-card:hover {
+        transform: none;
+      }
+      
+      .btn {
+        padding: var(--space-xs) var(--space-sm);
+        font-size: var(--text-xs);
+        min-height: 40px; /* Touch-friendly */
+      }
+      
+      .btn-lg {
+        padding: var(--space-sm) var(--space-md);
+        font-size: var(--text-sm);
+        min-height: 44px; /* Touch-friendly */
+      }
+      
+      /* Ultra-compact typography */
+      .text-display { font-size: var(--text-2xl); }
+      .text-heading { font-size: var(--text-xl); }
+      .text-title { font-size: var(--text-lg); }
+      .text-subtitle { font-size: var(--text-base); }
+      
+      /* Sidebar adjustments for ultra-mobile */
+      .sidebar {
+        width: 100vw;
+      }
+      
+      .sidebar-toggle {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+      }
+      
+      /* Form controls touch-friendly */
+      .form-control {
+        padding: var(--space-sm);
+        font-size: var(--text-base); /* Prevent zoom on iOS */
+        min-height: 44px;
+      }
+      
+      /* Modal adjustments */
+      .modal-dialog {
+        margin: var(--space-sm);
+        max-width: calc(100vw - 1rem);
+      }
+      
+      .modal-content {
+        border-radius: var(--border-radius-sm);
+      }
+    }
+    
+    /* Touch device optimizations */
+    @media (hover: none) and (pointer: coarse) {
+      .btn:hover {
+        transform: none;
+      }
+      
+      .card-hover:hover {
+        transform: none;
+      }
+      
+      /* Larger touch targets */
+      .btn, .form-control, .sidebar a {
+        min-height: 44px;
+      }
+    }
+    
+    /* Enhanced action button styling */
+    .task-card .btn-sm {
+      font-size: 0.75rem;
+      padding: 0.375rem 0.75rem;
+      border-radius: 6px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    
+    .task-card .btn-sm:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    /* Image enhancement */
+    .task-card img {
+      transition: opacity 0.3s ease;
+    }
+    
+    .task-card img.loaded {
+      opacity: 1;
+    }
+    
+    /* Engagement steps styling */
+    .step-item {
+      transition: all 0.2s ease;
+    }
+    
+    .step-item:hover {
+      transform: translateX(5px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .step-item.completed {
+      background: rgba(34, 197, 94, 0.2) !important;
+      border-left-color: #22c55e !important;
+    }
+    
+    .task-card h6, .task-card p, .task-card span {
+      color: #ffffff;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    .task-card .text-muted {
+      color: #adb5bd;
+    }
+    
+    .task-card .text-light {
+      color: #f8f9fa;
+    }
+    
+    .task-card .text-white {
+      color: #ffffff;
+    }
+    
+    /* Consistent card layout */
+    .task-card {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      min-height: 400px;
+      box-sizing: border-box;
+    }
+    
+    /* Badge styling improvements */
+    .badge {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.5rem 0.75rem;
+      border-radius: 6px;
+    }
+    
+    .badge.bg-success {
+      background: var(--success-color) !important;
+    }
+    
+    .badge.bg-dark {
+      background: rgba(0, 0, 0, 0.7) !important;
+      backdrop-filter: blur(4px);
+    }
+    
+    /* Button styling improvements */
+    .btn {
+      border-radius: 8px;
+      font-weight: 600;
+      padding: 0.75rem 1.5rem;
+      transition: all 0.2s ease;
+    }
+    
+    .btn-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+
+    .sidebar-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--accent-color);
+      color: #000;
+      border-color: var(--accent-color);
+    }
+
+    .user-profile {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .user-details h6 {
+      font-size: 0.875rem;
+      margin: 0;
+    }
+
+    .user-details small {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    /* Campaign Upload Specific Styles */
+    .upload-label {
+      border: 2px dashed var(--border-color);
+      background: var(--secondary-bg);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .upload-label:hover {
+      border-color: var(--accent-color);
+      background: rgba(202, 244, 3, 0.05);
+    }
+
+    .form-control {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      border-radius: 8px;
+      padding: 0.75rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      transition: all 0.2s ease;
+    }
+
+    .form-control:focus {
+      background: var(--secondary-bg);
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+      box-shadow: 0 0 0 0.2rem rgba(202, 244, 3, 0.25);
+      outline: none;
+    }
+
+    .form-control::placeholder {
+      color: var(--text-muted);
+      opacity: 0.8;
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #000;
+    }
+
+    .btn-outline-primary {
+      color: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+
+    .btn-outline-primary:hover,
+    .btn-outline-primary:focus {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .custom-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      position: relative;
+      z-index: 1050;
+      border-radius: 16px;
+      max-height: 90vh;
+      overflow-y: auto;
+      margin: 20px;
+      animation: slideIn 0.3s ease;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(8px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1040;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    }
+    
+    .overlay.show {
+      display: flex !important;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Modal content styling - Fixed animations */
+    .custom-card {
+      animation: modalSlideIn 0.25s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+      from { 
+        opacity: 0;
+        transform: scale(0.9) translateY(-20px);
+      }
+      to { 
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+    
+    @keyframes slideIn {
+      from { 
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Optimized image styling */
+    .task-card img {
+      transition: opacity 0.2s ease;
+      opacity: 0;
+    }
+    
+    .task-card img.loaded {
+      opacity: 1;
+    }
+    
+    /* Simplified hover effects */
+    .campaign-image-container {
+      transition: transform 0.2s ease;
+    }
+    
+    .task-card:hover .campaign-image-container {
+      transform: translateY(-1px);
+    }
+    
+    .creator-avatar {
+      transition: transform 0.2s ease;
+    }
+    
+    .task-card:hover .creator-avatar {
+      transform: scale(1.02);
+    }
+    
+    /* Reduce motion for users who prefer it */
+    @media (prefers-reduced-motion: reduce) {
+      .task-card,
+      .task-card *,
+      .task-card .btn {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        z-index: 1050;
+      }
+      
+      .task-card {
+        transition: none; /* Disable hover effects on mobile */
+      }
+      
+      .task-card:hover {
+        transform: none;
+        will-change: auto;
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.sidebar-collapsed {
+        margin-left: 0;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+
+      .sidebar-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+        display: none;
+      }
+
+      .sidebar-overlay.show {
+        display: block;
+      }
+
+      .sidebar-toggle {
+        width: 44px;
+        height: 44px;
+      }
+
+      .task-card {
+        min-height: 350px;
+        transform: none;
+      }
+      
+      .task-card:hover {
+        transform: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        will-change: auto;
+      }
+
+      .custom-card {
+        width: 95vw !important;
+        max-width: 95vw !important;
+        margin: 0 2.5vw;
+      }
+
+      .topbar {
+        padding: 1rem;
+      }
+    }
+
+    /* Tablet responsiveness */
+    @media (max-width: 1024px) and (min-width: 769px) {
+      .content {
+        padding: 1.5rem;
+      }
+      
+      .task-card {
+        min-height: 380px;
+      }
+    }
+    
+    /* Empty State Styles */
+    .empty-state-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+    
+    .empty-state-header {
+      margin-bottom: 3rem;
+    }
+    
+    .empty-state-icon {
+      width: 120px;
+      height: 120px;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 2rem;
+      box-shadow: 0 10px 30px rgba(202, 244, 3, 0.3);
+    }
+    
+    .empty-state-icon i {
+      font-size: 3rem;
+      color: #000;
+    }
+    
+    .empty-state-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+      line-height: 1.2;
+    }
+    
+    .empty-state-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .empty-state-actions {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 4rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .empty-state-actions .btn {
+      padding: 0.875rem 2rem;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      min-width: 200px;
+    }
+    
+    .empty-state-actions .btn-primary {
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      border: none;
+      color: #000;
+      box-shadow: 0 4px 15px rgba(202, 244, 3, 0.4);
+    }
+    
+    .empty-state-actions .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(202, 244, 3, 0.6);
+    }
+    
+    .empty-state-actions .btn-outline-light {
+      border: 2px solid var(--border-color);
+      color: var(--text-secondary);
+      background: transparent;
+    }
+    
+    .empty-state-actions .btn-outline-light:hover {
+      background: var(--card-bg);
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+      transform: translateY(-2px);
+    }
+    
+    .how-it-works-section {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 2.5rem;
+      border: 1px solid var(--border-color);
+      max-width: 800px;
+      width: 100%;
+    }
+    
+    .how-it-works-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    
+    .how-it-works-header i {
+      font-size: 1.5rem;
+      color: var(--accent-color);
+    }
+    
+    .how-it-works-header h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+    }
+    
+    .how-it-works-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.5rem;
+      background: rgba(202, 244, 3, 0.05);
+      border-radius: 16px;
+      border: 1px solid rgba(202, 244, 3, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .step-item:hover {
+      background: rgba(202, 244, 3, 0.1);
+      border-color: rgba(202, 244, 3, 0.2);
+      transform: translateX(5px);
+    }
+    
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      color: #000;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    
+    .step-content {
+      flex: 1;
+    }
+    
+    .step-content h4 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0 0 0.5rem 0;
+    }
+    
+    .step-content p {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.5;
+    }
+    
+    /* Empty State Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .empty-state-container {
+        padding: 2rem 1rem;
+        min-height: 50vh;
+      }
+      
+      .empty-state-icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 1.5rem;
+      }
+      
+      .empty-state-icon i {
+        font-size: 2rem;
+      }
+      
+      .empty-state-title {
+        font-size: 1.8rem;
+      }
+      
+      .empty-state-subtitle {
+        font-size: 1rem;
+      }
+      
+      .empty-state-actions {
+        flex-direction: column;
+        margin-bottom: 2rem;
+      }
+      
+      .empty-state-actions .btn {
+        min-width: auto;
+        width: 100%;
+      }
+      
+      .how-it-works-section {
+        padding: 1.5rem;
+      }
+      
+      .step-item {
+        padding: 1rem;
+      }
+      
+      .step-number {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .empty-state-title {
+        font-size: 1.5rem;
+      }
+      
+      .empty-state-subtitle {
+        font-size: 0.9rem;
+      }
+      
+      .how-it-works-header h3 {
+        font-size: 1.2rem;
+      }
+      
+      .step-content h4 {
+        font-size: 1rem;
+      }
+      
+      .step-content p {
+        font-size: 0.85rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <h4>
+        <i class="fas fa-gem me-2"></i>
+        PARTIVOX
+      </h4>
+    </div>
+    
+    <div class="user-profile">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <div class="user-details">
+        <h6 id="userHandle">@username</h6>
+        <small id="walletAddress">Connect wallet</small>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <h6>Main</h6>
+      <a href="userDashboard.html">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="campaign_upload.html">
+        <i class="fas fa-plus-circle"></i>
+        <span>Create Campaign</span>
+      </a>
+      <a href="campaignProgress.html">
+        <i class="fas fa-tasks"></i>
+        <span>My Campaigns</span>
+      </a>
+      <a href="task_engage.html" class="active">
+        <i class="fas fa-bolt"></i>
+        <span>Tasks</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <h6>Account</h6>
+      <a href="Wallet.html">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="settings.html">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+
+    <div class="nav-section mt-auto">
+      <a href="#" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <div class="content">
+      <!-- Topbar -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </div>
+          <div>
+            <h5 class="mb-0">Task Engagement</h5>
+            <small class="text-muted">Discover available tasks, complete social media engagements, and earn diamond rewards instantly</small>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-primary btn-sm" onclick="window.location.href='campaign_upload.html'">
+            <i class="fas fa-plus me-1"></i>Create Campaign
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter and Navigation Tabs -->
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary" onclick="window.location.href='campaignProgress.html'">
+            <i class="fas fa-bullseye me-2"></i>Campaigns Created
+          </button>
+          <button class="btn btn-primary active">
+            <i class="fas fa-bolt me-2"></i>Tasks Engaged
+          </button>
+        </div>
+        
+        <div class="d-flex gap-2">
+          <select class="form-select form-select-sm" style="width: auto; border-radius: 20px;">
+            <option selected>All campaigns</option>
+            <option value="ongoing">Ongoing</option>
+            <option value="active">Active</option>
+            <option value="upcoming">Upcoming</option>
+            <option value="ended">Ended</option>
+          </select>
+          <div class="position-relative">
+            <i class="fas fa-search position-absolute" style="left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted);"></i>
+            <input type="text" class="form-control form-control-sm" placeholder="Search campaigns..." style="padding-left: 2.5rem; border-radius: 20px; width: 200px;">
+          </div>
+        </div>
+      </div>
+
+      <!-- Available Tasks Grid -->
+      <div class="row g-4" id="tasksContainer">
+        <!-- Tasks will be loaded dynamically -->
+      </div>
+      
+      <!-- Loading State -->
+      <div id="loadingState" class="text-center py-5" style="display: none;">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="text-muted mt-3">Loading available tasks...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Task Modal -->
+  <div class="overlay" id="taskModal" style="display: none;">
+    <div class="custom-card" style="width: 800px; max-width: 90vw;">
+      <div class="p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="mb-0">
+              <i class="fas fa-rocket me-2 text-primary"></i>Start Your Engagement
+            </h4>
+            <small class="text-muted">Follow the steps below to earn your reward</small>
+          </div>
+          <button class="btn-close btn-close-white" onclick="closeTaskModal()"></button>
+        </div>
+        
+        <div class="row g-4">
+          <!-- Task Details -->
+          <div class="col-md-6">
+            <div class="mb-3">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <div class="creator-avatar" style="width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-color), #9dcf00); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.75rem; color: #000; overflow: hidden;">
+                  <img src="../images/avarter2.png" alt="Creator Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="handleImageError(this)" onload="handleImageLoad(this)">
+                </div>
+                <span class="fw-semibold" id="taskCreator">@creator</span>
+              </div>
+              <img id="taskImage" src="../images/bottom1.jpg" alt="Task" class="img-fluid rounded mb-2" style="height: 200px; width: 100%; object-fit: cover;">
+              <p id="taskDescription">Task description will appear here</p>
+              <div class="mb-2">
+                <span class="badge bg-primary" id="taskStatus">Active</span>
+                <span class="badge bg-info ms-2" id="taskType">Campaign</span>
+              </div>
+            </div>
+            
+            <div class="d-flex justify-content-between align-items-center p-3" style="background: rgba(26, 26, 26, 0.4); border-radius: 12px;">
+              <div>
+                <small class="text-muted">Participants</small>
+                <div class="fw-semibold" id="taskParticipants">50/100</div>
+              </div>
+              <div class="d-flex align-items-center gap-1">
+                <img src="../images/IconDiamond.png" alt="Diamond" style="width: 20px; height: 20px;">
+                <span class="fw-semibold" id="taskReward">100</span>
+                <small class="text-muted">Reward</small>
+              </div>
+            </div>
+          </div>
+
+          <!-- Task Instructions -->
+          <div class="col-md-6">
+            <h6 class="mb-3">Instructions</h6>
+            <p class="text-muted mb-3">Complete all engagement actions below, then submit your X (Twitter) username to claim your diamond reward. Make sure to follow all steps carefully to ensure successful verification.</p>
+            
+            <!-- Engagement URLs Section -->
+            <div class="mb-4" id="engagementUrlsContainer">
+              <h6 class="mb-3">
+                <i class="fas fa-link me-2 text-primary"></i>Engagement Links:
+              </h6>
+              
+              <!-- Follow URLs -->
+              <div class="engagement-url-group mb-3" id="followUrlsGroup" style="display: none;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-user-plus text-primary"></i>
+                  <span class="fw-semibold">Follow These Accounts:</span>
+                </div>
+                <div id="followUrls"></div>
+              </div>
+              
+              <!-- Like URLs -->
+              <div class="engagement-url-group mb-3" id="likeUrlsGroup" style="display: none;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-heart text-danger"></i>
+                  <span class="fw-semibold">Like These Posts:</span>
+                </div>
+                <div id="likeUrls"></div>
+              </div>
+              
+              <!-- Retweet URLs -->
+              <div class="engagement-url-group mb-3" id="retweetUrlsGroup" style="display: none;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-retweet text-success"></i>
+                  <span class="fw-semibold">Retweet These Posts:</span>
+                </div>
+                <div id="retweetUrls"></div>
+              </div>
+              
+              <!-- Comment URLs -->
+              <div class="engagement-url-group mb-3" id="commentUrlsGroup" style="display: none;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-comment text-info"></i>
+                  <span class="fw-semibold">Comment on These Posts:</span>
+                </div>
+                <div id="commentUrls"></div>
+              </div>
+              
+              <!-- General Task Link (fallback) -->
+              <div class="engagement-url-group mb-3" id="generalLinkGroup" style="display: none;">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                  <i class="fas fa-external-link-alt text-warning"></i>
+                  <span class="fw-semibold">Task Link:</span>
+                </div>
+                <div id="generalLink"></div>
+              </div>
+            </div>
+
+            <div class="mb-4">
+              <h6 class="mb-3">
+                <i class="fas fa-list-check me-2"></i>Engagement Steps:
+              </h6>
+              
+              <!-- Step-by-step engagement process -->
+              <div class="engagement-steps" id="engagementSteps">
+                <div class="step-item d-flex align-items-center gap-3 mb-3 p-3 rounded" style="background: rgba(var(--primary-color-rgb), 0.1); border-left: 3px solid var(--primary-color); cursor: pointer;" id="followStep" onclick="openStepUrls('follow')">
+                  <div class="step-number bg-primary text-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; font-weight: bold; font-size: 0.9rem;">1</div>
+                  <div class="flex-grow-1">
+                    <div class="fw-semibold mb-1">
+                      <i class="fas fa-user-plus text-primary me-2"></i>Follow the Account
+                    </div>
+                    <small class="text-muted">Click here to open Twitter and follow the specified accounts</small>
+                    <div id="followStepUrls" class="mt-2" style="display: none;"></div>
+                  </div>
+                  <i class="fas fa-external-link-alt text-primary"></i>
+                </div>
+                
+                <div class="step-item d-flex align-items-center gap-3 mb-3 p-3 rounded" style="background: rgba(220, 38, 127, 0.1); border-left: 3px solid #dc267f; cursor: pointer;" id="likeStep" onclick="openStepUrls('like')">
+                  <div class="step-number rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; font-weight: bold; font-size: 0.9rem; background: #dc267f; color: white;">2</div>
+                  <div class="flex-grow-1">
+                    <div class="fw-semibold mb-1">
+                      <i class="fas fa-heart text-danger me-2"></i>Like the Post
+                    </div>
+                    <small class="text-muted">Click here to open Twitter and like the campaign posts</small>
+                    <div id="likeStepUrls" class="mt-2" style="display: none;"></div>
+                  </div>
+                  <i class="fas fa-external-link-alt text-danger"></i>
+                </div>
+                
+                <div class="step-item d-flex align-items-center gap-3 mb-3 p-3 rounded" style="background: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; cursor: pointer;" id="retweetStep" onclick="openStepUrls('retweet')">
+                  <div class="step-number rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; font-weight: bold; font-size: 0.9rem; background: #22c55e; color: white;">3</div>
+                  <div class="flex-grow-1">
+                    <div class="fw-semibold mb-1">
+                      <i class="fas fa-retweet text-success me-2"></i>Retweet/Share
+                    </div>
+                    <small class="text-muted">Click here to open Twitter and retweet the campaign posts</small>
+                    <div id="retweetStepUrls" class="mt-2" style="display: none;"></div>
+                  </div>
+                  <i class="fas fa-external-link-alt text-success"></i>
+                </div>
+                
+                <div class="step-item d-flex align-items-center gap-3 mb-3 p-3 rounded" style="background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; cursor: pointer;" id="commentStep" onclick="openStepUrls('comment')">
+                  <div class="step-number rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; font-weight: bold; font-size: 0.9rem; background: #3b82f6; color: white;">4</div>
+                  <div class="flex-grow-1">
+                    <div class="fw-semibold mb-1">
+                      <i class="fas fa-comment text-info me-2"></i>Comment & Tag
+                    </div>
+                    <small class="text-muted">Click here to open Twitter and comment on the campaign posts</small>
+                    <div id="commentStepUrls" class="mt-2" style="display: none;"></div>
+                  </div>
+                  <i class="fas fa-external-link-alt text-info"></i>
+                </div>
+                
+                <div class="step-item d-flex align-items-center gap-3 mb-3 p-3 rounded" style="background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b;">
+                  <div class="step-number rounded-circle d-flex align-items-center justify-content-center" style="width: 30px; height: 30px; font-weight: bold; font-size: 0.9rem; background: #f59e0b; color: white;">5</div>
+                  <div class="flex-grow-1">
+                    <div class="fw-semibold mb-1">
+                      <i class="fas fa-check-circle text-warning me-2"></i>Submit Proof
+                    </div>
+                    <small class="text-muted">Provide your username and any additional proof below</small>
+                  </div>
+                  <i class="fas fa-arrow-down text-warning"></i>
+                </div>
+              </div>
+              
+              <!-- Engagement Tips -->
+              <div class="alert alert-info d-flex align-items-start gap-2 mb-3" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 8px;">
+                <i class="fas fa-lightbulb text-info mt-1"></i>
+                <div>
+                  <strong>Pro Tips:</strong>
+                  <ul class="mb-0 mt-1" style="font-size: 0.9rem;">
+                    <li>Complete all steps before submitting your claim</li>
+                    <li>Use the same username across all platforms</li>
+                    <li>Be genuine in your engagement - quality matters!</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label fw-semibold">
+                <i class="fas fa-user me-2 text-primary"></i>Your Social Media Username:
+              </label>
+              <input type="text" class="form-control" placeholder="@yourusername (without @)" id="usernameInput" 
+                     style="background: var(--secondary-bg); border: 1px solid var(--border-color); color: var(--text-primary); padding: 0.75rem; font-size: 0.95rem; line-height: 1.4;">
+              <small class="text-muted d-block mt-1">
+                <i class="fas fa-info-circle me-1"></i>
+                Enter your exact username from the platform where you completed the engagement
+              </small>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label fw-semibold">
+                <i class="fas fa-camera me-2 text-success"></i>Proof of Completion (Optional):
+              </label>
+              <textarea class="form-control" placeholder="• Paste screenshot URL&#10;• Describe what you did&#10;• Add any additional proof..." 
+                        id="proofInput" rows="4" 
+                        style="background: var(--secondary-bg); border: 1px solid var(--border-color); color: var(--text-primary); padding: 0.75rem; font-size: 0.9rem; line-height: 1.5; resize: vertical;"></textarea>
+              <small class="text-muted d-block mt-1">
+                <i class="fas fa-lightbulb me-1"></i>
+                Adding proof increases your chances of quick approval
+              </small>
+            </div>
+
+            <div class="d-grid gap-2">
+              <button class="btn btn-primary btn-lg" onclick="claimReward()" style="background: linear-gradient(135deg, var(--primary-color), var(--accent-color)); border: none; border-radius: 8px; font-weight: 600;">
+                <i class="fas fa-gift me-2"></i>Claim My Reward
+                <div class="small mt-1">Submit for Review</div>
+              </button>
+              <small class="text-center text-muted">
+                <i class="fas fa-shield-alt me-1"></i>
+                Your submission will be verified before reward distribution
+              </small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="overlay" id="successModal" style="display: none;">
+    <div class="custom-card" style="width: 400px; max-width: 90vw;">
+      <div class="p-4 text-center">
+        <div class="mb-3">
+          <i class="fas fa-check-circle fa-4x text-success"></i>
+        </div>
+        <h4 class="mb-2 text-white">Reward Claimed!</h4>
+        <p class="text-muted mb-4">Your submission is under review. You'll receive your reward once approved.</p>
+        <div class="d-flex align-items-center justify-content-center gap-2 mb-4 p-3" style="background: rgba(34, 197, 94, 0.1); border-radius: 12px; border: 1px solid rgba(34, 197, 94, 0.2);">
+          <img src="../images/IconDiamond.png" alt="Diamond" style="width: 24px; height: 24px;">
+          <span class="fw-bold text-success" id="claimedReward">100</span>
+          <span class="text-success">Diamonds Pending</span>
+        </div>
+        <button class="btn btn-primary w-100" onclick="closeSuccessModal()">
+          <i class="fas fa-check me-2"></i>Continue
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+  <script src="../javascript/api.js"></script>
+  <script src="../javascript/globalUser.js"></script>
+  <script>
+    // Dynamic API base URL to match current origin
+    const API_BASE_URL = window.location.origin + "/";
+
+    // Simple banner helper
+    function showBanner(message, type = 'info') {
+      let el = document.getElementById('globalBanner');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = 'globalBanner';
+        el.style.position = 'fixed';
+        el.style.top = '0';
+        el.style.left = '0';
+        el.style.right = '0';
+        el.style.zIndex = '9999';
+        el.style.padding = '10px 16px';
+        el.style.textAlign = 'center';
+        el.style.fontWeight = '600';
+        document.body.appendChild(el);
+      }
+      const colors = {
+        info: 'rgba(202,244,3,0.25)',
+        warning: 'rgba(245,158,11,0.25)',
+        error: 'rgba(239,68,68,0.25)',
+        success: 'rgba(16,185,129,0.25)'
+      };
+      el.style.background = colors[type] || colors.info;
+      el.textContent = message;
+      setTimeout(() => { try { el.remove(); } catch(_){} }, 4000);
+    }
+
+    // fetch with timeout helper
+    async function fetchWithTimeout(resource, options = {}, timeoutMs = 8000) {
+      const controller = new AbortController();
+      const id = setTimeout(() => controller.abort(), timeoutMs);
+      try {
+        return await fetch(resource, { ...options, signal: controller.signal });
+      } finally {
+        clearTimeout(id);
+      }
+    }
+
+    // Get valid authentication token
+    async function getValidToken() {
+      // Try to get JWT token first
+      let token = localStorage.getItem('authToken');
+      
+      if (token) {
+        return token;
+      }
+      
+      // If no JWT token, try to get one for Twitter users
+      try {
+        const response = await fetch(`${API_BASE_URL}api/twitter/get-token.php`, {
+          method: 'GET',
+          credentials: 'include'
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.token) {
+            localStorage.setItem('authToken', data.token);
+            return data.token;
+          }
+        }
+      } catch (error) {
+        console.error('Error getting token for Twitter user:', error);
+      }
+      
+      return null;
+    }
+
+    // Placeholder functions - will be overridden by actual implementations below
+    // Global variables to prevent memory leaks
+    let sidebarToggleHandler = null;
+    let sidebarOverlayHandler = null;
+    let windowResizeHandler = null;
+    let imageLoadHandlers = new Map();
+    
+    // SIDEBAR TOGGLE FUNCTIONALITY - Optimized
+    function initializeSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+      if (!sidebar || !sidebarToggle) return;
+
+      // Remove existing listeners to prevent duplicates
+      if (sidebarToggleHandler) {
+        sidebarToggle.removeEventListener('click', sidebarToggleHandler);
+      }
+      if (sidebarOverlayHandler && sidebarOverlay) {
+        sidebarOverlay.removeEventListener('click', sidebarOverlayHandler);
+      }
+      if (windowResizeHandler) {
+        window.removeEventListener('resize', windowResizeHandler);
+      }
+
+      sidebarToggleHandler = function() {
+        const isMobile = window.innerWidth <= 768;
+        const toggleIcon = sidebarToggle.querySelector('i');
+        
+        if (isMobile) {
+          sidebar.classList.toggle('show');
+          if (sidebarOverlay) sidebarOverlay.classList.toggle('show');
+          
+          if (toggleIcon) {
+            toggleIcon.className = sidebar.classList.contains('show') ? 'fas fa-times' : 'fas fa-bars';
+          }
+        } else {
+          sidebar.classList.toggle('collapsed');
+          if (mainContent) mainContent.classList.toggle('sidebar-collapsed');
+          
+          if (toggleIcon) {
+            toggleIcon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-bars';
+          }
+        }
+      };
+
+      sidebarOverlayHandler = function() {
+        sidebar.classList.remove('show');
+        if (sidebarOverlay) sidebarOverlay.classList.remove('show');
+        const toggleIcon = sidebarToggle.querySelector('i');
+        if (toggleIcon) toggleIcon.className = 'fas fa-bars';
+      };
+
+      windowResizeHandler = function() {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('show');
+          if (sidebarOverlay) sidebarOverlay.classList.remove('show');
+          const toggleIcon = sidebarToggle.querySelector('i');
+          if (toggleIcon) toggleIcon.className = 'fas fa-bars';
+        }
+      };
+
+      // Add new listeners
+      sidebarToggle.addEventListener('click', sidebarToggleHandler);
+      if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', sidebarOverlayHandler);
+      }
+      window.addEventListener('resize', windowResizeHandler);
+    }
+
+
+    // Update user profile information
+    async function updateUserProfile() {
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          console.log('❌ No token available for profile loading');
+          return;
+        }
+
+        console.log('🔄 Loading user profile...');
+        const response = await fetch(`${API_BASE_URL}api/settings/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        console.log('📡 Profile response status:', response.status);
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('👤 Profile API response data:', data);
+          
+          if (data.status === 'success' && data.data) {
+            const userHandle = document.getElementById('userHandle');
+            
+            // Handle Twitter users
+            if (data.data.twitter_handle) {
+              if (userHandle) {
+                userHandle.textContent = `@${data.data.twitter_handle}`;
+                console.log('✅ Updated Twitter handle:', data.data.twitter_handle);
+              }
+            }
+            // Handle email users with name
+            else if (data.data.name && data.data.name.trim() !== '') {
+              if (userHandle) {
+                userHandle.textContent = data.data.name;
+                console.log('✅ Updated user name:', data.data.name);
+              }
+            }
+            // Handle email display for email users
+            else if (data.data.email) {
+              if (userHandle) {
+                // Show first part of email for privacy
+                const emailParts = data.data.email.split('@');
+                const displayName = emailParts[0];
+                userHandle.textContent = displayName;
+                console.log('✅ Updated user email display:', displayName);
+              }
+            }
+            // Final fallback
+            else {
+              if (userHandle) {
+                userHandle.textContent = 'User';
+                console.log('⚠️ Using fallback display name');
+              }
+            }
+            
+            console.log('✅ Profile updated successfully');
+          } else {
+            console.log('⚠️ Profile data not available or invalid format:', data);
+          }
+        } else {
+          console.error('❌ Profile API returned non-OK status:', response.status);
+          const errorText = await response.text();
+          console.error('Error response:', errorText.substring(0, 500));
+        }
+      } catch (error) {
+        console.error('💥 Error loading user profile:', error);
+      }
+    }
+
+    // Load and update user avatar
+    async function loadUserAvatar() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}api/settings/profile-picture`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.profile_picture_url) {
+            const userAvatar = document.getElementById('userAvatar');
+            if (userAvatar) {
+              userAvatar.innerHTML = `<img src="${data.data.profile_picture_url}?t=${Date.now()}" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user avatar:', error);
+      }
+    }
+
+    // Update wallet address display
+    function updateWalletAddress() {
+      const CONNECTED_EVM_KEY = 'connected_evm_wallet';
+      const localWallet = localStorage.getItem(CONNECTED_EVM_KEY);
+      const walletAddress = document.getElementById('walletAddress');
+      
+      if (walletAddress) {
+        if (localWallet && localWallet.startsWith('0x')) {
+          const shortAddress = `${localWallet.slice(0, 6)}...${localWallet.slice(-4)}`;
+          walletAddress.textContent = shortAddress;
+        } else {
+          walletAddress.textContent = 'Connect wallet';
+        }
+      }
+    }
+
+    // Duplicate function removed - using global window.handleImageLoad defined above
+
+    // Duplicate function removed - using global window.handleImageError defined above
+
+    // Validate and process image URLs
+    function validateImageUrl(url) {
+      if (!url || typeof url !== 'string') {
+        return '../images/bottom1.jpg';
+      }
+      
+      const trimmedUrl = url.trim();
+      
+      // Check if it's a data URL (base64)
+      if (trimmedUrl.startsWith('data:image/')) {
+        return trimmedUrl;
+      }
+      
+      // Check if it's a valid HTTP/HTTPS URL
+      if (trimmedUrl.startsWith('http://') || trimmedUrl.startsWith('https://')) {
+        return trimmedUrl;
+      }
+      
+      // Check if it's a relative path that exists
+      if (trimmedUrl.startsWith('../') || trimmedUrl.startsWith('./') || trimmedUrl.startsWith('/')) {
+        return trimmedUrl;
+      }
+      
+      // If it doesn't match any pattern, return default
+      console.log('⚠️ Invalid image URL format:', trimmedUrl);
+      return '../images/bottom1.jpg';
+    }
+
+    // Load creator profile picture
+    async function loadCreatorAvatar(creatorHandle, avatarElement) {
+      try {
+        const token = await getValidToken();
+        if (!token || !creatorHandle) return;
+
+        // Extract username from handle (remove @ if present)
+        const username = creatorHandle.replace('@', '');
+        
+        const response = await fetch(`${API_BASE_URL}api/users/profile-picture?username=${encodeURIComponent(username)}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.profile_picture_url) {
+            const img = avatarElement.querySelector('img');
+            if (img) {
+              img.src = data.data.profile_picture_url + '?t=' + Date.now();
+              console.log('✅ Loaded creator avatar for:', username);
+            }
+          }
+        }
+      } catch (error) {
+        console.log('⚠️ Could not load creator avatar:', error.message);
+        // Silently fail - will use default avatar
+      }
+    }
+
+    // Enhanced function to load current user's profile picture
+    async function loadCurrentUserAvatar() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}api/settings/profile-picture`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.profile_picture_url) {
+            // Update sidebar avatar
+            const sidebarAvatar = document.getElementById('userAvatar');
+            if (sidebarAvatar) {
+              sidebarAvatar.innerHTML = `<img src="${data.data.profile_picture_url}?t=${Date.now()}" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+            }
+            
+            // Update any current user avatars in task cards if they exist
+            const currentUserAvatars = document.querySelectorAll('.current-user-avatar img');
+            currentUserAvatars.forEach(img => {
+              img.src = data.data.profile_picture_url + '?t=' + Date.now();
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error loading current user avatar:', error);
+      }
+    }
+
+    // Global state for tasks
+    let _tasks = [];
+    let _selectedTaskId = null;
+    
+    // Global engagement tracking
+    let engagementTracker = {
+      taskId: null,
+      completedActions: {},
+      startTime: null,
+      urls: {}
+    };
+    
+    // Preload default image to prevent multiple requests
+    const defaultImage = new Image();
+    defaultImage.src = '../images/bottom1.jpg?v=1';
+    defaultImage.onload = () => console.log('✅ Default image preloaded');
+    defaultImage.onerror = () => console.warn('⚠️ Default image failed to preload');
+
+    // Global image handling functions (defined early to prevent ReferenceError)
+    window.handleImageLoad = function(img) {
+      if (!img) return;
+      
+      img.classList.add('loaded');
+      img.style.opacity = '1';
+      
+      // Clean up handler reference
+      const handlerId = img.dataset.handlerId;
+      if (handlerId && window.imageLoadHandlers && window.imageLoadHandlers.has(handlerId)) {
+        window.imageLoadHandlers.delete(handlerId);
+      }
+      
+      // Image loaded successfully (reduced logging)
+    };
+
+    window.handleImageError = function(img) {
+      if (!img) return;
+      
+      // Prevent infinite loops by checking if we've already handled this image
+      if (img.dataset.errorHandled === 'true') {
+        return;
+      }
+      img.dataset.errorHandled = 'true';
+      
+      // Image failed to load (reduced logging)
+      
+      // Clean up handler reference
+      const handlerId = img.dataset.handlerId;
+      if (handlerId && window.imageLoadHandlers && window.imageLoadHandlers.has(handlerId)) {
+        window.imageLoadHandlers.delete(handlerId);
+      }
+      
+      if (img.classList.contains('campaign-image')) {
+        // Create placeholder for campaign images
+        const placeholder = document.createElement('div');
+        placeholder.className = 'image-placeholder';
+        placeholder.style.cssText = `
+          width: 100%; height: 140px; display: flex; flex-direction: column; 
+          align-items: center; justify-content: center; 
+          background: linear-gradient(135deg, var(--secondary-bg), var(--card-bg)); 
+          color: var(--text-muted); text-align: center; border-radius: 8px;
+        `;
+        placeholder.innerHTML = '<i class="fas fa-image fa-2x mb-2" style="opacity: 0.5;"></i><small style="font-size: 0.8rem; opacity: 0.7;">Campaign Image</small>';
+        
+        if (img.parentElement) {
+          img.parentElement.replaceChild(placeholder, img);
+        }
+      } else {
+        // For avatar images, just hide and show initials
+        img.style.display = 'none';
+        const parent = img.parentElement;
+        if (parent && parent.classList.contains('creator-avatar')) {
+          const text = parent.dataset.creator || parent.textContent || 'U';
+          const initial = text.charAt(text.indexOf('@') + 1 || 0).toUpperCase() || 'U';
+          parent.innerHTML = initial;
+          parent.style.fontSize = '0.875rem';
+          parent.style.fontWeight = '600';
+        }
+      }
+    };
+
+    // Initialize global image handlers map
+    window.imageLoadHandlers = new Map();
+    window.imageCache = new Map();
+
+    // Load tasks data (now prefers campaigns as engageable tasks)
+    async function loadTasksData() {
+      const loadingState = document.getElementById('loadingState');
+      const tasksContainer = document.getElementById('tasksContainer');
+      
+      try {
+        // Show loading state
+        if (loadingState) loadingState.style.display = 'block';
+        if (tasksContainer) tasksContainer.style.display = 'none';
+        
+        const token = await getValidToken();
+        if (!token) {
+          window.location.href = '../index.html';
+          return;
+        }
+
+        // Primary: load all campaigns across the platform and map as tasks
+        await loadCampaignsAsTasks(token);
+        
+        // Log the number of tasks loaded from API
+        console.log(`Loaded ${_tasks ? _tasks.length : 0} tasks from API`);
+        
+        // Log the number of real campaigns loaded
+        if (!_tasks || _tasks.length === 0) {
+          console.log('No campaigns found. Users need to create campaigns to see tasks here.');
+          console.log('Campaign creation is available at: campaign_upload.html');
+        } else {
+          console.log(`Successfully loaded ${_tasks.length} real user-created campaigns as tasks`);
+        }
+        
+        // Hide loading state
+        if (loadingState) loadingState.style.display = 'none';
+        if (tasksContainer) tasksContainer.style.display = 'block';
+        
+        renderTaskCards(_tasks);
+
+        // Optional: try native tasks progress to update progress bars if your API supports it
+        try {
+          const progressResponse = await fetch(`${API_BASE_URL}api/tasks/progress`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          if (progressResponse.ok) {
+            const progressData = await progressResponse.json();
+            if (progressData.status === 'success') {
+              updateTaskProgress(progressData.data);
+            }
+          }
+        } catch (_) { /* non-critical */ }
+
+      } catch (error) {
+        console.error('Error loading tasks data:', error);
+        if (loadingState) loadingState.style.display = 'none';
+        if (tasksContainer) tasksContainer.style.display = 'block';
+        showBanner('Failed to load tasks. Please try again.', 'error');
+      }
+    }
+
+    // Fetch available campaigns from the campaigns API
+    async function loadCampaignsAsTasks(token) {
+      const headers = { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' };
+      const url = `${API_BASE_URL}api/campaigns/list-all?limit=50`;
+      try {
+        const res = await fetchWithTimeout(url, { headers }, 10000);
+        
+        if (res.status === 401) {
+          // Token expired or invalid, try to refresh
+          showBanner('Session expired. Please login again.', 'warning');
+          setTimeout(() => {
+            window.location.href = '../index.html';
+          }, 2000);
+          return;
+        }
+        
+        if (!res.ok) { 
+          console.error('API Error:', res.status, res.statusText);
+          _tasks = []; 
+          return; 
+        }
+        
+        const data = await res.json();
+        console.log('API Response:', data);
+        console.log('Tasks data structure:', data.data);
+        
+        if (data.status === 'success' && data.data && Array.isArray(data.data.items)) {
+          console.log('🔍 RAW CAMPAIGN DATA FROM API:', data.data.items);
+          _tasks = data.data.items.map(campaign => {
+            // Enhanced image handling with multiple field support
+            let campaignImage = '../images/bottom1.jpg'; // Default fallback
+            
+            // Check multiple possible image fields
+            const imageFields = [
+              campaign.image_url,
+              campaign.image_data, 
+              campaign.image,
+              campaign.imageUrl,
+              campaign.imageData,
+              campaign.campaign_image,
+              campaign.photo,
+              campaign.picture
+            ];
+            
+            for (const field of imageFields) {
+              if (field && field.trim()) {
+                campaignImage = validateImageUrl(field);
+                console.log(`🖼️ Found image for campaign ${campaign.title || campaign.id}:`, field.substring(0, 50) + '...');
+                console.log(`🖼️ Image type:`, field.startsWith('data:image/') ? 'Base64' : 'URL');
+                break;
+              }
+            }
+            
+            // Debug: Log all image-related fields
+            console.log(`🔍 IMAGE DEBUG for ${campaign.title}:`, {
+              image_url: campaign.image_url ? campaign.image_url.substring(0, 50) + '...' : null,
+              image_data: campaign.image_data ? campaign.image_data.substring(0, 50) + '...' : null,
+              assets: campaign.assets,
+              finalImage: campaignImage
+            });
+            
+            // Extract creator information properly
+            let creatorName = '@creator'; // Default fallback
+            if (campaign.creator) {
+              if (typeof campaign.creator === 'string') {
+                creatorName = campaign.creator.startsWith('@') ? campaign.creator : `@${campaign.creator}`;
+              } else if (typeof campaign.creator === 'object') {
+                // Handle creator object with various possible fields
+                const nameFields = [
+                  campaign.creator.username,
+                  campaign.creator.handle,
+                  campaign.creator.twitter_handle,
+                  campaign.creator.name,
+                  campaign.creator.display_name,
+                  campaign.creator.email
+                ];
+                
+                for (const field of nameFields) {
+                  if (field && typeof field === 'string' && field.trim()) {
+                    creatorName = field.startsWith('@') ? field : `@${field}`;
+                    break;
+                  }
+                }
+              }
+            }
+            
+            // Calculate reward per participant and max participants based on budget
+            const budget = campaign.budget || 100;
+            let rewardPerParticipant;
+            let maxParticipants;
+            
+            if (campaign.max_participants && campaign.max_participants > 0) {
+              // If max_participants is specified, use it to calculate reward
+              maxParticipants = campaign.max_participants;
+              rewardPerParticipant = Math.floor(budget / maxParticipants);
+            } else if (campaign.reward_per_participant && campaign.reward_per_participant > 0) {
+              // If reward per participant is specified, calculate max participants
+              rewardPerParticipant = campaign.reward_per_participant;
+              maxParticipants = Math.floor(budget / rewardPerParticipant);
+            } else {
+              // Default calculation: assume 50 diamonds per participant
+              rewardPerParticipant = 50;
+              maxParticipants = Math.floor(budget / rewardPerParticipant);
+            }
+            
+            // Ensure minimum values
+            rewardPerParticipant = Math.max(1, rewardPerParticipant);
+            maxParticipants = Math.max(1, maxParticipants);
+            
+            console.log(`Campaign ${campaign.title}: Budget=${budget}, Reward=${rewardPerParticipant}, MaxParticipants=${maxParticipants}`);
+            
+            // Extract engagement URLs/actions from campaign data
+            let actions = null;
+            
+            // Check for actions in various possible formats
+            console.log('🔍 CAMPAIGN ACTIONS DEBUG:', {
+              hasActions: !!(campaign.actions),
+              actionsType: typeof campaign.actions,
+              actionsContent: campaign.actions,
+              campaignKeys: Object.keys(campaign)
+            });
+            
+            if (campaign.actions && typeof campaign.actions === 'object') {
+              actions = campaign.actions;
+              console.log('✅ Found structured actions:', actions);
+            } else if (campaign.engagement_urls && typeof campaign.engagement_urls === 'object') {
+              actions = campaign.engagement_urls;
+            } else if (campaign.urls && typeof campaign.urls === 'object') {
+              actions = campaign.urls;
+            } else if (campaign.social_actions && typeof campaign.social_actions === 'object') {
+              actions = campaign.social_actions;
+            }
+            
+            // If no structured actions, try to extract from individual URL fields
+            if (!actions) {
+              actions = {};
+              
+              // Check for individual URL fields
+              if (campaign.follow_urls && Array.isArray(campaign.follow_urls)) {
+                actions.follow = campaign.follow_urls;
+              }
+              if (campaign.like_urls && Array.isArray(campaign.like_urls)) {
+                actions.like = campaign.like_urls;
+              }
+              if (campaign.retweet_urls && Array.isArray(campaign.retweet_urls)) {
+                actions.retweet = campaign.retweet_urls;
+              }
+              if (campaign.comment_urls && Array.isArray(campaign.comment_urls)) {
+                actions.comment = campaign.comment_urls;
+              }
+              
+              // Check for single URL fields and convert to arrays (comprehensive field name checking)
+              
+              // Primary field names (from campaign_upload)
+              if (campaign.followUrl && typeof campaign.followUrl === 'string' && campaign.followUrl.trim()) {
+                actions.follow = [campaign.followUrl];
+              }
+              if (campaign.likeUrl && typeof campaign.likeUrl === 'string' && campaign.likeUrl.trim()) {
+                actions.like = [campaign.likeUrl];
+              }
+              if (campaign.retweetUrl && typeof campaign.retweetUrl === 'string' && campaign.retweetUrl.trim()) {
+                actions.retweet = [campaign.retweetUrl];
+              }
+              if (campaign.commentUrl && typeof campaign.commentUrl === 'string' && campaign.commentUrl.trim()) {
+                actions.comment = [campaign.commentUrl];
+              }
+              
+              // Alternative field names with underscores
+              if (campaign.follow_url && typeof campaign.follow_url === 'string' && campaign.follow_url.trim()) {
+                actions.follow = actions.follow || [campaign.follow_url];
+              }
+              if (campaign.like_url && typeof campaign.like_url === 'string' && campaign.like_url.trim()) {
+                actions.like = actions.like || [campaign.like_url];
+              }
+              if (campaign.retweet_url && typeof campaign.retweet_url === 'string' && campaign.retweet_url.trim()) {
+                actions.retweet = actions.retweet || [campaign.retweet_url];
+              }
+              if (campaign.comment_url && typeof campaign.comment_url === 'string' && campaign.comment_url.trim()) {
+                actions.comment = actions.comment || [campaign.comment_url];
+              }
+              
+              // Check for any field containing 'twitter', 'x.com', or 'follow'
+              Object.keys(campaign).forEach(key => {
+                const value = campaign[key];
+                if (typeof value === 'string' && value.trim()) {
+                  const lowerKey = key.toLowerCase();
+                  const lowerValue = value.toLowerCase();
+                  
+                  // If it's a Twitter/X URL, try to categorize it
+                  if (lowerValue.includes('twitter.com') || lowerValue.includes('x.com')) {
+                    if (lowerKey.includes('follow') && !actions.follow) {
+                      actions.follow = [value.trim()];
+                    } else if (lowerKey.includes('like') && !actions.like) {
+                      actions.like = [value.trim()];
+                    } else if (lowerKey.includes('retweet') && !actions.retweet) {
+                      actions.retweet = [value.trim()];
+                    } else if (lowerKey.includes('comment') && !actions.comment) {
+                      actions.comment = [value.trim()];
+                    } else if (!actions.general) {
+                      // If we can't categorize it, put it in general
+                      actions.general = actions.general || [];
+                      actions.general.push(value.trim());
+                    }
+                  }
+                }
+              });
+              
+              // If still no actions, check for generic URL fields
+              if (campaign.tweet_url && typeof campaign.tweet_url === 'string') {
+                actions.general = [campaign.tweet_url];
+              } else if (campaign.url && typeof campaign.url === 'string') {
+                actions.general = [campaign.url];
+              } else if (campaign.reference_link && typeof campaign.reference_link === 'string') {
+                actions.general = [campaign.reference_link];
+              }
+            }
+            
+            // Debug logging to understand the data structure
+            console.log(`🔍 DEBUG - Campaign ${campaign.title}:`, {
+              fullCampaign: campaign,
+              hasActions: !!campaign.actions,
+              hasFollowUrl: !!campaign.followUrl,
+              hasLikeUrl: !!campaign.likeUrl,
+              hasRetweetUrl: !!campaign.retweetUrl,
+              hasCommentUrl: !!campaign.commentUrl,
+              hasLegacyFollowUrl: !!campaign.follow_url,
+              extractedActions: actions,
+              allKeys: Object.keys(campaign)
+            });
+            
+            console.log(`🎯 FINAL ACTIONS for ${campaign.title}:`, {
+              actions: actions,
+              hasFollow: !!(actions?.follow?.length),
+              hasLike: !!(actions?.like?.length),
+              hasRetweet: !!(actions?.retweet?.length),
+              hasComment: !!(actions?.comment?.length),
+              followUrls: actions?.follow,
+              likeUrls: actions?.like,
+              retweetUrls: actions?.retweet,
+              commentUrls: actions?.comment
+            });
+            
+            return {
+              id: campaign.id || campaign._id,
+              title: campaign.title || 'Campaign Task',
+              description: campaign.description || 'Complete this campaign to earn rewards',
+              owner: creatorName,
+              reward: rewardPerParticipant,
+              image: campaignImage,
+              participants_current: campaign.participants || campaign.participant_count || 0,
+              participants_total: maxParticipants,
+              link: campaign.tweet_url || campaign.url || campaign.reference_link || '',
+              status: campaign.status || 'active',
+              budget: budget,
+              actions: actions // Include the extracted actions/engagement URLs
+            };
+          });
+          console.log(`Loaded ${_tasks.length} campaigns as tasks from API`);
+          return;
+        } else if (data.status === 'success' && Array.isArray(data.data)) {
+          // Handle direct array response format (campaigns list)
+          _tasks = data.data.map(campaign => {
+            // Enhanced image handling with multiple field support
+            let campaignImage = '../images/bottom1.jpg'; // Default fallback
+            
+            // Check multiple possible image fields
+            const imageFields = [
+              campaign.image_url,
+              campaign.image_data, 
+              campaign.image,
+              campaign.imageUrl,
+              campaign.imageData,
+              campaign.campaign_image,
+              campaign.photo,
+              campaign.picture
+            ];
+            
+            for (const field of imageFields) {
+              if (field && field.trim()) {
+                campaignImage = validateImageUrl(field);
+                console.log(`🖼️ Found image for campaign ${campaign.title || campaign.id}:`, field.substring(0, 50) + '...');
+                console.log(`🖼️ Image type:`, field.startsWith('data:image/') ? 'Base64' : 'URL');
+                break;
+              }
+            }
+            
+            // Debug: Log all image-related fields
+            console.log(`🔍 IMAGE DEBUG for ${campaign.title}:`, {
+              image_url: campaign.image_url ? campaign.image_url.substring(0, 50) + '...' : null,
+              image_data: campaign.image_data ? campaign.image_data.substring(0, 50) + '...' : null,
+              assets: campaign.assets,
+              finalImage: campaignImage
+            });
+            
+            // Extract creator information properly
+            let creatorName = '@creator'; // Default fallback
+            if (campaign.creator) {
+              if (typeof campaign.creator === 'string') {
+                creatorName = campaign.creator.startsWith('@') ? campaign.creator : `@${campaign.creator}`;
+              } else if (typeof campaign.creator === 'object') {
+                // Handle creator object with various possible fields
+                const nameFields = [
+                  campaign.creator.username,
+                  campaign.creator.handle,
+                  campaign.creator.twitter_handle,
+                  campaign.creator.name,
+                  campaign.creator.display_name,
+                  campaign.creator.email
+                ];
+                
+                for (const field of nameFields) {
+                  if (field && typeof field === 'string' && field.trim()) {
+                    creatorName = field.startsWith('@') ? field : `@${field}`;
+                    break;
+                  }
+                }
+              }
+            }
+            
+            // Calculate reward per participant and max participants based on budget
+            const budget = campaign.budget || 100;
+            let rewardPerParticipant;
+            let maxParticipants;
+            
+            if (campaign.max_participants && campaign.max_participants > 0) {
+              // If max_participants is specified, use it to calculate reward
+              maxParticipants = campaign.max_participants;
+              rewardPerParticipant = Math.floor(budget / maxParticipants);
+            } else if (campaign.reward_per_participant && campaign.reward_per_participant > 0) {
+              // If reward per participant is specified, calculate max participants
+              rewardPerParticipant = campaign.reward_per_participant;
+              maxParticipants = Math.floor(budget / rewardPerParticipant);
+            } else {
+              // Default calculation: assume 50 diamonds per participant
+              rewardPerParticipant = 50;
+              maxParticipants = Math.floor(budget / rewardPerParticipant);
+            }
+            
+            // Ensure minimum values
+            rewardPerParticipant = Math.max(1, rewardPerParticipant);
+            maxParticipants = Math.max(1, maxParticipants);
+            
+            console.log(`Campaign ${campaign.title}: Budget=${budget}, Reward=${rewardPerParticipant}, MaxParticipants=${maxParticipants}`);
+            
+            // Extract engagement URLs/actions from campaign data
+            let actions = null;
+            
+            // Check for actions in various possible formats
+            console.log('🔍 CAMPAIGN ACTIONS DEBUG:', {
+              hasActions: !!(campaign.actions),
+              actionsType: typeof campaign.actions,
+              actionsContent: campaign.actions,
+              campaignKeys: Object.keys(campaign)
+            });
+            
+            if (campaign.actions && typeof campaign.actions === 'object') {
+              actions = campaign.actions;
+              console.log('✅ Found structured actions:', actions);
+            } else if (campaign.engagement_urls && typeof campaign.engagement_urls === 'object') {
+              actions = campaign.engagement_urls;
+            } else if (campaign.urls && typeof campaign.urls === 'object') {
+              actions = campaign.urls;
+            } else if (campaign.social_actions && typeof campaign.social_actions === 'object') {
+              actions = campaign.social_actions;
+            }
+            
+            // If no structured actions, try to extract from individual URL fields
+            if (!actions) {
+              actions = {};
+              
+              // Check for individual URL fields
+              if (campaign.follow_urls && Array.isArray(campaign.follow_urls)) {
+                actions.follow = campaign.follow_urls;
+              }
+              if (campaign.like_urls && Array.isArray(campaign.like_urls)) {
+                actions.like = campaign.like_urls;
+              }
+              if (campaign.retweet_urls && Array.isArray(campaign.retweet_urls)) {
+                actions.retweet = campaign.retweet_urls;
+              }
+              if (campaign.comment_urls && Array.isArray(campaign.comment_urls)) {
+                actions.comment = campaign.comment_urls;
+              }
+              
+              // Check for single URL fields and convert to arrays (comprehensive field name checking)
+              
+              // Primary field names (from campaign_upload)
+              if (campaign.followUrl && typeof campaign.followUrl === 'string' && campaign.followUrl.trim()) {
+                actions.follow = [campaign.followUrl];
+              }
+              if (campaign.likeUrl && typeof campaign.likeUrl === 'string' && campaign.likeUrl.trim()) {
+                actions.like = [campaign.likeUrl];
+              }
+              if (campaign.retweetUrl && typeof campaign.retweetUrl === 'string' && campaign.retweetUrl.trim()) {
+                actions.retweet = [campaign.retweetUrl];
+              }
+              if (campaign.commentUrl && typeof campaign.commentUrl === 'string' && campaign.commentUrl.trim()) {
+                actions.comment = [campaign.commentUrl];
+              }
+              
+              // Alternative field names with underscores
+              if (campaign.follow_url && typeof campaign.follow_url === 'string' && campaign.follow_url.trim()) {
+                actions.follow = actions.follow || [campaign.follow_url];
+              }
+              if (campaign.like_url && typeof campaign.like_url === 'string' && campaign.like_url.trim()) {
+                actions.like = actions.like || [campaign.like_url];
+              }
+              if (campaign.retweet_url && typeof campaign.retweet_url === 'string' && campaign.retweet_url.trim()) {
+                actions.retweet = actions.retweet || [campaign.retweet_url];
+              }
+              if (campaign.comment_url && typeof campaign.comment_url === 'string' && campaign.comment_url.trim()) {
+                actions.comment = actions.comment || [campaign.comment_url];
+              }
+              
+              // Check for any field containing 'twitter', 'x.com', or 'follow'
+              Object.keys(campaign).forEach(key => {
+                const value = campaign[key];
+                if (typeof value === 'string' && value.trim()) {
+                  const lowerKey = key.toLowerCase();
+                  const lowerValue = value.toLowerCase();
+                  
+                  // If it's a Twitter/X URL, try to categorize it
+                  if (lowerValue.includes('twitter.com') || lowerValue.includes('x.com')) {
+                    if (lowerKey.includes('follow') && !actions.follow) {
+                      actions.follow = [value.trim()];
+                    } else if (lowerKey.includes('like') && !actions.like) {
+                      actions.like = [value.trim()];
+                    } else if (lowerKey.includes('retweet') && !actions.retweet) {
+                      actions.retweet = [value.trim()];
+                    } else if (lowerKey.includes('comment') && !actions.comment) {
+                      actions.comment = [value.trim()];
+                    } else if (!actions.general) {
+                      // If we can't categorize it, put it in general
+                      actions.general = actions.general || [];
+                      actions.general.push(value.trim());
+                    }
+                  }
+                }
+              });
+              
+              // If still no actions, check for generic URL fields
+              if (campaign.tweet_url && typeof campaign.tweet_url === 'string') {
+                actions.general = [campaign.tweet_url];
+              } else if (campaign.url && typeof campaign.url === 'string') {
+                actions.general = [campaign.url];
+              } else if (campaign.reference_link && typeof campaign.reference_link === 'string') {
+                actions.general = [campaign.reference_link];
+              }
+            }
+            
+            // Debug logging to understand the data structure
+            console.log(`🔍 DEBUG - Campaign ${campaign.title}:`, {
+              fullCampaign: campaign,
+              hasActions: !!campaign.actions,
+              hasFollowUrl: !!campaign.followUrl,
+              hasLikeUrl: !!campaign.likeUrl,
+              hasRetweetUrl: !!campaign.retweetUrl,
+              hasCommentUrl: !!campaign.commentUrl,
+              hasLegacyFollowUrl: !!campaign.follow_url,
+              extractedActions: actions,
+              allKeys: Object.keys(campaign)
+            });
+            
+            console.log(`🎯 FINAL ACTIONS for ${campaign.title}:`, {
+              actions: actions,
+              hasFollow: !!(actions?.follow?.length),
+              hasLike: !!(actions?.like?.length),
+              hasRetweet: !!(actions?.retweet?.length),
+              hasComment: !!(actions?.comment?.length),
+              followUrls: actions?.follow,
+              likeUrls: actions?.like,
+              retweetUrls: actions?.retweet,
+              commentUrls: actions?.comment
+            });
+            
+            return {
+              id: campaign.id || campaign._id,
+              title: campaign.title || 'Campaign Task',
+              description: campaign.description || 'Complete this campaign to earn rewards',
+              owner: creatorName,
+              reward: rewardPerParticipant,
+              image: campaignImage,
+              participants_current: campaign.participants || campaign.participant_count || 0,
+              participants_total: maxParticipants,
+              link: campaign.tweet_url || campaign.url || campaign.reference_link || '',
+              status: campaign.status || 'active',
+              budget: budget,
+              actions: actions // Include the extracted actions/engagement URLs
+            };
+          });
+          console.log(`Loaded ${_tasks.length} campaigns as tasks from direct array`);
+        } else {
+          console.log('No campaigns available or invalid response format:', data);
+        }
+      } catch (error) {
+        console.error('Error loading tasks:', error);
+        if (error.name === 'AbortError') {
+          showBanner('Request timeout. Please check your connection.', 'warning');
+        } else {
+          showBanner('Failed to load tasks. Please try again.', 'error');
+        }
+        _tasks = [];
+      }
+    }
+
+    // Render task cards dynamically
+    function renderTaskCards(tasks) {
+      const container = document.getElementById('tasksContainer');
+      console.log('Rendering tasks:', tasks);
+      
+      // Only render if we have real tasks
+      if (!tasks || tasks.length === 0) {
+        container.innerHTML = `
+          <div class="col-12">
+            <div class="empty-state-container">
+              <!-- Main Icon and Title -->
+              <div class="empty-state-header">
+                <div class="empty-state-icon">
+                  <i class="fas fa-rocket"></i>
+                </div>
+                <h2 class="empty-state-title">No Campaigns Available Yet</h2>
+                <p class="empty-state-subtitle">Tasks will appear here when users create campaigns.<br>Be the first to create an engaging campaign!</p>
+              </div>
+              
+              <!-- Action Buttons -->
+              <div class="empty-state-actions">
+                <button class="btn btn-primary btn-lg" onclick="window.location.href='campaign_upload.html'">
+                  <i class="fas fa-plus me-2"></i>Create Your First Campaign
+                </button>
+                <button class="btn btn-outline-light btn-lg" onclick="loadTasksData()">
+                  <i class="fas fa-sync-alt me-2"></i>Refresh Tasks
+                </button>
+              </div>
+              
+              <!-- How It Works Section -->
+              <div class="how-it-works-section">
+                <div class="how-it-works-header">
+                  <i class="fas fa-lightbulb"></i>
+                  <h3>How it works</h3>
+                </div>
+                
+                <div class="how-it-works-steps">
+                  <div class="step-item">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                      <h4>Create Campaigns</h4>
+                      <p>Users create campaigns with diamond budgets</p>
+                    </div>
+                  </div>
+                  
+                  <div class="step-item">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                      <h4>Tasks Appear</h4>
+                      <p>Campaigns appear here as engageable tasks</p>
+                    </div>
+                  </div>
+                  
+                  <div class="step-item">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                      <h4>Earn Rewards</h4>
+                      <p>Complete tasks to earn diamond rewards</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>`;
+        return;
+      }
+      
+      container.innerHTML = tasks.map((t, idx) => {
+        const title = t.title || t.name || 'Sample Task';
+        const desc = t.description || 'Complete this task to earn rewards and help grow the community!';
+        const owner = t.owner || t.owner_handle || t.creator || '@partivox';
+        const reward = t.reward || t.reward_per_task || 50;
+        
+        // Enhanced image handling with validation
+        let img = '../images/bottom1.jpg'; // Default fallback
+        
+        // Debug: Log available image sources
+        console.log(`🖼️ CARD IMAGE DEBUG for ${title}:`, {
+          assets: t.assets,
+          image_data: t.image_data ? t.image_data.substring(0, 50) + '...' : null,
+          image_url: t.image_url ? t.image_url.substring(0, 50) + '...' : null,
+          image: t.image
+        });
+        
+        // Check multiple possible image sources in priority order
+        if (t.assets && t.assets[0]) {
+          if (t.assets[0].data && t.assets[0].data.trim()) {
+            img = validateImageUrl(t.assets[0].data);
+            console.log(`🖼️ Using asset data for ${title}:`, t.assets[0].data.substring(0, 50) + '...');
+          } else if (t.assets[0].url && t.assets[0].url.trim()) {
+            img = validateImageUrl(t.assets[0].url);
+            console.log(`🖼️ Using asset URL for ${title}:`, t.assets[0].url);
+          }
+        } else if (t.image_data && t.image_data.trim()) {
+          img = validateImageUrl(t.image_data);
+          console.log(`🖼️ Using image_data for ${title}:`, t.image_data.substring(0, 50) + '...');
+        } else if (t.image_url && t.image_url.trim()) {
+          img = validateImageUrl(t.image_url);
+          console.log(`🖼️ Using image_url for ${title}:`, t.image_url);
+        } else if (t.image && t.image.trim() && t.image !== '../images/bottom1.jpg') {
+          img = validateImageUrl(t.image);
+          console.log(`🖼️ Using image for ${title}:`, t.image);
+        }
+        
+        console.log(`🖼️ Final image for ${title}:`, img.substring(0, 50) + '...');
+        
+        // Cache buster to prevent multiple requests for same default image
+        const imageId = `task-image-${idx}`;
+        const cachedImg = img === '../images/bottom1.jpg' ? `${img}?v=1` : img;
+        const current = t.participants_current || t.enrolled_count || 0;
+        const total = t.participants_total || t.max_participants || 100;
+        const pct = total > 0 ? Math.min(100, Math.round((current / total) * 100)) : 0;
+        const budget = t.budget || 5000;
+        
+        // Generate action buttons for engagement URLs
+        let actionButtons = '';
+        if (t.actions && typeof t.actions === 'object') {
+          const actions = [];
+          
+          // Follow URLs
+          if (t.actions.follow && Array.isArray(t.actions.follow)) {
+            t.actions.follow.forEach((url, i) => {
+              if (url && url.trim()) {
+                actions.push({
+                  type: 'follow',
+                  url: url.trim(),
+                  icon: 'fas fa-user-plus',
+                  text: 'Follow',
+                  class: 'btn-primary',
+                  index: i
+                });
+              }
+            });
+          }
+          
+          // Like URLs
+          if (t.actions.like && Array.isArray(t.actions.like)) {
+            t.actions.like.forEach((url, i) => {
+              if (url && url.trim()) {
+                actions.push({
+                  type: 'like',
+                  url: url.trim(),
+                  icon: 'fas fa-heart',
+                  text: 'Like',
+                  class: 'btn-danger',
+                  index: i
+                });
+              }
+            });
+          }
+          
+          // Retweet URLs
+          if (t.actions.retweet && Array.isArray(t.actions.retweet)) {
+            t.actions.retweet.forEach((url, i) => {
+              if (url && url.trim()) {
+                actions.push({
+                  type: 'retweet',
+                  url: url.trim(),
+                  icon: 'fas fa-retweet',
+                  text: 'Retweet',
+                  class: 'btn-success',
+                  index: i
+                });
+              }
+            });
+          }
+          
+          // Comment URLs
+          if (t.actions.comment && Array.isArray(t.actions.comment)) {
+            t.actions.comment.forEach((url, i) => {
+              if (url && url.trim()) {
+                actions.push({
+                  type: 'comment',
+                  url: url.trim(),
+                  icon: 'fas fa-comment',
+                  text: 'Comment',
+                  class: 'btn-info',
+                  index: i
+                });
+              }
+            });
+          }
+          
+          // General URLs
+          if (t.actions.general && Array.isArray(t.actions.general)) {
+            t.actions.general.forEach((url, i) => {
+              if (url && url.trim()) {
+                actions.push({
+                  type: 'general',
+                  url: url.trim(),
+                  icon: 'fas fa-external-link-alt',
+                  text: 'Open',
+                  class: 'btn-outline-success',
+                  index: i
+                });
+              }
+            });
+          }
+          
+          // Generate action buttons HTML
+          if (actions.length > 0) {
+            actionButtons = `
+              <div class="mb-3">
+                <h6 class="mb-2" style="font-size: 0.875rem; color: var(--text-secondary);">
+                  <i class="fas fa-link me-1"></i>Quick Actions:
+                </h6>
+                <div class="d-flex flex-wrap gap-1">
+                  ${actions.slice(0, 4).map(action => `
+                    <button class="btn ${action.class} btn-sm" 
+                            onclick="openAndTrackUrl('${action.url}', '${action.type}', ${action.index})"
+                            title="${action.text} on ${isTwitterOrXUrl(action.url) ? 'X/Twitter' : 'external site'}">
+                      <i class="${action.icon} me-1"></i>${action.text}
+                    </button>
+                  `).join('')}
+                  ${actions.length > 4 ? `
+                    <button class="btn btn-outline-secondary btn-sm" onclick="openTaskModal(${idx})" title="View all actions">
+                      +${actions.length - 4} more
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            `;
+          }
+        }
+        
+        console.log('Card data:', { title, desc, owner, reward, current, total, pct, budget, hasActions: !!actionButtons });
+        
+        return `
+        <div class="task-card-wrapper" style="flex: 0 0 calc(33.333% - 1rem); max-width: calc(33.333% - 1rem);">
+          <div class="content-card task-card h-100 d-flex flex-column">
+            <!-- Header with creator and status -->
+            <div class="d-flex justify-content-between align-items-start mb-3">
+              <div class="d-flex align-items-center gap-2">
+                <div class="creator-avatar" data-creator="${owner}" style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--primary-color); background: linear-gradient(135deg, var(--accent-color), #9dcf00); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem; color: #000; overflow: hidden;">
+                  <img src="../images/avarter2.png" alt="Creator Avatar" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;" onerror="this.style.display='none'; this.parentElement.innerHTML='${owner.charAt(1) || 'U'}'">
+                </div>
+                <div>
+                  <span class="fw-semibold d-block text-white">${owner}</span>
+                  <small class="text-muted">${budget > 0 ? budget + ' 💎 Budget' : 'Campaign Task'}</small>
+                </div>
+              </div>
+              <span class="badge bg-success px-2 py-1">
+                <i class="fas fa-clock me-1"></i>Active
+              </span>
+            </div>
+            
+            <!-- Campaign Image -->
+            <div class="mb-3">
+              <img id="${imageId}" src="${cachedImg}" alt="Campaign" class="img-fluid rounded mb-2 campaign-image" 
+                   style="height: 140px; width: 100%; object-fit: cover;" 
+                   onerror="handleImageError(this)"
+                   onload="handleImageLoad(this)">
+              <h6 class="mb-1 fw-semibold text-white">${title}</h6>
+              <p class="mb-0 text-muted" style="font-size: 0.875rem; line-height: 1.4;">${desc.length > 80 ? desc.substring(0, 80) + '...' : desc}</p>
+            </div>
+            
+            <!-- Quick Action Buttons -->
+            ${actionButtons}
+            
+            <!-- URL Preview Section -->
+            ${t.actions && Object.keys(t.actions).length > 0 ? `
+              <div class="mb-2">
+                <small class="text-muted d-flex align-items-center">
+                  <i class="fas fa-link me-1"></i>
+                  ${Object.values(t.actions).flat().length} engagement URL${Object.values(t.actions).flat().length !== 1 ? 's' : ''} available
+                </small>
+              </div>
+            ` : ''}
+            
+            <!-- Participants Progress -->
+            <div class="mb-3">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                <small class="text-muted">Participants</small>
+                <small class="fw-semibold">${current}/${total || '—'}</small>
+              </div>
+              <div class="progress" style="height: 6px;">
+                <div class="progress-bar bg-success" style="width: ${pct}%"></div>
+              </div>
+            </div>
+            
+            <!-- Reward and Action -->
+            <div class="mt-auto d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center gap-1">
+                <img src="../images/IconDiamond.png" alt="Diamond" style="width: 16px; height: 16px;">
+                <span class="fw-semibold">${reward}</span>
+              </div>
+              <button class="btn btn-outline-primary btn-sm" onclick="openTaskModal(${idx})">
+                Start Task
+              </button>
+            </div>
+          </div>
+        </div>`;
+      }).join('');
+      
+      // Load creator avatars after rendering cards
+      setTimeout(() => {
+        const creatorAvatars = document.querySelectorAll('.creator-avatar[data-creator]');
+        creatorAvatars.forEach(avatar => {
+          const creatorHandle = avatar.getAttribute('data-creator');
+          if (creatorHandle) {
+            loadCreatorAvatar(creatorHandle, avatar);
+          }
+        });
+      }, 100);
+      
+      console.log(`✅ Rendered ${tasks.length} task cards in side-by-side layout`);
+      
+      // Optimize image loading to prevent multiple requests
+      optimizeImageLoading();
+    }
+
+    // Optimized image loading with proper cleanup and caching
+    function optimizeImageLoading() {
+      const images = document.querySelectorAll('#tasksContainer img');
+      const imageCache = new Map();
+      let handlerCounter = 0;
+      
+      images.forEach(img => {
+        if (!img.src) return;
+        
+        // Add unique handler ID for cleanup
+        const handlerId = `img_${++handlerCounter}`;
+        img.dataset.handlerId = handlerId;
+        
+        // Check cache first
+        const cacheKey = img.src;
+        if (imageCache.has(cacheKey)) {
+          const cachedResult = imageCache.get(cacheKey);
+          if (cachedResult.loaded) {
+            handleImageLoad(img);
+          } else {
+            handleImageError(img);
+          }
+          return;
+        }
+        
+        // Set loading attributes
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        
+        // Create handlers with cleanup
+        const loadHandler = function() {
+          imageCache.set(cacheKey, { loaded: true });
+          handleImageLoad(img);
+          cleanup();
+        };
+        
+        const errorHandler = function() {
+          imageCache.set(cacheKey, { loaded: false });
+          handleImageError(img);
+          cleanup();
+        };
+        
+        const cleanup = function() {
+          img.removeEventListener('load', loadHandler);
+          img.removeEventListener('error', errorHandler);
+          imageLoadHandlers.delete(handlerId);
+        };
+        
+        // Store handlers for cleanup
+        imageLoadHandlers.set(handlerId, { loadHandler, errorHandler, cleanup });
+        
+        // Add event listeners
+        img.addEventListener('load', loadHandler, { once: true });
+        img.addEventListener('error', errorHandler, { once: true });
+        
+        // If image is already loaded
+        if (img.complete && img.naturalWidth > 0) {
+          loadHandler();
+        }
+      });
+      
+      console.log(`🖼️ Optimized ${images.length} task images with caching`);
+    }
+
+    // Update task progress
+    function updateTaskProgress(progress) {
+      const progressBars = document.querySelectorAll('.progress-bar');
+      
+      progress.forEach((item, index) => {
+        if (index < progressBars.length) {
+          const progressBar = progressBars[index];
+          const percentage = (item.completed / item.total) * 100;
+          progressBar.style.width = `${percentage}%`;
+        }
+      });
+    }
+
+    // Open task modal with enhanced details
+    function openTaskModal(taskIndex) {
+      const modal = document.getElementById('taskModal');
+      if (!modal) {
+        showBanner('Modal not found. Please refresh the page.', 'error');
+        return;
+      }
+      
+      const t = _tasks[taskIndex];
+      if (!t) {
+        showBanner('Task not found.', 'error');
+        return;
+      }
+      
+      // Show modal with proper display
+      modal.style.display = 'flex';
+      modal.style.alignItems = 'center';
+      modal.style.justifyContent = 'center';
+      
+      // Add show class for CSS transitions
+      modal.classList.add('show');
+      
+      _selectedTaskId = t.id || t._id || t.task_id || null;
+      
+      // Update task details with enhanced image handling
+      let img = '../images/bottom1.jpg';
+      
+      // Check multiple possible image sources in priority order
+      if (t.assets && t.assets[0]) {
+        if (t.assets[0].data && t.assets[0].data.trim()) {
+          img = validateImageUrl(t.assets[0].data);
+        } else if (t.assets[0].url && t.assets[0].url.trim()) {
+          img = validateImageUrl(t.assets[0].url);
+        }
+      } else if (t.image_data && t.image_data.trim()) {
+        img = validateImageUrl(t.image_data);
+      } else if (t.image_url && t.image_url.trim()) {
+        img = validateImageUrl(t.image_url);
+      } else if (t.image && t.image.trim() && t.image !== '../images/bottom1.jpg') {
+        img = validateImageUrl(t.image);
+      }
+      
+      const taskImage = document.getElementById('taskImage');
+      if (taskImage) {
+        taskImage.src = img;
+        taskImage.classList.add('campaign-image');
+        taskImage.onerror = function() {
+          handleImageError(this);
+        };
+        taskImage.onload = function() {
+          handleImageLoad(this);
+        };
+        console.log('Modal image set to:', img);
+      }
+      document.getElementById('taskDescription').textContent = t.description || t.title || '';
+      document.getElementById('taskCreator').textContent = t.owner || t.creator || '@creator';
+      
+      // Update creator avatar in modal
+      const modalCreatorImg = document.querySelector('#taskModal .d-flex.align-items-center.gap-2 img');
+      if (modalCreatorImg) {
+        modalCreatorImg.src = '../images/avarter2.png';
+        modalCreatorImg.onerror = function() {
+          handleImageError(this);
+        };
+        modalCreatorImg.onload = function() {
+          handleImageLoad(this);
+        };
+      }
+      
+      // Update participants and reward
+      const current = t.participants_current || t.enrolled_count || 0;
+      const total = t.participants_total || t.max_participants || 0;
+      document.getElementById('taskParticipants').textContent = `${current}/${total || '—'}`;
+      document.getElementById('taskReward').textContent = t.reward || t.reward_per_task || 0;
+      
+      // Update engagement URLs
+      populateEngagementUrls(t);
+      
+      // Update status and type badges
+      document.getElementById('taskStatus').textContent = (t.status || 'active').charAt(0).toUpperCase() + (t.status || 'active').slice(1);
+      document.getElementById('taskType').textContent = 'Campaign';
+      
+      // Clear previous inputs
+      document.getElementById('usernameInput').value = '';
+      document.getElementById('proofInput').value = '';
+    }
+
+    // Populate engagement URLs in the modal
+    function populateEngagementUrls(task) {
+      console.log('📋 Populating engagement URLs for task:', task.title);
+      console.log('📋 Task actions data:', task.actions);
+      
+      // Hide all URL groups initially
+      document.getElementById('followUrlsGroup').style.display = 'none';
+      document.getElementById('likeUrlsGroup').style.display = 'none';
+      document.getElementById('retweetUrlsGroup').style.display = 'none';
+      document.getElementById('commentUrlsGroup').style.display = 'none';
+      document.getElementById('generalLinkGroup').style.display = 'none';
+      
+      let hasAnyUrls = false;
+      
+      // Handle actions from campaign data
+      if (task.actions && typeof task.actions === 'object') {
+        // Follow URLs
+        if (task.actions.follow && Array.isArray(task.actions.follow) && task.actions.follow.length > 0) {
+          populateUrlGroup('followUrls', task.actions.follow, 'follow');
+          document.getElementById('followUrlsGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+        
+        // Like URLs
+        if (task.actions.like && Array.isArray(task.actions.like) && task.actions.like.length > 0) {
+          populateUrlGroup('likeUrls', task.actions.like, 'like');
+          document.getElementById('likeUrlsGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+        
+        // Retweet URLs
+        if (task.actions.retweet && Array.isArray(task.actions.retweet) && task.actions.retweet.length > 0) {
+          populateUrlGroup('retweetUrls', task.actions.retweet, 'retweet');
+          document.getElementById('retweetUrlsGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+        
+        // Comment URLs
+        if (task.actions.comment && Array.isArray(task.actions.comment) && task.actions.comment.length > 0) {
+          populateUrlGroup('commentUrls', task.actions.comment, 'comment');
+          document.getElementById('commentUrlsGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+        
+        // General URLs (fallback from campaign data)
+        if (task.actions.general && Array.isArray(task.actions.general) && task.actions.general.length > 0) {
+          populateUrlGroup('generalLink', task.actions.general, 'general');
+          document.getElementById('generalLinkGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+      }
+      
+      // Final fallback to task link if no actions found
+      if (!hasAnyUrls) {
+        const generalLink = task.link || task.url || task.reference_link || '';
+        if (generalLink) {
+          populateUrlGroup('generalLink', [generalLink], 'general');
+          document.getElementById('generalLinkGroup').style.display = 'block';
+          hasAnyUrls = true;
+        }
+      }
+      
+      // Show message if no URLs available
+      if (!hasAnyUrls) {
+        document.getElementById('generalLink').innerHTML = `
+          <div class="alert alert-warning d-flex align-items-center gap-2" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.2);">
+            <i class="fas fa-exclamation-triangle text-warning"></i>
+            <span>No specific engagement links provided. Contact the campaign creator for instructions.</span>
+          </div>
+        `;
+        document.getElementById('generalLinkGroup').style.display = 'block';
+      }
+      
+      console.log('📋 URLs populated. Has URLs:', hasAnyUrls);
+    }
+    
+    // Helper function to populate URL groups
+    function populateUrlGroup(containerId, urls, actionType) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      
+      const urlsHtml = urls.map((url, index) => {
+        if (!url || !url.trim()) return '';
+        
+        const cleanUrl = url.trim();
+        const urlId = `${actionType}_${index}`;
+        const isTwitterUrl = isTwitterOrXUrl(cleanUrl);
+        
+        // Get action-specific button text and icon
+        const actionInfo = getActionInfo(actionType, isTwitterUrl);
+        
+        return `
+          <div class="url-item mb-2 p-2 rounded" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);">
+            <div class="d-flex align-items-center gap-2 mb-2">
+              <div class="flex-grow-1">
+                <input type="text" class="form-control form-control-sm" value="${cleanUrl}" readonly 
+                       style="background: transparent; border: none; color: var(--text-primary); font-size: 0.85rem;">
+              </div>
+              <button class="btn btn-outline-primary btn-sm" onclick="copyUrl('${cleanUrl}')" title="Copy URL">
+                <i class="fas fa-copy"></i>
+              </button>
+            </div>
+            
+            <!-- Action-specific buttons for Twitter/X URLs -->
+            ${isTwitterUrl ? `
+              <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-sm ${actionInfo.buttonClass}" onclick="openAndTrackUrl('${cleanUrl}', '${actionType}', ${index})" title="${actionInfo.title}">
+                  <i class="${actionInfo.icon} me-1"></i>${actionInfo.text}
+                </button>
+                <button class="btn btn-outline-secondary btn-sm" onclick="openAndTrackUrl('${cleanUrl}', '${actionType}', ${index})" title="Open in X">
+                  <i class="fab fa-x-twitter me-1"></i>Open in X
+                </button>
+              </div>
+            ` : `
+              <div class="d-flex gap-2 mb-2">
+                <button class="btn btn-outline-success btn-sm" onclick="openAndTrackUrl('${cleanUrl}', '${actionType}', ${index})" title="Open Link">
+                  <i class="fas fa-external-link-alt me-1"></i>Open Link
+                </button>
+              </div>
+            `}
+            
+            <div class="engagement-status mt-1" id="status_${urlId}" style="font-size: 0.75rem; color: var(--text-muted);">
+              <i class="fas fa-clock me-1"></i>Click to ${actionInfo.actionText} and track completion
+            </div>
+          </div>
+        `;
+      }).filter(html => html).join('');
+      
+      container.innerHTML = urlsHtml;
+    }
+
+    // Check if URL is Twitter/X URL
+    function isTwitterOrXUrl(url) {
+      const twitterDomains = ['twitter.com', 'x.com', 'mobile.twitter.com', 'm.twitter.com'];
+      try {
+        const urlObj = new URL(url);
+        return twitterDomains.some(domain => urlObj.hostname.includes(domain));
+      } catch (e) {
+        return false;
+      }
+    }
+
+    // Get action-specific information for buttons
+    function getActionInfo(actionType, isTwitterUrl) {
+      const actionMap = {
+        follow: {
+          icon: 'fas fa-user-plus',
+          text: isTwitterUrl ? 'Follow on X' : 'Follow',
+          buttonClass: 'btn-primary',
+          title: isTwitterUrl ? 'Follow this account on X' : 'Follow this account',
+          actionText: 'follow'
+        },
+        like: {
+          icon: 'fas fa-heart',
+          text: isTwitterUrl ? 'Like on X' : 'Like',
+          buttonClass: 'btn-danger',
+          title: isTwitterUrl ? 'Like this post on X' : 'Like this post',
+          actionText: 'like'
+        },
+        retweet: {
+          icon: 'fas fa-retweet',
+          text: isTwitterUrl ? 'Retweet on X' : 'Share',
+          buttonClass: 'btn-success',
+          title: isTwitterUrl ? 'Retweet this post on X' : 'Share this post',
+          actionText: 'retweet'
+        },
+        comment: {
+          icon: 'fas fa-comment',
+          text: isTwitterUrl ? 'Reply on X' : 'Comment',
+          buttonClass: 'btn-info',
+          title: isTwitterUrl ? 'Reply to this post on X' : 'Comment on this post',
+          actionText: 'comment'
+        },
+        general: {
+          icon: 'fas fa-external-link-alt',
+          text: 'Open Link',
+          buttonClass: 'btn-outline-success',
+          title: 'Open this link',
+          actionText: 'engage'
+        }
+      };
+      
+      return actionMap[actionType] || actionMap.general;
+    }
+
+    // Close task modal
+    function closeTaskModal() {
+      const modal = document.getElementById('taskModal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+      }
+      const usernameInput = document.getElementById('usernameInput');
+      if (usernameInput) usernameInput.value = '';
+    }
+
+    // Removed static demo task data; now dynamic
+
+    // Copy task link
+    function copyTaskLink() {
+      const taskLink = document.getElementById('taskLinkInput').value;
+      if (!taskLink) {
+        showBanner('No link available to copy', 'warning');
+        return;
+      }
+      
+      navigator.clipboard.writeText(taskLink).then(() => {
+        const copyBtn = document.getElementById('copyLinkBtn');
+        const originalHTML = copyBtn.innerHTML;
+        copyBtn.innerHTML = '<i class="fas fa-check"></i>';
+        copyBtn.classList.add('btn-success');
+        copyBtn.classList.remove('btn-outline-primary');
+        
+        showBanner('Link copied to clipboard!', 'success');
+        
+        setTimeout(() => {
+          copyBtn.innerHTML = originalHTML;
+          copyBtn.classList.remove('btn-success');
+          copyBtn.classList.add('btn-outline-primary');
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy link:', err);
+        showBanner('Failed to copy link. Please copy manually.', 'error');
+      });
+    }
+    
+    // Open task link in new tab
+    function openTaskLink() {
+      const taskLink = document.getElementById('taskLinkInput').value;
+      if (!taskLink) {
+        showBanner('No link available to open', 'warning');
+        return;
+      }
+      window.open(taskLink, '_blank');
+    }
+
+    // Copy URL function
+    function copyUrl(url) {
+      if (!url) {
+        showBanner('No URL to copy', 'warning');
+        return;
+      }
+      
+      navigator.clipboard.writeText(url).then(() => {
+        showBanner('URL copied to clipboard!', 'success');
+      }).catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = url;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          showBanner('URL copied to clipboard!', 'success');
+        } catch (err) {
+          showBanner('Failed to copy URL', 'error');
+        }
+        document.body.removeChild(textArea);
+      });
+    }
+
+    // Open step URLs for engagement steps in modal
+    function openStepUrls(actionType) {
+      console.log(`🔍 DEBUG - openStepUrls called with actionType: ${actionType}`);
+      console.log(`🔍 DEBUG - _selectedTaskId:`, _selectedTaskId);
+      console.log(`🔍 DEBUG - _tasks:`, _tasks);
+      
+      if (!_selectedTaskId || !_tasks) {
+        console.log(`❌ DEBUG - No task selected or no tasks available`);
+        showBanner('No task selected', 'error');
+        return;
+      }
+      
+      const currentTask = _tasks.find(t => t.id === _selectedTaskId);
+      console.log(`🔍 DEBUG - currentTask found:`, currentTask);
+      console.log(`🔍 DEBUG - currentTask.actions:`, currentTask?.actions);
+      
+      // EXTRA DEBUG: Let's see the full task structure
+      console.log(`🔍 FULL TASK DEBUG:`, {
+        taskKeys: Object.keys(currentTask || {}),
+        hasFollowUrl: !!(currentTask?.followUrl),
+        hasLikeUrl: !!(currentTask?.likeUrl), 
+        hasRetweetUrl: !!(currentTask?.retweetUrl),
+        hasCommentUrl: !!(currentTask?.commentUrl),
+        hasFollowUrls: !!(currentTask?.follow_urls),
+        hasLikeUrls: !!(currentTask?.like_urls),
+        hasRetweetUrls: !!(currentTask?.retweet_urls),
+        hasCommentUrls: !!(currentTask?.comment_urls),
+        fullTask: currentTask
+      });
+      
+      
+      if (!currentTask || !currentTask.actions) {
+        console.log(`❌ DEBUG - No current task or no actions in task`);
+        showBanner('No engagement URLs available for this task', 'warning');
+        return;
+      }
+      
+      const urls = currentTask.actions[actionType];
+      console.log(`🔍 DEBUG - URLs for ${actionType}:`, urls);
+      console.log(`🔍 DEBUG - All available actions:`, Object.keys(currentTask.actions));
+      
+      if (!urls || !Array.isArray(urls) || urls.length === 0) {
+        console.log(`❌ DEBUG - No ${actionType} URLs found or empty array`);
+        showBanner(`No ${actionType} URLs available for this task`, 'warning');
+        return;
+      }
+      
+      // Open all URLs for this action type
+      urls.forEach((url, index) => {
+        if (url && url.trim()) {
+          setTimeout(() => {
+            openAndTrackUrl(url.trim(), actionType, index);
+          }, index * 500); // Stagger opening by 500ms to avoid popup blocking
+        }
+      });
+      
+      // Update step visual feedback
+      const stepElement = document.getElementById(`${actionType}Step`);
+      if (stepElement) {
+        stepElement.classList.add('completed');
+        
+        // Add checkmark
+        const icon = stepElement.querySelector('.fas:last-child');
+        if (icon) {
+          icon.className = 'fas fa-check-circle text-success';
+        }
+        
+        // Update text to show completion
+        const smallText = stepElement.querySelector('small');
+        if (smallText) {
+          smallText.textContent = `✅ ${actionType.charAt(0).toUpperCase() + actionType.slice(1)} URLs opened! Complete the actions on Twitter.`;
+        }
+      }
+      
+      // Show success message
+      const actionText = actionType.charAt(0).toUpperCase() + actionType.slice(1);
+      showBanner(`${actionText} URLs opened! Complete the ${actionType} actions on Twitter and return.`, 'success');
+    }
+
+    // Open and track URL engagement
+    function openAndTrackUrl(url, actionType, index) {
+      if (!url) {
+        showBanner('Invalid URL', 'error');
+        return;
+      }
+      
+      console.log(`🔗 Opening ${actionType} URL:`, url);
+      
+      // Initialize tracking for this task if not already done
+      if (!engagementTracker.taskId || engagementTracker.taskId !== _selectedTaskId) {
+        engagementTracker = {
+          taskId: _selectedTaskId,
+          completedActions: {},
+          startTime: new Date().toISOString(),
+          urls: {}
+        };
+      }
+      
+      // Track this URL engagement
+      const urlId = `${actionType}_${index}`;
+      engagementTracker.completedActions[urlId] = {
+        url: url,
+        actionType: actionType,
+        timestamp: new Date().toISOString(),
+        status: 'opened'
+      };
+      
+      // Update UI to show engagement started
+      const statusElement = document.getElementById(`status_${urlId}`);
+      const isTwitterUrl = isTwitterOrXUrl(url);
+      
+      if (statusElement) {
+        if (isTwitterUrl) {
+          const actionEmoji = {
+            follow: '👤',
+            like: '❤️',
+            retweet: '🔄',
+            comment: '💬'
+          };
+          
+          statusElement.innerHTML = `
+            <i class="fab fa-x-twitter text-info me-1"></i>
+            <span class="text-info">Opened on X - ${actionEmoji[actionType] || '🔗'} Complete the ${actionType} and return</span>
+          `;
+        } else {
+          statusElement.innerHTML = `
+            <i class="fas fa-external-link-alt text-info me-1"></i>
+            <span class="text-info">Opened - Complete the action and return</span>
+          `;
+        }
+      }
+      
+      // Open URL in new tab
+      const newWindow = window.open(url, '_blank');
+      
+      if (newWindow) {
+        const isTwitterUrl = isTwitterOrXUrl(url);
+        const actionText = actionType.charAt(0).toUpperCase() + actionType.slice(1);
+        
+        if (isTwitterUrl) {
+          showBanner(`${actionText} on X opened! Complete the ${actionType} action and return to claim your reward.`, 'info');
+        } else {
+          showBanner(`${actionText} link opened! Complete the action and return.`, 'info');
+        }
+        
+        // Set up focus detection to mark as potentially completed
+        const checkFocus = () => {
+          if (!document.hidden && engagementTracker.completedActions[urlId]) {
+            engagementTracker.completedActions[urlId].status = 'completed';
+            engagementTracker.completedActions[urlId].completedAt = new Date().toISOString();
+            
+            if (statusElement) {
+              statusElement.innerHTML = `
+                <i class="fas fa-check-circle text-success me-1"></i>
+                <span class="text-success">Action completed! ✓</span>
+              `;
+            }
+            
+            // Remove event listener
+            document.removeEventListener('visibilitychange', checkFocus);
+            
+            // Update completion progress
+            updateEngagementProgress();
+          }
+        };
+        
+        // Listen for when user returns to the page
+        setTimeout(() => {
+          document.addEventListener('visibilitychange', checkFocus);
+        }, 2000); // Wait 2 seconds before starting to listen
+        
+      } else {
+        showBanner('Failed to open link. Please check your popup blocker.', 'error');
+      }
+      
+      // Save tracking data to localStorage
+      localStorage.setItem('engagementTracker', JSON.stringify(engagementTracker));
+    }
+
+    // Update engagement progress display
+    function updateEngagementProgress() {
+      const completedCount = Object.values(engagementTracker.completedActions)
+        .filter(action => action.status === 'completed').length;
+      const totalCount = Object.keys(engagementTracker.completedActions).length;
+      
+      console.log(`📊 Engagement Progress: ${completedCount}/${totalCount} actions completed`);
+      
+      // Show progress in the modal if there are tracked actions
+      if (totalCount > 0) {
+        const progressHtml = `
+          <div class="engagement-progress alert alert-info mt-3" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.2);">
+            <div class="d-flex align-items-center gap-2">
+              <i class="fas fa-chart-line text-info"></i>
+              <div>
+                <strong>Engagement Progress:</strong> ${completedCount}/${totalCount} actions completed
+                <div class="progress mt-2" style="height: 6px;">
+                  <div class="progress-bar bg-info" style="width: ${(completedCount/totalCount)*100}%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        // Add or update progress display
+        let progressContainer = document.getElementById('engagementProgress');
+        if (!progressContainer) {
+          progressContainer = document.createElement('div');
+          progressContainer.id = 'engagementProgress';
+          const container = document.getElementById('engagementUrlsContainer');
+          if (container) {
+            container.appendChild(progressContainer);
+          }
+        }
+        progressContainer.innerHTML = progressHtml;
+      }
+    }
+
+    // View task details (quick info modal)
+    function viewTaskDetails(taskIndex) {
+      if (!_tasks || taskIndex >= _tasks.length) {
+        showBanner('Task not found', 'error');
+        return;
+      }
+      
+      const task = _tasks[taskIndex];
+      const detailsHtml = `
+        <div class="task-details-popup p-3 rounded" style="background: var(--card-bg); border: 1px solid var(--border-color); position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 2000; max-width: 400px; width: 90%;">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6 class="mb-0">Task Details</h6>
+            <button class="btn-close btn-close-white" onclick="this.parentElement.parentElement.remove()"></button>
+          </div>
+          <div class="mb-2"><strong>Creator:</strong> ${task.owner || '@creator'}</div>
+          <div class="mb-2"><strong>Reward:</strong> ${task.reward || 0} 💎</div>
+          <div class="mb-2"><strong>Participants:</strong> ${task.participants_current || 0}/${task.participants_total || '∞'}</div>
+          <div class="mb-2"><strong>Progress:</strong> ${Math.round((task.participants_current || 0) / Math.max(1, task.participants_total || 1) * 100)}%</div>
+          <div class="mb-3"><strong>Description:</strong> ${task.description || 'No description available'}</div>
+          <button class="btn btn-primary btn-sm w-100" onclick="openTaskModal(${taskIndex}); this.parentElement.remove();">
+            <i class="fas fa-play me-1"></i>Start Engagement
+          </button>
+        </div>
+      `;
+      
+      const popup = document.createElement('div');
+      popup.innerHTML = detailsHtml;
+      document.body.appendChild(popup);
+      
+      // Auto remove after 10 seconds
+      setTimeout(() => {
+        if (popup.parentElement) popup.remove();
+      }, 10000);
+    }
+
+    // Preview task (open link if available)
+    function previewTask(taskIndex) {
+      if (!_tasks || taskIndex >= _tasks.length) {
+        showBanner('Task not found', 'error');
+        return;
+      }
+      
+      const task = _tasks[taskIndex];
+      if (task.link && task.link.trim()) {
+        window.open(task.link, '_blank');
+        showBanner('Task link opened in new tab', 'info');
+      } else {
+        showBanner('No preview link available for this task', 'warning');
+      }
+    }
+
+    // Claim reward with enhanced validation
+    async function claimReward() {
+      const username = document.getElementById('usernameInput').value.trim();
+      const proof = document.getElementById('proofInput').value.trim();
+      const claimBtn = document.querySelector('#taskModal .btn-primary');
+      
+      if (!username) {
+        showBanner('Please enter your social media username', 'warning');
+        return;
+      }
+
+      try {
+        // Disable button and show loading
+        claimBtn.disabled = true;
+        claimBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Submitting...';
+        
+        const token = await getValidToken();
+        if (!token) {
+          showBanner('Please login to claim rewards', 'warning');
+          return;
+        }
+
+        if (!_selectedTaskId) {
+          showBanner('No task selected. Please try again.', 'warning');
+          return;
+        }
+
+        // Include engagement tracking data
+        const engagementData = engagementTracker.taskId === _selectedTaskId ? {
+          completedActions: engagementTracker.completedActions,
+          startTime: engagementTracker.startTime,
+          totalActions: Object.keys(engagementTracker.completedActions).length,
+          completedCount: Object.values(engagementTracker.completedActions)
+            .filter(action => action.status === 'completed').length
+        } : null;
+
+        const requestData = {
+          task_id: _selectedTaskId, // This will be a campaign ID for campaign-based tasks
+          username: username,
+          proof: proof || null,
+          engagement_tracking: engagementData,
+          submission_time: new Date().toISOString()
+        };
+
+        const response = await fetchWithTimeout(`${API_BASE_URL}api/tasks/claim-reward`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(requestData)
+        }, 15000);
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            // Show success modal with reward amount
+            const currentTask = _tasks.find(t => t.id === _selectedTaskId);
+            const rewardAmount = data.data?.reward_amount || currentTask?.reward || 100;
+            document.getElementById('claimedReward').textContent = rewardAmount;
+            
+            closeTaskModal();
+            showSuccessModal();
+            
+            // Refresh tasks to update participant count
+            setTimeout(() => {
+              loadTasksData();
+            }, 1000);
+            
+            showBanner('Task claim submitted successfully!', 'success');
+          } else {
+            showBanner('Error: ' + (data.message || 'Failed to claim reward'), 'error');
+          }
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          showBanner('Error: ' + (errorData.message || 'Failed to claim reward'), 'error');
+        }
+      } catch (error) {
+        console.error('Error claiming reward:', error);
+        if (error.name === 'AbortError') {
+          showBanner('Request timeout. Please try again.', 'error');
+        } else {
+          showBanner('Network error. Please check your connection.', 'error');
+        }
+      } finally {
+        // Re-enable button
+        claimBtn.disabled = false;
+        claimBtn.innerHTML = '<i class="fas fa-gift me-2"></i>Claim My Reward<div class="small mt-1">Submit for Review</div>';
+      }
+    }
+
+    // Show success modal
+    function showSuccessModal() {
+      const modal = document.getElementById('successModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        modal.style.alignItems = 'center';
+        modal.style.justifyContent = 'center';
+        modal.classList.add('show');
+      }
+    }
+
+    // Close success modal
+    function closeSuccessModal() {
+      const modal = document.getElementById('successModal');
+      if (modal) {
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+      }
+    }
+
+    // Modal event handlers with proper cleanup
+    let modalClickHandler = null;
+    let modalKeyHandler = null;
+    
+    function initializeModalHandlers() {
+      // Remove existing handlers
+      if (modalClickHandler) {
+        document.removeEventListener('click', modalClickHandler);
+      }
+      if (modalKeyHandler) {
+        document.removeEventListener('keydown', modalKeyHandler);
+      }
+      
+      // Create new handlers
+      modalClickHandler = function(event) {
+        if (event.target.classList.contains('overlay')) {
+          const taskModal = document.getElementById('taskModal');
+          const successModal = document.getElementById('successModal');
+          
+          if (taskModal && taskModal.style.display === 'flex') {
+            closeTaskModal();
+          } else if (successModal && successModal.style.display === 'flex') {
+            closeSuccessModal();
+          }
+        }
+      };
+      
+      modalKeyHandler = function(event) {
+        if (event.key === 'Escape') {
+          closeTaskModal();
+          closeSuccessModal();
+        }
+      };
+      
+      // Add new handlers
+      document.addEventListener('click', modalClickHandler);
+      document.addEventListener('keydown', modalKeyHandler);
+    }
+    
+    // Initialize modal handlers when DOM is ready
+    document.addEventListener('DOMContentLoaded', initializeModalHandlers);
+
+    
+
+
+
+    // Logout function
+    function logout() {
+      // Clear local storage
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('connected_evm_wallet');
+      
+      // Try Twitter logout first, then redirect
+      fetch('/api/twitter/logout.php', {
+        method: 'POST',
+        credentials: 'include'
+      }).finally(() => {
+        window.location.href = '../index.html';
+      });
+    }
+
+    // Cleanup function to prevent memory leaks
+    function cleanup() {
+      // Clean up image handlers
+      imageLoadHandlers.forEach(handlers => {
+        if (handlers.cleanup) handlers.cleanup();
+      });
+      imageLoadHandlers.clear();
+      
+      // Clean up sidebar handlers
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+      
+      if (sidebarToggleHandler && sidebarToggle) {
+        sidebarToggle.removeEventListener('click', sidebarToggleHandler);
+      }
+      if (sidebarOverlayHandler && sidebarOverlay) {
+        sidebarOverlay.removeEventListener('click', sidebarOverlayHandler);
+      }
+      if (windowResizeHandler) {
+        window.removeEventListener('resize', windowResizeHandler);
+      }
+    }
+
+    // Initialize page when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('🚀 Task Engage page initializing...');
+      
+      // Initialize sidebar with proper cleanup
+      initializeSidebar();
+      
+      // Update user info
+      updateUserProfile();
+      loadUserAvatar();
+      loadCurrentUserAvatar();
+      updateWalletAddress();
+      
+      // Initialize modal handlers
+      initializeModalHandlers();
+      
+      // Add debug functions to window for testing
+      window.debugTaskEngage = {
+        testImages: window.testImageLoading,
+        debugImages: window.debugTaskImages,
+        testUrls: window.testUrlFunctionality,
+        testModals: window.testModalFunctionality,
+        testCards: window.testCardLayout,
+        getTasks: () => _tasks,
+        getEngagementTracker: () => engagementTracker
+      };
+      
+      console.log('🎯 Debug functions available: window.debugTaskEngage');
+      console.log('📋 Available debug methods:', Object.keys(window.debugTaskEngage));
+      
+      // Load tasks data
+      console.log('📋 Loading tasks data...');
+      loadTasksData().then(() => {
+        console.log('✅ Tasks loaded successfully');
+      }).catch(error => {
+        console.error('❌ Failed to load tasks:', error);
+        showTaskLoadError();
+      });
+    });
+    
+    // Separate function for task load error display
+    function showTaskLoadError() {
+      const loadingState = document.getElementById('loadingState');
+      const tasksContainer = document.getElementById('tasksContainer');
+      
+      if (loadingState) loadingState.style.display = 'none';
+      if (tasksContainer) {
+        tasksContainer.style.display = 'block';
+        tasksContainer.innerHTML = `
+          <div class="text-center py-5">
+            <i class="fas fa-exclamation-triangle fa-3x text-warning mb-3"></i>
+            <h5 class="text-light mb-2">Unable to Load Tasks</h5>
+            <p class="text-muted mb-3">There was an issue loading available tasks. This could be due to:</p>
+            <ul class="text-muted text-start" style="max-width: 400px; margin: 0 auto;">
+              <li>No campaigns have been created yet</li>
+              <li>Network connectivity issues</li>
+              <li>Server maintenance</li>
+            </ul>
+            <div class="mt-4">
+              <button class="btn btn-primary me-2" onclick="loadTasksData()">
+                <i class="fas fa-refresh me-1"></i>Try Again
+              </button>
+              <a href="campaign_upload.html" class="btn btn-outline-success">
+                <i class="fas fa-plus me-1"></i>Create Campaign
+              </a>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
+    // Clean up on page unload
+    window.addEventListener('beforeunload', cleanup);
+
+    // Add global error handler for debugging
+    window.addEventListener('error', function(event) {
+      console.error('Global error:', event.error);
+    });
+
+    // Add unhandled promise rejection handler
+    window.addEventListener('unhandledrejection', function(event) {
+      console.error('Unhandled promise rejection:', event.reason);
+    });
+
+    // Debug function to test image loading
+    window.testImageLoading = function() {
+      console.log('🧪 Testing image loading...');
+      
+      const testImages = [
+        '../images/bottom1.jpg',
+        '../images/logo.png', 
+        '../images/IconDiamond.png',
+        '../images/avarter2.png'
+      ];
+      
+      testImages.forEach(imageUrl => {
+        const img = new Image();
+        img.onload = () => console.log(`✅ Success: ${imageUrl}`);
+        img.onerror = () => console.log(`❌ Failed: ${imageUrl}`);
+        img.src = imageUrl;
+      });
+    };
+
+    // Debug function to check current task images
+    window.debugTaskImages = function() {
+      console.log('🔍 Debugging current task images...');
+      
+      const images = document.querySelectorAll('.task-card img');
+      images.forEach((img, index) => {
+        console.log(`Task ${index + 1}:`, {
+          src: img.src,
+          alt: img.alt,
+          naturalWidth: img.naturalWidth,
+          naturalHeight: img.naturalHeight,
+          complete: img.complete
+        });
+      });
+    };
+    
+    // Debug function to test URL functionality
+    window.testUrlFunctionality = function() {
+      console.log('🔗 Testing URL functionality...');
+      
+      // Test copyUrl function
+      copyUrl('https://twitter.com/test');
+      
+      // Test openAndTrackUrl function
+      openAndTrackUrl('https://twitter.com/test', 'follow', 0);
+      
+      console.log('✅ URL functions tested');
+    };
+    
+    // Debug function to test modal functionality
+    window.testModalFunctionality = function() {
+      console.log('🎭 Testing modal functionality...');
+      
+      // Test task modal
+      if (_tasks && _tasks.length > 0) {
+        openTaskModal(0);
+        setTimeout(() => {
+          closeTaskModal();
+          console.log('✅ Task modal tested');
+        }, 2000);
+      } else {
+        console.log('⚠️ No tasks available for modal testing');
+      }
+    };
+    
+    // Debug function to test card layout and URLs
+    window.testCardLayout = function() {
+      console.log('🎨 Testing card layout and URLs...');
+      
+      const container = document.getElementById('tasksContainer');
+      const cards = container.querySelectorAll('.task-card-wrapper');
+      
+      console.log(`📊 Found ${cards.length} task cards`);
+      
+      cards.forEach((card, index) => {
+        const actionButtons = card.querySelectorAll('.btn[onclick*="openAndTrackUrl"]');
+        const image = card.querySelector('img[id^="task-image-"]');
+        
+        console.log(`Card ${index + 1}:`, {
+          hasActionButtons: actionButtons.length > 0,
+          actionCount: actionButtons.length,
+          hasImage: !!image,
+          imageLoaded: image ? image.complete && image.naturalWidth > 0 : false,
+          cardHeight: card.offsetHeight
+        });
+      });
+      
+      console.log('✅ Card layout analysis complete');
+    };
+  </script>
+</body>
+</html>

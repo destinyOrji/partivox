@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PARTIVOX Reports</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0e0e0e;
+      color: white;
+    }
+    .sidebar {
+      background-color: #141414;
+      height: 100vh;
+      padding-top: 1rem;
+    }
+    .sidebar a {
+      color: #aaa;
+      display: block;
+      padding: 0.75rem 1.25rem;
+      text-decoration: none;
+    }
+    .sidebar a.active, .sidebar a:hover {
+      background-color: #222;
+      color: white;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background-color: #1a1a1a;
+    }
+    .tab-button {
+      background-color: #2d2d2d;
+      color: white;
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+      margin-right: 10px;
+      border: none;
+    }
+    .tab-button.active {
+      background-color: #a678f1;
+    }
+    .badge-resolved {
+      background-color: #2ecc71;
+    }
+    .badge-pending {
+      background-color: #f39c12;
+    }
+    .main-content {
+      padding: 2rem;
+    }
+    .table td, .table th {
+      vertical-align: middle;
+      color: #ddd;
+    }
+    .review-btn {
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+    }
+    .report-modal {
+      background-color: #1a1a1a;
+      color: white;
+    }
+    .report-modal .modal-header {
+      border-bottom: 1px solid #333;
+    }
+    .report-modal .modal-footer {
+      border-top: 1px solid #333;
+    }
+    .btn-take-action {
+      background-color: #8f5af7;
+      color: white;
+    }
+    .btn-confirm {
+      background-color: #2ecc71;
+      color: white;
+    }
+    .campaign-url {
+      color: #8f5af7;
+      text-decoration: none;
+    }
+    .campaign-url:hover {
+      text-decoration: underline;
+    }
+    .action-item {
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #222;
+      border-radius: 5px;
+    }
+    .action-item input[type="checkbox"] {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div class="sidebar col-md-2">
+    <h4 class="text-white ps-3">🟩 PARTIVOX</h4>
+    <a href="#">Overview</a>
+    <a href="#">Users</a>
+    <a href="#">Transactions</a>
+    <a class="active" href="#">Reports</a>
+    <a href="#">Settings</a>
+    <a class="mt-5 text-danger" href="#">↩ Logout</a>
+  </div>
+
+  <!-- Main -->
+  <div class="col-md-10">
+    <div class="header">
+      <div>
+        <h5 class="mb-0">Reports</h5>
+        <small>Review flagged campaigns, tasks, and user reports</small>
+      </div>
+      <div class="d-flex align-items-center">
+        <img src="https://i.pravatar.cc/40" alt="Admin" class="rounded-circle me-2">
+        <div>
+          <strong>Divine Essen</strong><br>
+          <small>Administrator</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <button class="tab-button">Campaign reports</button>
+          <button class="tab-button active">Task reports</button>
+        </div>
+        <div class="d-flex">
+          <select class="form-select form-select-sm bg-dark text-white me-2" style="width: 150px;">
+            <option>All campaigns</option>
+          </select>
+          <input type="text" class="form-control form-control-sm bg-dark text-white" placeholder="Search campaign...">
+        </div>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-dark table-hover">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Subject</th>
+              <th>Status</th>
+              <th>Total earning</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Sample Row - You can loop this using JS or server-side -->
+            <tr>
+              <td>@Lord_Knightmare</td>
+              <td>Fake task completion</td>
+              <td><span class="badge badge-resolved">Resolved</span></td>
+              <td>600 diamonds</td>
+              <td><button class="btn btn-outline-light btn-sm review-btn" data-bs-toggle="modal" data-bs-target="#reportModal">Review</button></td>
+            </tr>
+            <!-- Repeat rows -->
+            <tr>
+              <td>@Lord_Knightmare</td>
+              <td>Fake task completion</td>
+              <td><span class="badge badge-pending">Pending</span></td>
+              <td>600 diamonds</td>
+              <td><button class="btn btn-outline-light btn-sm review-btn" data-bs-toggle="modal" data-bs-target="#reportModal">Review</button></td>
+            </tr>
+            <tr>
+              <td>@Lord_Knightmare</td>
+              <td>Fake task completion</td>
+              <td><span class="badge badge-resolved">Resolved</span></td>
+              <td>600 diamonds</td>
+              <td><button class="btn btn-outline-light btn-sm review-btn" data-bs-toggle="modal" data-bs-target="#reportModal">Review</button></td>
+            </tr>
+            <!-- Add more rows as needed -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Report Details Modal -->
+<div class="modal fade" id="reportModal" tabindex="-1" aria-labelledby="reportModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content report-modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportModalLabel">Review report</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Review the details of this report</p>
+        
+        <h6>Report summary</h6>
+        
+        <table class="table table-dark table-borderless">
+          <tr>
+            <th>Reported by</th>
+            <td>@Lord_Knightmare</td>
+          </tr>
+          <tr>
+            <th>Date</th>
+            <td>25-02-2025</td>
+          </tr>
+          <tr>
+            <th>Defaulter</th>
+            <td>@Random_user</td>
+          </tr>
+          <tr>
+            <th>Campaign</th>
+            <td>NFT campaign tweeter launch</td>
+          </tr>
+          <tr>
+            <th>Diamond reward</th>
+            <td>100 diamonds</td>
+          </tr>
+          <tr>
+            <th>Campaign url link</th>
+            <td><a href="https://thelinktothetweet.com" class="campaign-url" target="_blank">https://thelinktothetweet.com</a></td>
+          </tr>
+        </table>
+
+        <div class="mt-4">
+          <h6>Subject:</h6>
+          <p>Fake task submission. This person did not carry out the task</p>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-take-action" data-bs-toggle="modal" data-bs-target="#actionModal" data-bs-dismiss="modal">Take action</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Action Modal -->
+<div class="modal fade" id="actionModal" tabindex="-1" aria-labelledby="actionModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content report-modal">
+      <div class="modal-header">
+        <h5 class="modal-title" id="actionModalLabel">Review report</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Choose the appropriate action</p>
+        
+        <h6>Actions</h6>
+        
+        <div class="action-item">
+          <input type="checkbox" id="suspendUser">
+          <label for="suspendUser">Suspend user temporarily</label>
+        </div>
+        
+        <div class="action-item">
+          <input type="checkbox" id="banUser">
+          <label for="banUser">Ban user permanently</label>
+        </div>
+        
+        <div class="action-item">
+          <input type="checkbox" id="sendWarning">
+          <label for="sendWarning">Send warning message</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#reportModal" data-bs-dismiss="modal">Back</button>
+        <button type="button" class="btn btn-confirm">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

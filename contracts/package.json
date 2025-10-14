@@ -1,0 +1,32 @@
+{
+  "name": "partivox-diamond-contracts",
+  "version": "1.0.0",
+  "description": "Smart contracts for PARTIVOX Diamond token system",
+  "main": "index.js",
+  "scripts": {
+    "compile": "hardhat compile",
+    "test": "hardhat test",
+    "deploy": "hardhat run deploy.js",
+    "deploy:local": "hardhat run deploy.js --network localhost",
+    "deploy:sepolia": "hardhat run deploy.js --network sepolia",
+    "deploy:polygon": "hardhat run deploy.js --network polygon",
+    "deploy:mumbai": "hardhat run deploy.js --network mumbai",
+    "deploy:bsc": "hardhat run deploy.js --network bsc",
+    "deploy:bsc-testnet": "hardhat run deploy.js --network bscTestnet",
+    "check": "node check-deployment.js",
+    "status": "node check-deployment.js",
+    "node": "hardhat node",
+    "verify": "hardhat verify"
+  },
+  "keywords": ["ethereum", "smart-contracts", "defi", "tokens"],
+  "author": "PARTIVOX",
+  "license": "MIT",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^3.0.2",
+    "hardhat": "^2.17.1"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.3",
+    "dotenv": "^16.3.1"
+  }
+}

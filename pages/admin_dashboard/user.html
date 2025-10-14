@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Management - PARTIVOX</title>
+  <link rel="shortcut icon" href="../../images/IconDiamond.png" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/enhanced-typography.css" rel="stylesheet">
+  <style>
+    :root {
+      /* === PARTIVOX DESIGN SYSTEM === */
+      
+      /* Core Background Colors */
+      --primary-bg: #0a0a0f;
+      --secondary-bg: #1a1a1f;
+      --card-bg: #1e1e24;
+      --sidebar-bg: #16161b;
+      --surface-bg: #252530;
+      --overlay-bg: rgba(10, 10, 15, 0.95);
+      
+      /* Lemon Green Brand Colors (Primary) */
+      --accent-color: #caf403; /* signature lemon green */
+      --accent-hover: #9dcf00; /* darker lemon green */
+      --accent-light: #e8ff4d; /* lighter lemon green */
+      --accent-dark: #7ba800; /* darkest lemon green */
+      --accent-rgb: 202, 244, 3;
+      
+      /* Secondary Brand Colors */
+      --primary-color: #667eea;
+      --primary-hover: #5a67d8;
+      --primary-light: #7c3aed;
+      --primary-rgb: 102, 126, 234;
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --text-inverse: #000000;
+      --text-accent: var(--accent-color);
+      
+      /* Status Colors */
+      --success-color: #10b981;
+      --success-light: #34d399;
+      --warning-color: #f59e0b;
+      --warning-light: #fbbf24;
+      --danger-color: #ef4444;
+      --danger-light: #f87171;
+      --info-color: #3b82f6;
+      --info-light: #60a5fa;
+      
+      /* Border & Divider Colors */
+      --border-color: #27272a;
+      --border-light: #374151;
+      --border-accent: var(--accent-color);
+      --divider-color: rgba(255, 255, 255, 0.1);
+      
+      /* Layout Variables */
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 60px;
+      --topbar-height: 70px;
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --border-radius-lg: 16px;
+      
+      /* Spacing Scale */
+      --space-xs: 0.25rem;    /* 4px */
+      --space-sm: 0.5rem;     /* 8px */
+      --space-md: 1rem;       /* 16px */
+      --space-lg: 1.5rem;     /* 24px */
+      --space-xl: 2rem;       /* 32px */
+      --space-2xl: 3rem;      /* 48px */
+      --space-3xl: 4rem;      /* 64px */
+      
+      /* Typography Scale */
+      --text-xs: 0.75rem;     /* 12px */
+      --text-sm: 0.875rem;    /* 14px */
+      --text-base: 1rem;      /* 16px */
+      --text-lg: 1.125rem;    /* 18px */
+      --text-xl: 1.25rem;     /* 20px */
+      --text-2xl: 1.5rem;     /* 24px */
+      --text-3xl: 1.875rem;   /* 30px */
+      --text-4xl: 2.25rem;    /* 36px */
+      
+      /* Animation & Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.2s ease;
+      --transition-slow: 0.3s ease;
+      --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+      --shadow-accent: 0 0 0 3px rgba(202, 244, 3, 0.15);
+      
+      /* Z-Index Scale */
+      --z-dropdown: 1000;
+      --z-sticky: 1020;
+      --z-fixed: 1030;
+      --z-modal-backdrop: 1040;
+      --z-modal: 1050;
+      --z-popover: 1060;
+      --z-tooltip: 1070;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f14 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background: linear-gradient(180deg, var(--sidebar-bg) 0%, #12121a 100%);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      width: 280px;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-240px);
+      width: 60px;
+    }
+
+    .sidebar.collapsed .logo h4 {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar.collapsed .nav-section h6 {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar.collapsed a span {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar .logo {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar .logo h4 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar .nav-section {
+      padding: 1rem 0;
+    }
+
+    .sidebar .nav-section h6 {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      border-radius: 0;
+      position: relative;
+    }
+
+    .sidebar a i {
+      width: 20px;
+      margin-right: 12px;
+      font-size: 1rem;
+    }
+
+    .sidebar a:hover {
+      background: rgba(202, 244, 3, 0.1);
+      color: var(--text-primary);
+      transform: translateX(4px);
+    }
+
+    .sidebar a.active {
+      background: linear-gradient(90deg, var(--accent-color), transparent);
+      color: var(--text-primary);
+      border-right: 3px solid var(--accent-color);
+    }
+
+    .sidebar a.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--accent-color);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+    }
+
+    .main-content.sidebar-collapsed {
+      margin-left: 60px;
+    }
+
+    .sidebar-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      color: var(--text-secondary);
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--accent-color);
+      color: #000;
+      transform: scale(1.05);
+    }
+
+    .content {
+      padding: 2rem;
+      background: transparent;
+    }
+
+    .topbar {
+      background: var(--card-bg);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      backdrop-filter: blur(10px);
+    }
+
+    .topbar h4 {
+      font-weight: 700;
+      font-size: 1.75rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .topbar p {
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    /* Action button styles */
+    .btn-view {
+      background: var(--accent-color);
+      border: 1px solid var(--accent-color);
+      color: #000;
+    }
+
+    .btn-view:hover,
+    .btn-view:focus {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #000;
+    }
+
+    .btn-suspend {
+      background: var(--warning-color);
+      border: 1px solid var(--warning-color);
+      color: white;
+    }
+
+    .btn-suspend:hover {
+      background: #d97706;
+      border-color: #d97706;
+      color: white;
+    }
+
+    .btn-activate {
+      background: var(--success-color);
+      border: 1px solid var(--success-color);
+      color: white;
+    }
+
+    .btn-activate:hover {
+      background: #059669;
+      border-color: #059669;
+      color: white;
+    }
+
+    .search-input {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      width: 300px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+      box-shadow: 0 0 0 3px rgba(202, 244, 3, 0.15);
+    }
+
+    .btn-view {
+      background: var(--accent-color);
+      border: 1px solid var(--accent-color);
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.375rem 0.75rem;
+    }
+
+    .btn-view:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: white;
+    }
+
+    .btn-suspend {
+      background: var(--warning-color);
+      border: 1px solid var(--warning-color);
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.375rem 0.75rem;
+    }
+
+    .btn-suspend:hover {
+      background: #d97706;
+      border-color: #d97706;
+      color: white;
+    }
+
+    .btn-activate {
+      background: var(--success-color);
+      border: 1px solid var(--success-color);
+      color: white;
+      font-size: 0.75rem;
+      padding: 0.375rem 0.75rem;
+    }
+
+    .btn-activate:hover {
+      background: #059669;
+      border-color: #059669;
+      color: white;
+    }
+
+    .badge-success {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .badge-warning {
+      background: var(--warning-color);
+      color: white;
+    }
+
+    .badge-info {
+      background: var(--accent-color);
+      color: white;
+    }
+
+    .badge-secondary {
+      background: var(--text-muted);
+      color: white;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .content-card h6 {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 1rem;
+    }
+
+    .table {
+      color: var(--text-secondary);
+      background: transparent;
+    }
+
+    .table th {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 0.75rem;
+    }
+
+    .table td {
+      border-bottom: 1px solid rgba(39, 39, 42, 0.5);
+      padding: 1rem 0.75rem;
+      vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+      background: rgba(202, 244, 3, 0.05);
+    }
+
+    .badge {
+      padding: 0.375rem 0.75rem;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-success {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success-color);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .badge-warning {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning-color);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .badge-danger {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger-color);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .btn {
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+
+    .btn-primary:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      transform: translateY(-1px);
+    }
+
+    .btn-outline-light {
+      border-color: var(--border-color);
+      color: var(--text-secondary);
+    }
+
+    .btn-outline-light:hover {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-view {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      border-radius: 20px;
+      padding: 5px 15px;
+      font-size: 12px;
+    }
+
+    .btn-suspend {
+      background: transparent;
+      border: 1px solid var(--danger-color);
+      color: var(--danger-color);
+      border-radius: 20px;
+      padding: 5px 15px;
+      font-size: 12px;
+    }
+
+    .btn-activate {
+      background: transparent;
+      border: 1px solid var(--success-color);
+      color: var(--success-color);
+      border-radius: 20px;
+      padding: 5px 15px;
+      font-size: 12px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        width: 280px;
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.sidebar-collapsed {
+        margin-left: 0;
+      }
+
+      .topbar {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch !important;
+      }
+
+      .topbar .d-flex {
+        justify-content: center;
+      }
+
+      .user-info {
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .search-input {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .content-card {
+        padding: 1rem;
+      }
+
+      .table-responsive {
+        font-size: 0.875rem;
+      }
+
+      .d-flex.gap-2 {
+        flex-direction: column;
+        gap: 0.5rem !important;
+      }
+
+      .d-flex.gap-2 .form-select,
+      .d-flex.gap-2 .search-input,
+      .d-flex.gap-2 .btn {
+        width: 100% !important;
+        max-width: none !important;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .topbar {
+        padding: 1rem;
+        margin-bottom: 1rem;
+      }
+
+      .topbar h4 {
+        font-size: 1.125rem;
+      }
+
+      .topbar p {
+        font-size: 0.8rem;
+      }
+
+      .content {
+        padding: 0.75rem;
+      }
+
+      .table th,
+      .table td {
+        padding: 0.375rem 0.25rem;
+        font-size: 0.7rem;
+      }
+
+      .user-avatar {
+        width: 28px;
+        height: 28px;
+      }
+
+      .btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      .content-card {
+        padding: 0.875rem;
+        margin-bottom: 1rem;
+      }
+
+      .content-card h6 {
+        font-size: 0.95rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .badge {
+        font-size: 0.625rem;
+        padding: 0.25rem 0.5rem;
+      }
+
+      .sidebar-toggle {
+        width: 40px;
+        height: 40px;
+      }
+
+      .search-input {
+        font-size: 0.875rem;
+        padding: 0.5rem 0.75rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .topbar {
+        padding: 0.75rem;
+      }
+
+      .topbar h4 {
+        font-size: 1rem;
+      }
+
+      .content {
+        padding: 0.5rem;
+      }
+
+      .table th,
+      .table td {
+        padding: 0.25rem 0.125rem;
+        font-size: 0.65rem;
+      }
+
+      .user-avatar {
+        width: 24px;
+        height: 24px;
+      }
+
+      .sidebar-toggle {
+        width: 36px;
+        height: 36px;
+      }
+
+      .btn {
+        padding: 0.375rem 0.5rem;
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="logo">
+      <h4>
+        <img src="../../images/IconDiamond.png" alt="" width="24" height="24" class="me-2">
+        PARTIVOX
+      </h4>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Main</h6>
+      <a href="/pages/admin_dashboard/dashboard1.html">
+        <i class="fas fa-chart-line"></i>
+        <span>Overview</span>
+      </a>
+      <a href="/pages/admin_dashboard/user.html" class="active">
+        <i class="fas fa-users"></i>
+        <span>Users</span>
+      </a>
+      <a href="/pages/admin_dashboard/campaigns.html">
+        <i class="fas fa-bullhorn"></i>
+        <span>Campaigns</span>
+      </a>
+    </div>
+    
+    <div class="nav-section">
+      <h6>Management</h6>
+      <a href="/pages/admin_dashboard/transactions.html">
+        <i class="fas fa-credit-card"></i>
+        <span>Transactions</span>
+      </a>
+      <a href="/pages/admin_dashboard/reports.html">
+        <i class="fas fa-chart-bar"></i>
+        <span>Reports</span>
+      </a>
+      <a href="/pages/admin_dashboard/settings.html">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+    
+    <div class="nav-section mt-auto">
+      <a href="#" class="text-danger" id="logoutBtn">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="content">
+      <!-- Topbar -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </div>
+          <div>
+            <h4>User Management</h4>
+            <p>Comprehensive user administration: view detailed profiles, manage account status, suspend/activate users, grant admin privileges, and monitor user activity</p>
+          </div>
+        </div>
+        <div class="user-info">
+          <input type="text" id="userSearch" class="search-input" placeholder="Search users..." onkeyup="searchUsers()" />
+          <img src="../../images/avartar1.jpg" class="user-avatar" alt="avatar" />
+          <div>
+            <div id="adminName" class="fw-semibold">Admin</div>
+            <small class="text-muted">Administrator</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Management Content -->
+      <div class="content-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h6>Platform Users</h6>
+          <div class="d-flex gap-2">
+            <select id="statusFilter" class="form-select bg-dark text-light border-secondary" style="width: 150px;" onchange="filterUsers()">
+              <option value="all">All users</option>
+              <option value="active">Active</option>
+              <option value="suspended">Suspended</option>
+            </select>
+            <button class="btn btn-primary">
+              <i class="fas fa-plus me-1"></i>
+              Add User
+            </button>
+            <button class="btn btn-info" onclick="testDatabase()">
+              <i class="fas fa-database me-1"></i>
+              Test DB
+            </button>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>User</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Total Earning</th>
+                <th>Actions</th>
+              </tr>
+          </thead>
+          <tbody id="userTableBody">
+            <!-- User rows will be injected here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View User Modal -->
+<div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px;">
+      <div class="modal-header border-bottom border-secondary">
+        <h5 id="viewUserLabel" class="text-white mb-0">User Details</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-white p-4">
+        <div class="row">
+          <div class="col-md-4 text-center">
+            <img id="userAvatar" src="https://i.pravatar.cc/120" class="rounded-circle mb-3" alt="User Avatar" width="120" height="120">
+            <h5 id="userName" class="text-white mb-1">@username</h5>
+            <p id="userEmail" class="text-muted mb-2">user@example.com</p>
+            <span id="userStatusBadge" class="badge badge-success">Active</span>
+          </div>
+          <div class="col-md-8">
+            <div class="row g-3">
+              <div class="col-6">
+                <div class="content-card text-center">
+                  <h4 id="userCampaigns" class="text-primary mb-1">0</h4>
+                  <small class="text-muted">Campaigns Created</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="content-card text-center">
+                  <h4 id="userTasks" class="text-success mb-1">0</h4>
+                  <small class="text-muted">Tasks Completed</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="content-card text-center">
+                  <h4 id="userEarnings" class="text-warning mb-1">0 💎</h4>
+                  <small class="text-muted">Total Earnings</small>
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="content-card text-center">
+                  <h4 id="userReports" class="text-danger mb-1">0</h4>
+                  <small class="text-muted">Reports</small>
+                </div>
+              </div>
+            </div>
+            <div class="mt-4">
+              <h6 class="text-white mb-3">Account Information</h6>
+              <div class="row">
+                <div class="col-6">
+                  <small class="text-muted">Auth Provider:</small>
+                  <div id="userAuthProvider" class="text-white">Email</div>
+                </div>
+                <div class="col-6">
+                  <small class="text-muted">Joined:</small>
+                  <div id="userJoinDate" class="text-white">-</div>
+                </div>
+                <div class="col-6 mt-2">
+                  <small class="text-muted">Wallet:</small>
+                  <div id="userWallet" class="text-white">Not connected</div>
+                </div>
+                <div class="col-6 mt-2">
+                  <small class="text-muted">Verified:</small>
+                  <div id="userVerified" class="text-white">No</div>
+                </div>
+                <div class="col-6 mt-2">
+                  <small class="text-muted">Role:</small>
+                  <div id="userRole" class="text-white">User</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-top border-secondary">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" id="grantAdminBtn" class="btn btn-info" onclick="grantAdminRole()" style="display: none;">Grant Admin</button>
+        <button type="button" id="revokeAdminBtn" class="btn btn-secondary" onclick="revokeAdminRole()" style="display: none;">Revoke Admin</button>
+        <button type="button" id="suspendUserBtn" class="btn btn-warning" onclick="showSuspendModal()">Suspend User</button>
+        <button type="button" id="activateUserBtn" class="btn btn-success" onclick="activateUser()" style="display: none;">Activate User</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Suspend User Confirmation Modal -->
+<div class="modal fade" id="suspendUserModal" tabindex="-1" aria-labelledby="suspendUserLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content" style="background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 15px;">
+      <div class="modal-header border-bottom border-secondary">
+        <h5 id="suspendUserLabel" class="text-white mb-0">Suspend User</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-white p-4">
+        <div class="text-center mb-4">
+          <i class="fas fa-exclamation-triangle text-warning" style="font-size: 3rem;"></i>
+        </div>
+        <h6 class="text-center mb-3">Are you sure you want to suspend this user?</h6>
+        <p class="text-muted text-center mb-4">This action will prevent the user from accessing their account and participating in campaigns.</p>
+        <div class="mb-3">
+          <label class="form-label text-muted">Reason for suspension (optional):</label>
+          <textarea id="suspendReason" class="form-control" rows="3" placeholder="Enter reason for suspension..." style="background: var(--secondary-bg); border: 1px solid var(--border-color); color: var(--text-primary);"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer border-top border-secondary">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-warning" onclick="confirmSuspendUser()">Suspend User</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // Environment-agnostic API base
+  // Dynamic API base URL to match current origin
+  if (typeof API_BASE_URL === 'undefined') {
+    window.API_BASE_URL = window.location.origin + "/";
+  }
+
+  // Helper: Extract ObjectId string from MongoDB ObjectId object
+  function getObjectIdString(objectId) {
+    if (!objectId) return '';
+    if (typeof objectId === 'string') return objectId;
+    if (typeof objectId === 'object' && objectId.$oid) return objectId.$oid;
+    if (typeof objectId === 'object' && objectId.toString) return objectId.toString();
+    return String(objectId);
+  }
+
+  // Helper: Show notification
+  function showNotification(message, type = 'success') {
+    const notif = document.createElement('div');
+    notif.className = `alert alert-${type}`;
+    notif.style.position = 'fixed';
+    notif.style.top = '20px';
+    notif.style.right = '20px';
+    notif.style.zIndex = 9999;
+    notif.innerText = message;
+    document.body.appendChild(notif);
+    setTimeout(() => notif.remove(), 2500);
+  }
+
+  // Get user name from token
+  function getUserNameFromToken() {
+    const token = localStorage.getItem('authToken');
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.data && payload.data.name ? payload.data.name : (payload.data && payload.data.email ? payload.data.email.split('@')[0] : 'Admin');
+    }
+    return 'Admin';
+  }
+
+  // SIDEBAR TOGGLE FUNCTIONALITY
+  const sidebarToggle = document.getElementById('sidebarToggle');
+  const sidebar = document.querySelector('.sidebar');
+  const mainContent = document.querySelector('.main-content');
+  
+  if (sidebarToggle && sidebar && mainContent) {
+    sidebarToggle.addEventListener('click', () => {
+      // Check if we're on mobile
+      const isMobile = window.innerWidth <= 768;
+      
+      if (isMobile) {
+        // On mobile, toggle the 'show' class
+        sidebar.classList.toggle('show');
+      } else {
+        // On desktop, toggle the 'collapsed' class
+        sidebar.classList.toggle('collapsed');
+        mainContent.classList.toggle('sidebar-collapsed');
+      }
+      
+      // Change icon based on state
+      const icon = sidebarToggle.querySelector('i');
+      if (isMobile) {
+        if (sidebar.classList.contains('show')) {
+          icon.className = 'fas fa-times';
+        } else {
+          icon.className = 'fas fa-bars';
+        }
+      } else {
+        if (sidebar.classList.contains('collapsed')) {
+          icon.className = 'fas fa-chevron-right';
+        } else {
+          icon.className = 'fas fa-bars';
+        }
+      }
+    });
+    
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', (e) => {
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile && sidebar.classList.contains('show')) {
+        if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+          sidebar.classList.remove('show');
+          sidebarToggle.querySelector('i').className = 'fas fa-bars';
+        }
+      }
+    });
+    
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      const isMobile = window.innerWidth <= 768;
+      const icon = sidebarToggle.querySelector('i');
+      
+      if (!isMobile) {
+        // Reset mobile classes when switching to desktop
+        sidebar.classList.remove('show');
+        icon.className = sidebar.classList.contains('collapsed') ? 'fas fa-chevron-right' : 'fas fa-bars';
+      } else {
+        // Reset desktop classes when switching to mobile
+        sidebar.classList.remove('collapsed');
+        mainContent.classList.remove('sidebar-collapsed');
+        icon.className = sidebar.classList.contains('show') ? 'fas fa-times' : 'fas fa-bars';
+      }
+    });
+  }
+
+  // LOGOUT FUNCTIONALITY
+  const logoutBtn = document.getElementById('logoutBtn');
+  if (logoutBtn) {
+    logoutBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('authToken');
+      window.location.href = '/pages/admin_dashboard/login.html';
+    });
+  }
+
+  // Fetch and render users
+  async function loadUsers() {
+    try {
+      const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/users`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+      });
+      const data = await res.json();
+      const tbody = document.getElementById('userTableBody');
+      tbody.innerHTML = '';
+      
+      if (data.status === 'success' && Array.isArray(data.data)) {
+        data.data.forEach(user => {
+          // Extract ObjectId string properly
+          let userId = '';
+          if (user._id) {
+            if (typeof user._id === 'string') {
+              userId = user._id;
+            } else if (user._id.$oid) {
+              userId = user._id.$oid;
+            } else if (user._id.toString) {
+              userId = user._id.toString();
+            }
+          } else if (user.id) {
+            userId = user.id;
+          }
+          
+          console.log('User ID for table:', userId, 'Type:', typeof userId, 'Full user:', user);
+          
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>${user.name ? '@' + user.name : user.email}</td>
+            <td>${user.email || ''}</td>
+            <td>${user.wallet || 'Not connected'}</td>
+            <td><span class="badge badge-${user.status === 'active' ? 'success' : 'warning'}">${user.status ? user.status.charAt(0).toUpperCase() + user.status.slice(1) : 'Active'}</span></td>
+            <td>${user.earning || '0 💎'}</td>
+            <td>
+              <button class="btn btn-view btn-sm me-1" onclick="viewUser('${userId}')">View</button>
+              ${user.status === 'active' ? 
+                `<button class="btn btn-suspend btn-sm" onclick="updateUserStatus('${userId}', 'suspended')">Suspend</button>` : 
+                `<button class="btn btn-activate btn-sm" onclick="updateUserStatus('${userId}', 'active')">Activate</button>`
+              }
+            </td>
+          </tr>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No users found</td></tr>';
+      }
+    } catch (error) {
+      console.error('Error loading users:', error);
+      showNotification('Failed to load users', 'danger');
+    }
+  }
+
+  // Current user being viewed/managed
+  let currentUser = null;
+
+  // View user details
+  async function viewUser(userId) {
+    // Extract ObjectId string using helper
+    const userIdString = getObjectIdString(userId);
+    console.log('Viewing user with ID:', userIdString, 'Type:', typeof userIdString, 'Original:', userId);
+    
+    if (!userIdString || userIdString === 'undefined') {
+      showNotification('Invalid user ID', 'danger');
+      return;
+    }
+    
+    try {
+      const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/users/view?id=${userIdString}`, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+      });
+      const result = await res.json();
+      
+      if (result.status === 'success') {
+        currentUser = result.data;
+        populateUserModal(result.data);
+        const modal = new bootstrap.Modal(document.getElementById('viewUserModal'));
+        modal.show();
+      } else {
+        showNotification(result.message || 'Failed to load user details', 'danger');
+      }
+    } catch (error) {
+      console.error('Error loading user details:', error);
+      showNotification('Network error', 'danger');
+    }
+  }
+
+  // Populate user modal with data
+  function populateUserModal(user) {
+    document.getElementById('userName').textContent = user.name ? `@${user.name}` : (user.twitter_handle || '@user');
+    document.getElementById('userEmail').textContent = user.email || 'N/A';
+    document.getElementById('userAvatar').src = `https://i.pravatar.cc/120?u=${getObjectIdString(user._id || user.id)}`;
+    
+    // Status badge
+    const statusBadge = document.getElementById('userStatusBadge');
+    const status = user.status || 'active';
+    statusBadge.className = `badge badge-${status === 'active' ? 'success' : 'warning'}`;
+    statusBadge.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+    
+    // Stats (mock data for now - can be enhanced with real data)
+    document.getElementById('userCampaigns').textContent = user.campaigns_count || '0';
+    document.getElementById('userTasks').textContent = user.tasks_count || '0';
+    document.getElementById('userEarnings').textContent = user.earnings || '0 💎';
+    document.getElementById('userReports').textContent = user.reports_count || '0';
+    
+    // Account info
+    document.getElementById('userAuthProvider').textContent = (user.auth_provider || 'email').charAt(0).toUpperCase() + (user.auth_provider || 'email').slice(1);
+    document.getElementById('userJoinDate').textContent = user.created_at ? new Date(user.created_at).toLocaleDateString() : '-';
+    document.getElementById('userWallet').textContent = user.wallet || 'Not connected';
+    document.getElementById('userVerified').textContent = user.is_verified ? 'Yes' : 'No';
+    
+    // Role info
+    const userRole = user.role || 'user';
+    document.getElementById('userRole').textContent = userRole.charAt(0).toUpperCase() + userRole.slice(1);
+    
+    // Show/hide action buttons based on status and role
+    const suspendBtn = document.getElementById('suspendUserBtn');
+    const activateBtn = document.getElementById('activateUserBtn');
+    const grantAdminBtn = document.getElementById('grantAdminBtn');
+    const revokeAdminBtn = document.getElementById('revokeAdminBtn');
+    
+    // Status buttons
+    if (status === 'active') {
+      suspendBtn.style.display = 'inline-block';
+      activateBtn.style.display = 'none';
+    } else {
+      suspendBtn.style.display = 'none';
+      activateBtn.style.display = 'inline-block';
+    }
+    
+    // Admin role buttons
+    if (userRole === 'admin') {
+      grantAdminBtn.style.display = 'none';
+      revokeAdminBtn.style.display = 'inline-block';
+    } else {
+      grantAdminBtn.style.display = 'inline-block';
+      revokeAdminBtn.style.display = 'none';
+    }
+  }
+
+  // Show suspend confirmation modal
+  function showSuspendModal() {
+    const modal = new bootstrap.Modal(document.getElementById('suspendUserModal'));
+    modal.show();
+  }
+
+  // Confirm user suspension
+  async function confirmSuspendUser() {
+    if (!currentUser) return;
+    
+    const reason = document.getElementById('suspendReason').value;
+    
+    try {
+      const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/users/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify({ 
+          user_id: String(currentUser._id || currentUser.id), 
+          status: 'suspended',
+          reason: reason 
+        })
+      });
+      const result = await res.json();
+      
+      if (result.status === 'success') {
+        showNotification('User suspended successfully!', 'warning');
+        
+        // Close modals
+        bootstrap.Modal.getInstance(document.getElementById('suspendUserModal')).hide();
+        bootstrap.Modal.getInstance(document.getElementById('viewUserModal')).hide();
+        
+        // Clear form
+        document.getElementById('suspendReason').value = '';
+        
+        // Reload users table
+        loadUsers();
+      } else {
+        showNotification(result.message || 'Failed to suspend user', 'danger');
+      }
+    } catch (error) {
+      console.error('Error suspending user:', error);
+      showNotification('Network error', 'danger');
+    }
+  }
+
+  // Activate user
+  async function activateUser() {
+    if (!currentUser) return;
+    
+    try {
+      const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/users/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify({ 
+          user_id: String(currentUser._id || currentUser.id), 
+          status: 'active'
+        })
+      });
+      const result = await res.json();
+      
+      if (result.status === 'success') {
+        showNotification('User activated successfully!', 'success');
+        
+        // Close modal
+        bootstrap.Modal.getInstance(document.getElementById('viewUserModal')).hide();
+        
+        // Reload users table
+        loadUsers();
+      } else {
+        showNotification(result.message || 'Failed to activate user', 'danger');
+      }
+    } catch (error) {
+      console.error('Error activating user:', error);
+      showNotification('Network error', 'danger');
+    }
+  }
+
+  // Grant admin role
+  async function grantAdminRole() {
+    if (!currentUser) return;
+    
+    if (!confirm(`Are you sure you want to grant admin privileges to ${currentUser.name || currentUser.email}?`)) {
+      return;
+    }
+    
+    try {
+      const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/users/grant-admin`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify({ user_id: String(currentUser._id || currentUser.id) })
+      });
+      const result = await res.json();
+      
+      if (result.status === 'success') {
+        showNotification('Admin role granted successfully!', 'success');
+        
+        // Close modal and reload
+        bootstrap.Modal.getInstance(document.getElementById('viewUserModal')).hide();
+        loadUsers();
+      } else {
+        showNotification(result.message || 'Failed to grant admin role', 'danger');
+      }
+    } catch (error) {
+      console.error('Error granting admin role:', error);
+      showNotification('Network error', 'danger');
+    }
+  }
+
+  // Revoke admin role
+  async function revokeAdminRole() {
+    if (!currentUser) return;
+    
+    if (!confirm(`Are you sure you want to revoke admin privileges from ${currentUser.name || currentUser.email}?`)) {
+      return;
+    }
+    
+    try {
+      const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/users/revoke-admin`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify({ user_id: String(currentUser._id || currentUser.id) })
+      });
+      const result = await res.json();
+      
+      if (result.status === 'success') {
+        showNotification('Admin role revoked successfully!', 'warning');
+        
+        // Close modal and reload
+        bootstrap.Modal.getInstance(document.getElementById('viewUserModal')).hide();
+        loadUsers();
+      } else {
+        showNotification(result.message || 'Failed to revoke admin role', 'danger');
+      }
+    } catch (error) {
+      console.error('Error revoking admin role:', error);
+      showNotification('Network error', 'danger');
+    }
+  }
+
+  // Update user status (legacy function for table buttons)
+  async function updateUserStatus(userId, status) {
+    try {
+      console.log('updateUserStatus called with:', { userId, status, userIdType: typeof userId });
+      const userIdString = getObjectIdString(userId);
+      console.log('Converted userId to string:', userIdString);
+      
+      const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/users/status`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+        },
+        body: JSON.stringify({ user_id: userIdString, status })
+      });
+      const result = await res.json();
+      
+      if (result.status === 'success') {
+        showNotification(`User ${status === 'suspended' ? 'suspended' : 'activated'} successfully!`);
+        loadUsers(); // Reload the users table
+      } else {
+        showNotification(result.message || 'Failed to update user status', 'danger');
+      }
+    } catch (error) {
+      console.error('Error updating user status:', error);
+      showNotification('Network error', 'danger');
+    }
+  }
+
+  // Search functionality
+  let searchTimeout;
+  function searchUsers() {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      loadUsers();
+    }, 300);
+  }
+
+  // Filter functionality
+  function filterUsers() {
+    loadUsers();
+  }
+
+  // Enhanced loadUsers with search and filter - Load ALL users from database
+  async function loadUsers() {
+    try {
+      console.log('=== LOADING ALL USERS FROM DATABASE ===');
+      const searchTerm = document.getElementById('userSearch').value;
+      const statusFilter = document.getElementById('statusFilter').value;
+      
+      let url = `${window.API_BASE_URL || window.location.origin + '/'}api/admin/users`;
+      const params = new URLSearchParams();
+      
+      // Set a high limit to load all users (or use pagination later)
+      params.append('limit', '1000'); // Load up to 1000 users
+      params.append('page', '1');
+      
+      if (searchTerm) {
+        params.append('search', searchTerm);
+        console.log('🔍 Searching for:', searchTerm);
+      }
+      if (statusFilter && statusFilter !== 'all') {
+        params.append('status', statusFilter);
+        console.log('🔍 Filtering by status:', statusFilter);
+      }
+      
+      url += '?' + params.toString();
+      
+      console.log('Fetching users from:', url);
+      console.log('Auth token:', localStorage.getItem('authToken') ? 'Present' : 'Missing');
+      
+      const res = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('authToken')}` }
+      });
+      
+      console.log('Response status:', res.status);
+      console.log('Response headers:', res.headers);
+      
+      const data = await res.json();
+      console.log('Response data:', data);
+      const tbody = document.getElementById('userTableBody');
+      tbody.innerHTML = '';
+      
+      if (data.status === 'success' && Array.isArray(data.data)) {
+        console.log(`✅ Successfully loaded ${data.data.length} users from database`);
+        console.log('📊 Pagination info:', data.pagination);
+        console.log('🔍 First user sample:', data.data[0]);
+        
+        if (data.data.length === 0) {
+          console.log('⚠️ No users found in database');
+        }
+        data.data.forEach(user => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td>
+              <div class="d-flex align-items-center">
+                <img src="https://i.pravatar.cc/40?u=${getObjectIdString(user._id || user.id)}" class="user-avatar me-2" alt="avatar">
+                <div>
+                  <div class="fw-semibold">${user.name ? '@' + user.name : (user.twitter_handle || user.email)}</div>
+                  <small class="text-muted">${user.auth_provider === 'twitter' ? 'Twitter User' : 'Email User'}</small>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div>${user.email || 'N/A'}</div>
+              <small class="text-muted">${user.twitter_handle ? '@' + user.twitter_handle : ''}</small>
+            </td>
+            <td>
+              <span class="badge ${user.role === 'admin' ? 'badge-info' : 'badge-secondary'}">${user.role ? user.role.charAt(0).toUpperCase() + user.role.slice(1) : 'User'}</span>
+            </td>
+            <td><span class="badge badge-${user.status === 'active' ? 'success' : 'warning'}">${user.status ? user.status.charAt(0).toUpperCase() + user.status.slice(1) : 'Active'}</span></td>
+            <td>
+              <div>${user.earnings || '0 💎'}</div>
+              <small class="text-muted">${user.campaigns_count || 0} campaigns</small>
+            </td>
+            <td>
+              <button class="btn btn-view btn-sm me-1" onclick="viewUser('${getObjectIdString(user._id || user.id)}')" title="View Details">
+                <i class="fas fa-eye"></i>
+              </button>
+              ${user.status === 'active' ? 
+                `<button class="btn btn-suspend btn-sm" onclick="updateUserStatus('${getObjectIdString(user._id || user.id)}', 'suspended')" title="Suspend User">
+                  <i class="fas fa-ban"></i>
+                </button>` : 
+                `<button class="btn btn-activate btn-sm" onclick="updateUserStatus('${getObjectIdString(user._id || user.id)}', 'active')" title="Activate User">
+                  <i class="fas fa-check"></i>
+                </button>`
+              }
+            </td>
+          </tr>
+          `;
+          tbody.appendChild(tr);
+        });
+      } else {
+        tbody.innerHTML = '<tr><td colspan="6" class="text-center py-4">No users found</td></tr>';
+      }
+    } catch (error) {
+      console.error('Error loading users:', error);
+      showNotification('Failed to load users', 'danger');
+    }
+  }
+
+  // Test database connection and user data
+  async function testDatabase() {
+    try {
+      console.log('=== TESTING DATABASE ===');
+      const token = localStorage.getItem('authToken');
+      
+      if (!token) {
+        showNotification('No authentication token found. Please login.', 'danger');
+        return;
+      }
+      
+      // First check if user has admin privileges
+      console.log('Checking admin privileges...');
+      const authCheck = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/auth/me`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!authCheck.ok) {
+        showNotification('Authentication failed. Please login again.', 'danger');
+        return;
+      }
+      
+      const authData = await authCheck.json();
+      console.log('Current user:', authData);
+      
+      if (authData.user?.role !== 'admin') {
+        showNotification(`Access denied. You need admin role. Current role: ${authData.user?.role || 'unknown'}`, 'danger');
+        return;
+      }
+      
+      const res = await fetch(`${window.API_BASE_URL || window.location.origin + '/'}api/admin/test-users`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      const data = await res.json();
+      
+      console.log('Database test result:', data);
+      
+      if (data.status === 'success') {
+        showNotification(`Database OK: Found ${data.total_users} users`, 'success');
+        console.log('Sample users:', data.sample_users);
+      } else {
+        showNotification(`Database Error: ${data.message}`, 'danger');
+      }
+    } catch (error) {
+      console.error('Database test error:', error);
+      showNotification('Database test failed', 'danger');
+    }
+  }
+
+  // Initialize page
+  window.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('adminName').textContent = getUserNameFromToken();
+    loadUsers();
+  });
+</script>
+
+  <script src="/pages/admin_dashboard/js/admin-auth.js"></script>
+</body>
+</html>

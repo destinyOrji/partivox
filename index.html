@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Partivox</title>
+    <link rel="shortcut icon" href="images/IconDiamond.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+  <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-transparent px-3">
+  <div class="container-fluid">
+
+    <!-- Brand -->
+    <a class="navbar-brand text-white mt-2" href="#">
+      <img src="images/IconDiamond.png" alt="PARTIVOX Logo" style="width: 32px; height: 32px;"> PARTIVOX
+    </a>
+
+    <!-- Toggler -->
+    <button class="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarResponsive"
+            aria-controls="navbarResponsive"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Collapsible area -->
+    <div class="collapse navbar-collapse" id="navbarResponsive">
+      <div class="d-flex flex-column flex-lg-row align-items-lg-center w-100 gap-lg-3 justify-content-center">
+
+      <!-- Centre links -->
+<ul class="navbar-nav mx-auto text-center glassButton mb-3 mb-lg-0">
+  <li class="nav-item"><a class="nav-link active text-white" href="#">Home</a></li>
+  <li class="nav-item"><a class="nav-link text-light" href="#secondIntro">Features</a></li>
+  <li class="nav-item"><a class="nav-link text-light" href="#works">How it works</a></li>
+</ul>
+
+
+        <!-- Language dropdown -->
+        <div class="dropdown mb-3 mb-lg-0 me-lg-3">
+          <button class="btn btn-transparent text-white dropdown-toggle"
+                  id="dropdownMenuButton"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false">
+            English
+          </button>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="#">English</a></li>
+            <li><a class="dropdown-item" href="#">French</a></li>
+            <li><a class="dropdown-item" href="#">Arabic</a></li>
+          </ul>
+        </div>
+
+        <!-- Launch App -->
+        <!-- <div class="launch" >
+          <a href="/pages/userDashboard.html" class="btn glassButton text-white w-100 w-lg-auto">Launch&nbsp;App</a>
+        </div> -->
+            <div>
+              <button type="button" id="launchAppBtn" class="btn glassButton text-white w-100 w-lg-auto">Launch app</button>
+            </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+
+
+<div class="introContent py-4">
+  <div class="container">
+    <div class="row justify-content-center ">
+      <div class="col-12 col-md-8 col-lg-6">
+        <div class="image-stack d-flex align-items-center flex-wrap gap-2">
+          <img src="images/avartar1.jpg" alt="Avatar 1" class="avatar">
+          <img src="images/avarter2.png" alt="Avatar 2" class="avatar">
+          <img src="images/avarter3.png" alt="Avatar 3" class="avatar">
+          <img src="images/avarter4.jpg" alt="Avatar 4" class="avatar">
+          <img src="images/avarter5.jpg" alt="Avatar 5" class="avatar">
+
+          <div class="content-text text-light ">
+            <p class="mb-0">100+ registered users</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
+
+<!-- introInfo -->
+
+   <div class="introContent-info text-center">
+      <div class="container-fluid">
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 col-lg-6">
+            <h1 class="text-white">Explore the Largest Web3 Platform for <span >Social Growth</span> and <span>Rewards</span></h1>
+            <p class="text-white">Launch affordable tweet campaigns or earn crypto by engaging with posts you love</p>
+            <!-- popOut button -->
+            <button type="submit" id="loginBtn"><img src="images/walletIcon.png" alt="Wallet Icon" class="mb-3" > <p>Connect Wallet</p></button>
+             <div id="popupForm" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeBtn">&times;</span>
+       <div class="popInfo" >
+  <div style="display: flex; align-items: center; gap: 10px;" id="show">
+    <img src="images/IconDiamond.png" alt="PARTIVOX Logo" style="width: 30px; height: 30px;">
+    <h2 style="margin: 0;">LOGIN OR SIGN UP TO PARTIVOX</h2>
+  </div>
+  <p style="margin-top: 10px;">X Account to get started and Link your Wallet </p>
+</div>
+   <div class="progressBar">
+   <div class="progressInfo">
+     <p>connection in progress</p>
+    <p>0/2 completed</p>
+   </div>
+    <div class="progress"></div>
+   </div>
+      <form>
+     <p>Connect X account</p>
+       <div class="wallet" style="display:flex;align-items:center;gap:10px;">
+         <img src="images/xLogo.png" alt="Twitter/X" style="width: 50px; height: 50px;">
+         <a href="/api/twitter/twitter-auth.php" id="connectXBtn" style="padding:10px 20px;background:#1da1f2;color:#fff;border-radius:5px;text-decoration:none;font-weight:bold;">Connect with X</a>
+       </div>
+     <p>Connect wallet</p>
+       <div class="wallet">
+      <p>MetaMask</p>
+      <img src="images/metamaskIcon.png" alt="MetaMask" style="width: 50px; height: 50px;">
+       </div>
+       <div class="wallet">
+      <p>Phantom</p>
+      <img src="images/phantom.png" alt="Phantom" style="width: 50px; height: 50px;">
+       </div>
+
+          </form>
+          <div class="progressBottomInfo">
+            <p>By connecting your wallet, you agree to our <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>.</p>
+          </div>
+    </div>
+  </div>
+          <div class="introContent-bottom text-center mt-5 pt-5">
+            <!-- introBottom -->
+  <!-- <p class="text-white mt-5">Trusted by users across Top Web3 networks</p> -->
+
+  <div class="logos d-flex flex-wrap justify-content-center align-items-center gap-3 mb-5">
+   <div class="trusted-logos mt-5">
+      <p class="text-white">Trusted by users across Top Web3 networks</p>
+     
+      <div class="LogoFlex">
+         <div class="img">
+        <img src="images/iconconnect.png" alt="WalletConnect" />
+        <span>WalletConnect</span>
+        <img src="images/ethe.png" alt="Ethereum" />
+        <span>Ethereum</span>
+        <img src="images/metamaskIcon.png" alt="MetaMask" />
+        <span>MetaMask</span>
+      </div>
+    </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+        </div>
+      </div>
+   </div> 
+     </div>
+
+     <!--secondIntro  -->
+        <div class="secondIntro" id="secondIntro">
+          <div class="container">
+            <div class="row justify-content-center ">
+              <div class="col-12 col-md-8 col-lg-6">
+                <div class="secondTitle d-flex"><img src="images/diamond.png" alt="Diamond Icon"><p>What we offer</p></div>
+                <div class="secondIntro-Info text-center">
+                  <h1>Dynamic Features That Drive Real Results - Built for the Web3 Era</h1>
+                  <p class="text-light">Empowering Creators & Engagers with Web3</p>
+                </div>
+
+</div>
+
+
+ <div class="container py-5">
+  <div class="d-flex justify-content-center gap-4 flex-wrap flex-md-nowrap">
+    <!-- Feature Card 1 -->
+    <div class="feature-card green-bg text-dark">
+      <div class="feature-icon mb-3">
+        <img src="images/infinity.png" alt="Infinity Icon">
+      </div>
+      <div class="feature-title mb-3 text-left">Smart Tools for Creators and Engagers</div>
+      <div class="feature-text">
+        Launch campaigns, engage with posts, and earn real rewards.
+      </div>
+    </div>
+
+    <!-- Feature Card 2 -->
+    <div class="feature-card purple-bg">
+      <div class="feature-icon mb-3">
+        <img src="images/cube.png" alt="Cube Icon">
+      </div>
+      <div class="feature-title mb-3">Your Web3 Growth Toolkit</div>
+      <div class="feature-text">
+        Everything you need to promote tweets or earn tokens through simple social tasks.
+      </div>
+    </div>
+
+    <!-- Feature Card 3 -->
+    <div class="feature-card white-bg">
+      <div class="feature-icon mb-3">
+        <img src="images/coin.png" alt="Coin Icon">
+      </div>
+      <div class="feature-title mb-3">Promote. Engage. Earn. Effortlessly</div>
+      <div class="feature-text">
+        We make it easy to grow your reach or earn crypto by interacting with real content.
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</div>
+<div class="works" id="works">
+  <div class="container">
+      <div class="worksTitle col-6">
+         <div class="workButton">
+            <img src="images/diamond.png" alt="Diamond Icon">
+            <p>How it works</p>
+         </div>
+         <div class="workContent">
+            <h1>Whether You Create or Engage <span>We Reward</span> Every Action</h1>
+            <p>Here’s how to gain visibility and earn USDT from simple tasks</p>
+         </div>
+      </div>
+  </div>
+
+<div class="container">
+  <div class="row text-center justify-content-center">
+    
+    <div class="col-12 col-md-4 mb-4">
+      <div class="step-box step-low p-4 h-100">
+        <div class="step-number">01</div>
+        <h5 class="mt-3">Connect Wallet & Twitter</h5>
+        <p>Securely link your accounts using Web3 and Twitter OAuth.</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4 mb-4">
+      <div class="step-box step-mid p-4 h-100">
+        <div class="step-number">02</div>
+        <h5 class="mt-3">Engage and Promote Tweets</h5>
+        <p>Promote tweets and complete engagement tasks.</p>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-4 mb-4">
+      <div class="step-box step-high p-4 h-100">
+        <div class="step-number">03</div>
+        <h5 class="mt-3">Earn and Swap Diamonds</h5>
+        <p>Swap and use diamonds earned from tasks for campaigns or convert to USDT.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<div class="bottom">
+     <div class="bottomContent ">
+           <div class="space ms-3">
+               <h1 class="ms-3">Join the Future of Social Engagement</h1>
+            <p class="ms-3">Connect your wallet and start earning or promoting in minutes. Powered by Web3, built for creators and engagers</p>
+             <div class="bottomButton ms-2 ">
+               <img src="images/blackDiamond.png" alt="Diamond Icon">
+               <a href="#loginBtn" style="text-decoration: none;"><p>GET STARTED</p></a>
+            </div>
+           </div>
+
+            <div class="bottomLayer">
+             
+                 
+                <div class="footer d-flex justify-content-between align-items-start flex-wrap p-4 text-white bg-dark">
+  
+  <!-- Left Section -->
+  <div class="left">
+    <div class="bottomLayer-icon mb-3"> 
+      <a class="navbar-brand text-white d-flex align-items-center" href="#">
+        <img src="assets/images/logo.png" alt="PARTIVOX Logo" style="width: 30px; height: 30px; margin-right: 8px;"> 
+        PARTIVOX
+      </a>
+    </div>
+    <p>Let’s keep you updated</p>
+    <div class="email d-flex">
+      <input type="email" placeholder="Partivox@gmail.com" class="form-control me-2">
+      <button type="submit" class="btn btn-primary">Subscribe</button>
+    </div>
+  </div>
+
+  <!-- Right Section -->
+  <div class="right">
+   <div class="d-flex gap-5">
+  <ul class="list-unstyled d-flex flex-column gap-2">
+    <li><a href="#" class="text-white text-decoration-none">Home</a></li>
+    <li><a href="#" class="text-white text-decoration-none">Features</a></li>
+    <li><a href="#" class="text-white text-decoration-none">How it Works</a></li>
+  </ul>
+  
+  <ul class="list-unstyled d-flex flex-column gap-2">
+    <li><a href="#" class="text-white text-decoration-none">Twitter(X)</a></li>
+    <li><a href="#" class="text-white text-decoration-none">Instagram</a></li>
+  </ul>
+</div>
+
+</div>
+
+              
+     </div>
+         
+
+<!-- Login Modal -->
+<div id="popupForm" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" id="closeBtn">&times;</span>
+       <div class="popInfo" >
+  <div style="display: flex; align-items: center; gap: 10px;" id="show">
+    <img src="assets/images/logo.png" alt="PARTIVOX Logo" style="width: 30px; height: 30px;">
+    <h2 style="margin: 0;">LOGIN OR SIGN UP TO PARTIVOX</h2>
+  </div>
+  <p style="margin-top: 10px;">Link your wallet and X account to get started</p>
+</div>
+   <div class="progressBar">
+   <div class="progressInfo">
+     <p>connection in progress</p>
+    <p>0/2 completed</p>
+   </div>
+    <div class="progress"></div>
+   </div>
+      <form>
+       <p>Connect wallet</p>
+           <div class="wallet">
+            <p>MetaMask</p>
+            <img src="images/metamaskIcon.png" alt="MetaMask" style="width: 50px; height: 50px;">
+           </div>
+           <div class="wallet">
+            <p>Coinbase Wallet</p>
+            <img src="images/coinLogo.png" alt="Coinbase Wallet" style="width: 50px; height: 50px;">
+           </div>
+           <div class="wallet">
+            <p>WalletConnect</p>
+            <img src="assets/images/iconconnect.png" alt="WalletConnect" style="width: 50px; height: 50px;">
+           </div>
+
+          <p>Connect X account</p>
+           <div class="wallet">
+            <p>X (Twitter)</p>
+            <img src="images/xLogo.png" alt="Twitter/X" style="width: 50px; height: 50px;">
+            <a href="/api/twitter/twitter-auth.php" style="padding:10px 20px;background:#1da1f2;color:#fff;border-radius:5px;text-decoration:none;font-weight:bold; margin-left:10px;">Connect with X</a>
+           </div>
+
+          </form>
+          <div class="progressBottomInfo">
+            <p>By connecting your wallet, you agree to our <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>.</p>
+          </div>
+    </div>
+  </div>
+
+<!-- Launch App Modal -->
+<div id="launchAppModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" id="closeLaunchAppBtn">&times;</span>
+    <div class="popInfo">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="images/IconDiamond.png" alt="PARTIVOX Logo" style="width: 30px; height: 30px;">
+        <h2 style="margin: 0;">LAUNCH PARTIVOX APP</h2>
+      </div>
+      <p style="margin-top: 10px;">Link your wallet and X account to get started</p>
+    </div>
+    <form>
+  <div class="alert alert-info text-center mb-3">You must sign up with your X (Twitter) account.</div>
+      <p>Connect X account</p>
+      <div class="wallet">
+        <p>Twitter (OAuth)</p>
+        <img src="images/xLogo.png" alt="Twitter/X" style="width: 50px; height: 50px;">
+        <a href="/api/twitter/twitter-auth.php" style="padding:10px 20px;background:#1da1f2;color:#fff;border-radius:5px;text-decoration:none;font-weight:bold; margin-left:10px;">Connect with X</a>
+      </div>
+    </form>
+    <div class="progressBottomInfo">
+      <p>By connecting your wallet, you agree to our <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>.</p>
+    </div>
+  </div>
+</div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ethers@6.12.1/dist/ethers.umd.min.js"></script>
+<script src="javascript/script.js"></script>
+<script>
+// Additional modal elements (loginBtn, popupForm, closeBtn are already declared in script.js)
+const launchAppBtn = document.getElementById('launchAppBtn');
+const launchAppModal = document.getElementById('launchAppModal');
+const closeLaunchAppBtn = document.getElementById('closeLaunchAppBtn');
+
+// Note: Connect Wallet Modal is already handled in script.js
+
+// Launch App Modal (from Launch App button)
+if (launchAppBtn && launchAppModal && closeLaunchAppBtn) {
+  launchAppBtn.onclick = function() {
+    launchAppModal.style.display = "block";
+  }
+  closeLaunchAppBtn.onclick = function() {
+    launchAppModal.style.display = "none";
+  }
+}
+
+// MetaMask wallet connection
+const walletElements = document.querySelectorAll('.wallet');
+walletElements.forEach(wallet => {
+  const walletText = wallet.querySelector('p');
+  if (walletText && walletText.textContent.includes('MetaMask')) {
+    wallet.style.cursor = 'pointer';
+    wallet.onclick = async function() {
+      try {
+        if (typeof window.ethereum !== 'undefined') {
+          console.log('MetaMask detected, requesting connection...');
+          const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+          if (accounts.length > 0) {
+            console.log('Connected to MetaMask:', accounts[0]);
+            
+            // Store wallet address
+            localStorage.setItem('connected_evm_wallet', accounts[0]);
+            
+            // Show success message
+            alert('MetaMask connected successfully!\nAddress: ' + accounts[0].slice(0, 6) + '...' + accounts[0].slice(-4));
+            
+            // Update progress (you can enhance this)
+            const progressInfo = document.querySelector('.progressInfo p:last-child');
+            if (progressInfo) {
+              progressInfo.textContent = '1/2 completed';
+            }
+          }
+        } else {
+          console.log('MetaMask not detected');
+          if (confirm('MetaMask is not installed. Would you like to install it now?')) {
+            window.open('https://metamask.io/download/', '_blank');
+          }
+        }
+      } catch (error) {
+        console.error('Error connecting to MetaMask:', error);
+        if (error.code === 4001) {
+          alert('Connection request was rejected by user');
+        } else if (error.code === -32002) {
+          alert('Connection request is already pending. Please check MetaMask.');
+        } else {
+          alert('Failed to connect to MetaMask. Please try again.');
+        }
+      }
+    };
+  }
+});
+
+// Close Launch App modal when clicking outside (popupForm is handled in script.js)
+window.addEventListener('click', function(event) {
+  if (event.target == launchAppModal) {
+    launchAppModal.style.display = "none";
+  }
+});
+
+// Smooth scrolling for navigation links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  });
+});
+
+// Check if user is already connected on page load
+window.addEventListener('load', function() {
+  const connectedWallet = localStorage.getItem('connected_evm_wallet');
+  if (connectedWallet) {
+    console.log('Previously connected wallet found:', connectedWallet);
+    // You can update UI to show connected state
+  }
+});
+
+console.log('PARTIVOX Landing Page loaded successfully!');
+console.log('Features available:');
+console.log('- Connect Wallet Modal');
+console.log('- Launch App Modal');
+console.log('- MetaMask Integration');
+console.log('- Smooth Scrolling Navigation');
+</script>
+</html>

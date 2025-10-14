@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - PartiVox</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        .signin-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        .logo {
+            margin-bottom: 1.5rem;
+            max-width: 150px;
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+        }
+        .google-btn {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto;
+            width: 100%;
+            max-width: 280px;
+            transition: background-color 0.3s;
+        }
+        .google-btn:hover {
+            background-color: #357ABD;
+            text-decoration: none;
+        }
+        .google-btn img {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            background: white;
+            padding: 4px;
+            border-radius: 50%;
+        }
+        .divider {
+            margin: 1.5rem 0;
+            text-align: center;
+            position: relative;
+        }
+        .divider::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background-color: #e0e0e0;
+            z-index: 1;
+        }
+        .divider span {
+            background: white;
+            padding: 0 15px;
+            position: relative;
+            z-index: 2;
+            color: #757575;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #555;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 15px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #4285F4;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+        }
+        .btn-primary {
+            background-color: #4285F4;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s;
+        }
+        .btn-primary:hover {
+            background-color: #357ABD;
+        }
+        .footer-links {
+            margin-top: 1.5rem;
+            font-size: 14px;
+            color: #666;
+        }
+        .footer-links a {
+            color: #4285F4;
+            text-decoration: none;
+        }
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+        #error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            text-align: left;
+            font-size: 14px;
+            border-left: 4px solid #c62828;
+        }
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="signin-container">
+        <!-- Logo -->
+        <div class="logo">
+            <img src="../images/logo.png" alt="PartiVox" style="max-width: 100%;">
+        </div>
+        
+        <h1>Welcome Back</h1>
+        
+        <!-- Error Message -->
+        <div id="error-message" style="display: none;"></div>
+        
+        <!-- Google Sign In Button -->
+        <button id="google-signin-btn" class="google-btn">
+            <img src="https://www.google.com/favicon.ico" alt="Google">
+            Continue with Google
+        </button>
+        
+        <div class="divider">
+            <span>OR</span>
+        </div>
+        
+        <!-- Email/Password Form -->
+        <form id="login-form">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <button type="submit" class="btn-primary">Sign In</button>
+        </form>
+        
+        <div class="footer-links">
+            <p>Don't have an account? <a href="/signup.html">Sign up</a></p>
+            <p><a href="/forgot-password.html">Forgot password?</a></p>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/js/auth.js"></script>
+    
+    <script>
+        // Handle form submission
+        document.getElementById('login-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            try {
+                // Show loading state
+                button.disabled = true;
+                button.innerHTML = '<span class="loading"></span> Signing in...';
+                
+                // Call your login API
+                const response = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.token) {
+                    // Store the token
+                    localStorage.setItem('auth_token', data.token);
+                    
+                    // Redirect to dashboard or previous page
+                    const redirectTo = localStorage.getItem('redirect_after_login') || '/';
+                    localStorage.removeItem('redirect_after_login');
+                    window.location.href = redirectTo;
+                } else {
+                    throw new Error(data.message || 'Login failed');
+                }
+            } catch (error) {
+                console.error('Login Error:', error);
+                showError(error.message || 'An error occurred during login. Please try again.');
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+        });
+        
+        // Show error function for form errors
+        function showError(message) {
+            const errorDiv = document.getElementById('error-message');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            // Scroll to error
+            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        
+        // Check if we have a callback from Google
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('code') || urlParams.has('error')) {
+            // Let the auth.js handle the callback
+            handleGoogleCallback();
+        }
+    </script>
+</body>
+</html>

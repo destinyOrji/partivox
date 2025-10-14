@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>User Management - PARTIVOX</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      background-color: #0e0e0e;
+      color: white;
+    }
+    .sidebar {
+      background-color: #141414;
+      height: 100vh;
+      padding-top: 1rem;
+    }
+    .sidebar a {
+      color: #aaa;
+      display: block;
+      padding: 0.75rem 1.25rem;
+      text-decoration: none;
+    }
+    .sidebar a.active, .sidebar a:hover {
+      background-color: #222;
+      color: white;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      background-color: #1a1a1a;
+    }
+    .main-content {
+      padding: 2rem;
+    }
+    .table td, .table th {
+      vertical-align: middle;
+      color: #ddd;
+    }
+    .badge-active {
+      background-color: #2ecc71;
+    }
+    .badge-suspended {
+      background-color: #f39c12;
+    }
+    .btn-view {
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+    }
+    .btn-suspend {
+      color: red;
+      border: 1px solid red;
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+      background: none;
+    }
+    .btn-activate {
+      color: #a678f1;
+      border: 1px solid #a678f1;
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+      background: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="d-flex">
+  <!-- Sidebar -->
+  <div class="sidebar col-md-2">
+    <h4 class="text-white ps-3">🟩 PARTIVOX</h4>
+    <a href="#">Overview</a>
+    <a class="active" href="#">Users</a>
+    <a href="#">Transactions</a>
+    <a href="#">Reports</a>
+    <a href="#">Settings</a>
+    <a class="mt-5 text-danger" href="#">↩ Logout</a>
+  </div>
+
+  <!-- Main -->
+  <div class="col-md-10">
+    <div class="header">
+      <div>
+        <h5 class="mb-0">User Management</h5>
+        <small>View and manage all platform users</small>
+      </div>
+      <div class="d-flex align-items-center">
+        <img src="https://i.pravatar.cc/40" alt="Admin" class="rounded-circle me-2">
+        <div>
+          <strong>Divine Essen</strong><br>
+          <small>Administrator</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="main-content">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+          <select class="form-select form-select-sm bg-dark text-white" style="width: 150px;">
+            <option>All users</option>
+          </select>
+        </div>
+        <input type="text" class="form-control form-control-sm bg-dark text-white" placeholder="Search campaign..." style="width: 250px;">
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-dark table-hover">
+          <thead>
+            <tr>
+              <th>User</th>
+              <th>Wallet</th>
+              <th>Status</th>
+              <th>Total earning</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>@Lord_Knightmare</td>
+              <td>0xAbC...13D</td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>600 diamonds</td>
+              <td>
+                <button class="btn btn-outline-light btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#viewUserModal">View</button>
+                <button class="btn btn-suspend btn-sm">Suspend</button>
+              </td>
+            </tr>
+            <tr>
+              <td>@Lord_Knightmare</td>
+              <td>0xAbC...13D</td>
+              <td><span class="badge badge-suspended">Suspended</span></td>
+              <td>600 diamonds</td>
+              <td>
+                <button class="btn btn-outline-light btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#viewUserModal">View</button>
+                <button class="btn btn-activate btn-sm">Activate</button>
+              </td>
+            </tr>
+            <tr>
+              <td>@Lord_Knightmare</td>
+              <td>0xAbC...13D</td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>600 diamonds</td>
+              <td>
+                <button class="btn btn-outline-light btn-sm btn-view" data-bs-toggle="modal" data-bs-target="#viewUserModal">View</button>
+                <button class="btn btn-suspend btn-sm">Suspend</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- View User Modal -->
+<div class="modal fade" id="viewUserModal" tabindex="-1" aria-labelledby="viewUserLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-dark text-white text-center p-4" style="border-radius: 15px;">
+      <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+      <h5 id="viewUserLabel" class="mb-1">View user</h5>
+      <p class="text-muted">User profile</p>
+      <img src="https://i.pravatar.cc/100" class="rounded-circle mb-2" alt="User Avatar" width="80" height="80">
+      <h6 class="mb-4">@Lord_Knightmare</h6>
+
+      <div class="d-flex justify-content-center bg-black rounded py-3">
+        <div class="px-4">
+          <strong>Campaign launched</strong><br>
+          <small class="text-muted">10 campaigns</small>
+        </div>
+        <div class="px-4 border-start border-end">
+          <strong>Task engaged</strong><br>
+          <small class="text-muted">10 campaigns</small>
+        </div>
+        <div class="px-4">
+          <strong>Reports</strong><br>
+          <small class="text-muted">None</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

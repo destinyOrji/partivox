@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Campaigns</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0f0f12;
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .sidebar {
+      height: 100vh;
+      background-color: #1a1a1d;
+    }
+    .sidebar a {
+      color: #c4c4c4;
+      display: block;
+      padding: 15px;
+      text-decoration: none;
+    }
+    .sidebar a:hover {
+      background-color: #2a2a2e;
+      color: #fff;
+    }
+    .content {
+      padding: 30px;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      color: #aaa;
+      padding: 10px 20px;
+      border-radius: 20px;
+      margin-right: 10px;
+    }
+    .tab-btn.active {
+      background-color: #6f42c1;
+      color: #fff;
+    }
+    .filter-bar {
+      background-color: #1e1e22;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+    .table {
+      color: #ccc;
+    }
+    .table th {
+      color: #888;
+    }
+    .badge-active {
+      background-color: #198754;
+      padding: 6px 12px;
+      border-radius: 12px;
+    }
+    .badge-suspended {
+      background-color: #ffc107;
+      color: #000;
+      padding: 6px 12px;
+      border-radius: 12px;
+    }
+    .btn-view {
+      background-color: transparent;
+      border: 1px solid #888;
+      color: #fff;
+      border-radius: 20px;
+      padding: 5px 15px;
+    }
+    .btn-suspend {
+      background-color: transparent;
+      border: 1px solid #dc3545;
+      color: #dc3545;
+      border-radius: 20px;
+      padding: 5px 15px;
+    }
+    .btn-activate {
+      background-color: transparent;
+      border: 1px solid #6f42c1;
+      color: #6f42c1;
+      border-radius: 20px;
+      padding: 5px 15px;
+    }
+    /* Modal styles */
+    .campaign-modal {
+      background-color: #1e1e22;
+      color: #fff;
+      border-radius: 12px;
+    }
+    .campaign-modal .modal-header {
+      border-bottom: 1px solid #2a2a2e;
+      position: relative;
+    }
+    .campaign-modal .modal-footer {
+      border-top: 1px solid #2a2a2e;
+    }
+    .campaign-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      background-color: #2a2a2e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #6f42c1;
+      font-size: 24px;
+    }
+    .creator-avatar {
+      position: absolute;
+      top: -25px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 3px solid #1e1e22;
+      object-fit: cover;
+    }
+    .campaign-details {
+      background-color: #2a2a2e;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .campaign-steps {
+      background-color: #2a2a2e;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    .step-item {
+      margin-bottom: 10px;
+      padding-left: 20px;
+      position: relative;
+    }
+    .step-item:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #6f42c1;
+    }
+    .participants-progress {
+      background-color: #6f42c110;
+      height: 10px;
+      border-radius: 5px;
+      margin-top: 5px;
+      overflow: hidden;
+    }
+    .progress-bar {
+      background-color: #6f42c1;
+    }
+  </style>
+</head>
+<body>
+  <div class="d-flex">
+    <!-- Sidebar -->
+    <div class="sidebar p-3">
+      <h4 class="text-light mb-4">🟨 PARTIVOX</h4>
+      <a href="#">Overview</a>
+      <a href="#">Users</a>
+      <a href="#">Transactions</a>
+      <a href="#">Reports</a>
+      <a href="#">Settings</a>
+      <a href="#" class="mt-5 d-block text-danger">Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-grow-1 content">
+      <!-- Topbar -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h4>Campaigns</h4>
+          <p class="text-secondary">Manage your platform with comprehensive insights</p>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <input type="text" class="form-control bg-dark text-light" placeholder="Search campaign here.." />
+          <img src="https://i.pravatar.cc/40?img=3" class="rounded-circle" width="40" alt="avatar" />
+          <div>
+            <div>Divine Essen</div>
+            <small class="text-muted">Administrator</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs and Filters -->
+      <div class="filter-bar">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <button class="tab-btn active">Created campaigns</button>
+            <button class="tab-btn">Task engaged</button>
+          </div>
+          <div class="d-flex gap-2">
+            <select class="form-select bg-dark text-light border-secondary" style="width: 150px;">
+              <option>All campaigns</option>
+            </select>
+            <input type="text" class="form-control bg-dark text-light" placeholder="Search campaign here.." />
+          </div>
+        </div>
+
+        <!-- Campaign Table -->
+        <table class="table table-dark table-hover">
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>User</th>
+              <th>Diamonds</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>NFT Launch</td>
+              <td>@Lord_Knightmare</td>
+              <td>600 diamonds</td>
+              <td><span class="badge-active">Active</span></td>
+              <td>
+                <button class="btn-view" data-bs-toggle="modal" data-bs-target="#campaignModal">View</button>
+                <button class="btn-suspend">Suspend</button>
+              </td>
+            </tr>
+            <tr>
+              <td>NFT Launch</td>
+              <td>@Lord_Knightmare</td>
+              <td>600 diamonds</td>
+              <td><span class="badge-active">Active</span></td>
+              <td>
+                <button class="btn-view" data-bs-toggle="modal" data-bs-target="#campaignModal">View</button>
+                <button class="btn-suspend">Suspend</button>
+              </td>
+            </tr>
+            <tr>
+              <td>NFT Launch</td>
+              <td>@Lord_Knightmare</td>
+              <td>600 diamonds</td>
+              <td><span class="badge-suspended">Suspended</span></td>
+              <td>
+                <button class="btn-view" data-bs-toggle="modal" data-bs-target="#campaignModal">View</button>
+                <button class="btn-activate">Activate</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Campaign Modal -->
+  <div class="modal fade" id="campaignModal" tabindex="-1" aria-labelledby="campaignModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content campaign-modal">
+        <div class="modal-header">
+          <h5 class="modal-title" id="campaignModalLabel">View campaign</h5>
+          <img src="https://i.pravatar.cc/100?img=5" class="creator-avatar" alt="Creator">
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <!-- Campaign Image (placeholder) -->
+          <div class="campaign-image">
+            NFT Campaign Image
+          </div>
+          
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h6>View campaign tweet and progress</h6>
+            <small class="text-muted">@Lord_Knightmare</small>
+          </div>
+          
+          <div class="campaign-details">
+            <h5>Launching our new NFT drop ✅</h5>
+            <p class="mb-2">Massive $100K airdrop happening soon! ✅ Retweet and spread the word!</p>
+            <p class="mb-3">✅ 100 Reward</p>
+            
+            <div class="d-flex justify-content-between align-items-center">
+              <span>Participants</span>
+              <span>17/30</span>
+            </div>
+            <div class="participants-progress">
+              <div class="progress-bar" style="width: 56.67%"></div>
+            </div>
+          </div>
+          
+          <div class="campaign-steps">
+            <h6 class="mb-3">Instructions</h6>
+            <p class="mb-3">Drop your X username after completing task to claim reward</p>
+            <p class="mb-3"><a href="#" class="text-primary">https://thelinktothetweet.com</a></p>
+            
+            <div class="step-item">Step 1: Go to tweet, follow account</div>
+            <div class="step-item">Step 2: Like tweet</div>
+            <div class="step-item">Step 3: Retweet the post</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

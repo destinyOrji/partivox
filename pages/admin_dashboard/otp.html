@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Partivox | OTP Verification</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link href="/css/enhanced-typography.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0f0f12;
+      color: white;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .card {
+      background-color: #111;
+      border-radius: 15px;
+      padding: 30px;
+      width: 400px;
+      box-shadow: 0px 0px 20px rgba(0,0,0,0.5);
+    }
+    .btn-custom {
+      background-color: #d5ff00;
+      color: black;
+      font-weight: bold;
+    }
+    .form-control {
+      background-color: #1e1e1e;
+      border: 1px solid #333;
+      color: white;
+      font-size: 1.5rem;
+      text-align: center;
+      letter-spacing: 5px;
+      height: 60px;
+    }
+    .form-control:focus {
+      background-color: #2d2d2d;
+      color: white;
+      border-color: #d5ff00;
+      box-shadow: 0 0 0 0.25rem rgba(213, 255, 0, 0.25);
+    }
+    a {
+      color: #d5ff00;
+      text-decoration: none;
+    }
+    a:hover {
+      color: #b8e000;
+      text-decoration: underline;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .card {
+        width: 90%;
+        max-width: 400px;
+        padding: 20px;
+        margin: 1rem;
+      }
+
+      body {
+        padding: 1rem;
+        align-items: flex-start;
+        padding-top: 2rem;
+      }
+
+      h4 {
+        font-size: 1.25rem;
+      }
+
+      .form-control {
+        font-size: 1.25rem;
+        height: 50px;
+        letter-spacing: 3px;
+      }
+    }
+
+    @media (max-width: 576px) {
+      .card {
+        width: 95%;
+        padding: 15px;
+      }
+
+      h4 {
+        font-size: 1.125rem;
+      }
+
+      .form-control {
+        font-size: 1.125rem;
+        height: 45px;
+        letter-spacing: 2px;
+      }
+
+      .btn {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+      }
+
+      p {
+        font-size: 0.875rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0.5rem;
+        padding-top: 1rem;
+      }
+
+      .card {
+        width: 100%;
+        padding: 12px;
+        border-radius: 10px;
+      }
+
+      .form-control {
+        font-size: 1rem;
+        height: 40px;
+        letter-spacing: 1px;
+      }
+
+      img[width="80"] {
+        width: 60px;
+      }
+    }
+
+    #resendOtp {
+      background: none;
+      border: none;
+      color: #d5ff00;
+      padding: 0;
+      cursor: pointer;
+    }
+    #resendOtp:disabled {
+      color: #666;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+  <div class="card text-center">
+    <img src="../../images/IconDiamond.png" alt="Partivox" width="80" class="mb-3">
+    <h4 class="mb-3">📧 Verify Admin Account</h4>
+    <p class="mb-4">Enter the 6-digit code sent to <span id="emailDisplay" class="fw-bold text-warning">your@email.com</span></p>
+
+    <form id="otpForm">
+      <div class="mb-4">
+        <input type="text" 
+               class="form-control mx-auto" 
+               name="otp" 
+               placeholder="_ _ _ _ _ _" 
+               maxlength="6"
+               pattern="\d{6}"
+               inputmode="numeric"
+               style="width: 80%;"
+               required>
+      </div>
+      <button type="submit" class="btn btn-custom w-100 mb-3">Verify & Access Dashboard</button>
+    </form>
+
+    <p class="mt-3 small">
+      Didn't receive code? 
+      <button id="resendOtp">Resend</button> 
+      <span id="timer" class="ms-1">(00:30)</span>
+    </p>
+  </div>
+
+  <!-- Loading indicator (hidden by default) -->
+  <div class="position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-none" id="loadingOverlay" style="z-index: 9999;">
+    <div class="d-flex justify-content-center align-items-center h-100">
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="/pages/admin_dashboard/js/auth.js"></script>
+  <script>
+    // Auto-focus OTP input
+    document.addEventListener('DOMContentLoaded', function() {
+      const otpInput = document.querySelector('input[name="otp"]');
+      if (otpInput) {
+        otpInput.focus();
+        
+        // Auto-tab between OTP digits
+        otpInput.addEventListener('input', function(e) {
+          this.value = this.value.replace(/[^0-9]/g, '');
+          if (this.value.length === 6) {
+            document.getElementById('otpForm').dispatchEvent(new Event('submit'));
+          }
+        });
+      }
+      
+      // Start the resend timer
+      startResendTimer();
+    });
+  </script>
+</body>
+</html>

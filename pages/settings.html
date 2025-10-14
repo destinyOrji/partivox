@@ -1,0 +1,1789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - PARTIVOX</title>
+    <link rel="shortcut icon" href="../images/IconDiamond.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="/css/enhanced-typography.css" rel="stylesheet">
+  <style>
+    :root {
+      /* === PARTIVOX DESIGN SYSTEM === */
+      
+      /* Core Background Colors */
+      --primary-bg: #0a0a0f;
+      --secondary-bg: #1a1a1f;
+      --card-bg: #1e1e24;
+      --sidebar-bg: #16161b;
+      --surface-bg: #252530;
+      --overlay-bg: rgba(10, 10, 15, 0.95);
+      
+      /* Lemon Green Brand Colors (Primary) */
+      --accent-color: #caf403; /* signature lemon green */
+      --accent-hover: #9dcf00; /* darker lemon green */
+      --accent-light: #e8ff4d; /* lighter lemon green */
+      --accent-dark: #7ba800; /* darkest lemon green */
+      --accent-rgb: 202, 244, 3;
+      
+      /* Secondary Brand Colors */
+      --primary-color: #667eea;
+      --primary-hover: #5a67d8;
+      --primary-light: #7c3aed;
+      --primary-rgb: 102, 126, 234;
+      
+      /* Text Colors */
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --text-inverse: #000000;
+      --text-accent: var(--accent-color);
+      
+      /* Status Colors */
+      --success-color: #10b981;
+      --success-light: #34d399;
+      --warning-color: #f59e0b;
+      --warning-light: #fbbf24;
+      --danger-color: #ef4444;
+      --danger-light: #f87171;
+      --info-color: #3b82f6;
+      --info-light: #60a5fa;
+      
+      /* Border & Divider Colors */
+      --border-color: #27272a;
+      --border-light: #374151;
+      --border-accent: var(--accent-color);
+      --divider-color: rgba(255, 255, 255, 0.1);
+      
+      /* Layout Variables */
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 60px;
+      --topbar-height: 70px;
+      --border-radius: 12px;
+      --border-radius-sm: 8px;
+      --border-radius-lg: 16px;
+      
+      /* Spacing Scale */
+      --space-xs: 0.25rem;    /* 4px */
+      --space-sm: 0.5rem;     /* 8px */
+      --space-md: 1rem;       /* 16px */
+      --space-lg: 1.5rem;     /* 24px */
+      --space-xl: 2rem;       /* 32px */
+      --space-2xl: 3rem;      /* 48px */
+      --space-3xl: 4rem;      /* 64px */
+      
+      /* Typography Scale */
+      --text-xs: 0.75rem;     /* 12px */
+      --text-sm: 0.875rem;    /* 14px */
+      --text-base: 1rem;      /* 16px */
+      --text-lg: 1.125rem;    /* 18px */
+      --text-xl: 1.25rem;     /* 20px */
+      --text-2xl: 1.5rem;     /* 24px */
+      --text-3xl: 1.875rem;   /* 30px */
+      --text-4xl: 2.25rem;    /* 36px */
+      
+      /* Animation & Transitions */
+      --transition-fast: 0.15s ease;
+      --transition-base: 0.2s ease;
+      --transition-slow: 0.3s ease;
+      --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+      --shadow-base: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+      --shadow-accent: 0 0 0 3px rgba(202, 244, 3, 0.15);
+      
+      /* Z-Index Scale */
+      --z-dropdown: 1000;
+      --z-sticky: 1020;
+      --z-fixed: 1030;
+      --z-modal-backdrop: 1040;
+      --z-modal: 1050;
+      --z-popover: 1060;
+      --z-tooltip: 1070;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(135deg, var(--primary-bg) 0%, #0f0f14 100%);
+      color: var(--text-primary);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      line-height: 1.6;
+    }
+
+    .sidebar {
+      height: 100vh;
+      background: linear-gradient(180deg, var(--sidebar-bg) 0%, #12121a 100%);
+      border-right: 1px solid var(--border-color);
+      position: fixed;
+      width: 280px;
+      z-index: 1000;
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .sidebar.collapsed {
+      transform: translateX(-240px);
+      width: 60px;
+    }
+
+    .sidebar.collapsed .logo h4,
+    .sidebar.collapsed .nav-section h6,
+    .sidebar.collapsed a span {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    .sidebar .logo {
+      padding: 2rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar .logo h4 {
+      font-weight: 700;
+      font-size: 1.5rem;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .sidebar .nav-section {
+      padding: 1rem 0;
+    }
+
+    .sidebar .nav-section h6 {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .sidebar a {
+      color: var(--text-secondary);
+      padding: 0.875rem 1.5rem;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .sidebar a i {
+      width: 20px;
+      margin-right: 12px;
+      font-size: 1rem;
+    }
+
+    .sidebar a:hover {
+      color: var(--text-primary);
+      background: rgba(202, 244, 3, 0.1);
+    }
+
+    .sidebar a.active {
+      color: var(--accent-color);
+      background: rgba(202, 244, 3, 0.15);
+      border-right: 3px solid var(--accent-color);
+    }
+
+    .main-content {
+      margin-left: 280px;
+      min-height: 100vh;
+      transition: margin-left 0.3s ease;
+      background: transparent;
+    }
+
+    .main-content.sidebar-collapsed {
+      margin-left: 60px;
+    }
+
+    .topbar {
+      background: rgba(30, 30, 36, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .content {
+      padding: 2rem;
+    }
+
+    .content-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .sidebar-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-toggle:hover {
+      background: var(--accent-color);
+      color: #000;
+      border-color: var(--accent-color);
+    }
+
+    .user-profile {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-color), #9dcf00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .user-details h6 {
+      font-size: 0.875rem;
+      margin: 0;
+    }
+
+    .user-details small {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    /* Campaign Upload Specific Styles */
+    .upload-label {
+      border: 2px dashed var(--border-color);
+      background: var(--secondary-bg);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .upload-label:hover {
+      border-color: var(--accent-color);
+      background: rgba(202, 244, 3, 0.05);
+    }
+
+    .form-control {
+      background: var(--secondary-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      border-radius: 8px;
+    }
+
+    .form-control:focus {
+      background: var(--secondary-bg);
+      border-color: var(--accent-color);
+      color: var(--text-primary);
+      box-shadow: 0 0 0 0.2rem rgba(202, 244, 3, 0.25);
+    }
+
+    .btn-primary {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+      background: var(--accent-hover);
+      border-color: var(--accent-hover);
+      color: #000;
+    }
+
+    .btn-outline-primary {
+      color: var(--accent-color);
+      border-color: var(--accent-color);
+    }
+
+    .btn-outline-primary:hover,
+    .btn-outline-primary:focus {
+      background: var(--accent-color);
+      border-color: var(--accent-color);
+      color: #000;
+    }
+
+    .custom-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 1050;
+      border-radius: 16px;
+      display: none;
+    }
+
+    .overlay {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1040;
+      display: none;
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.show {
+        transform: translateX(0);
+      }
+
+      .main-content {
+        margin-left: 0;
+      }
+
+      .main-content.sidebar-collapsed {
+        margin-left: 0;
+      }
+
+      .content {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <h4>
+        <i class="fas fa-gem me-2"></i>
+        PARTIVOX
+      </h4>
+    </div>
+    
+    <div class="user-profile">
+      <div class="user-avatar" id="userAvatar">U</div>
+      <div class="user-details">
+        <h6 id="userHandle">@username</h6>
+        <small id="walletAddress">Connect wallet</small>
+      </div>
+    </div>
+
+    <div class="nav-section">
+      <h6>Main</h6>
+      <a href="userDashboard.html">
+        <i class="fas fa-home"></i>
+        <span>Dashboard</span>
+      </a>
+      <a href="campaign_upload.html">
+        <i class="fas fa-plus-circle"></i>
+        <span>Create Campaign</span>
+      </a>
+      <a href="campaignProgress.html">
+        <i class="fas fa-tasks"></i>
+        <span>My Campaigns</span>
+      </a>
+      <a href="task_engage.html">
+        <i class="fas fa-bolt"></i>
+        <span>Tasks</span>
+      </a>
+    </div>
+
+    <div class="nav-section">
+      <h6>Account</h6>
+      <a href="Wallet.html">
+        <i class="fas fa-wallet"></i>
+        <span>Wallet</span>
+      </a>
+      <a href="settings.html" class="active">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </div>
+
+    <div class="nav-section mt-auto">
+      <a href="#" onclick="logout()">
+        <i class="fas fa-sign-out-alt"></i>
+        <span>Logout</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Overlay for mobile -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- Main Content -->
+  <div class="main-content" id="mainContent">
+    <div class="content">
+      <!-- Topbar -->
+      <div class="topbar d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-3">
+          <div class="sidebar-toggle" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+          </div>
+          <div>
+            <h5 class="mb-0">Settings</h5>
+            <small class="text-muted">Configure your profile, manage connected accounts (Twitter & MetaMask), customize notification preferences, and update security settings</small>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+          <button class="btn btn-primary btn-sm" id="saveSettingsBtn">
+            <i class="fas fa-save me-1"></i>Save Changes
+          </button>
+        </div>
+      </div>
+
+      <!-- Profile Settings Card -->
+      <div class="content-card mb-4">
+        <h6 class="mb-4">Profile Settings</h6>
+        
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="d-flex align-items-center gap-3 mb-4">
+              <div class="position-relative">
+                <img src="../images/avartar1.jpg" alt="Profile" id="profile-avatar" class="rounded-circle" style="width: 60px; height: 60px; object-fit: cover; cursor: pointer;" onclick="triggerAvatarUpload()">
+                <div class="position-absolute bottom-0 end-0" style="background: var(--accent-color); border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="triggerAvatarUpload()" title="Change profile picture">
+                  <i class="fas fa-camera" style="font-size: 10px; color: white;"></i>
+                </div>
+                <input type="file" id="avatar-upload" accept="image/*" style="display: none;" onchange="handleAvatarUpload(this)">
+              </div>
+              <div class="flex-grow-1">
+                <label class="form-label">Display Name</label>
+                <input type="text" id="display-name" class="form-control" placeholder="@username">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label" id="address-label">Wallet ID</label>
+            <input type="text" id="wallet-address" class="form-control" placeholder="Connect wallet to see address" readonly>
+          </div>
+        </div>
+      </div>
+
+      <!-- Connected Accounts & Notifications -->
+      <div class="row g-4">
+        <!-- Connected Accounts -->
+        <div class="col-lg-6">
+          <div class="content-card">
+            <h6 class="mb-4">Connected Accounts</h6>
+            
+            <!-- MetaMask Account -->
+            <div class="d-flex align-items-center gap-3 p-3 mb-3" style="background: rgba(26, 26, 26, 0.4); border-radius: 12px;">
+              <img src="../images/metamaskIcon.png" alt="MetaMask" class="rounded-circle" style="width: 40px; height: 40px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">MetaMask Wallet</h6>
+                <small class="text-muted" id="metamask-address">Not connected</small>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge" id="metamask-status" style="background: rgba(220, 38, 38, 0.2); color: var(--danger-color);">
+                  <i class="fas fa-times me-1"></i>Not Connected
+                </span>
+                <button class="btn btn-sm btn-primary" id="connect-metamask" onclick="connectMetaMask()">Connect</button>
+                <button class="btn btn-sm btn-danger" id="disconnect-metamask" onclick="disconnectAccount('metamask')" style="display: none;">Disconnect</button>
+              </div>
+            </div>
+
+            <!-- Twitter Account -->
+            <div class="d-flex align-items-center gap-3 p-3" style="background: rgba(26, 26, 26, 0.4); border-radius: 12px;">
+              <img src="../images/xLogo.png" alt="Twitter" class="rounded-circle" style="width: 40px; height: 40px;">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">X (Twitter)</h6>
+                <small class="text-muted" id="twitter-handle">Not connected</small>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="badge" id="twitter-status" style="background: rgba(220, 38, 38, 0.2); color: var(--danger-color);">
+                  <i class="fas fa-times me-1"></i>Not Connected
+                </span>
+                <button class="btn btn-sm" id="connect-twitter" onclick="connectTwitter()" style="background: rgba(29, 161, 242, 1); color: white;">Connect</button>
+                <button class="btn btn-sm btn-danger" id="disconnect-twitter" onclick="disconnectAccount('twitter')" style="display: none;">Disconnect</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Notification Settings -->
+        <div class="col-lg-6">
+          <div class="content-card">
+            <h6 class="mb-4">Notification Settings</h6>
+            
+            <!-- Activity Notifications -->
+            <div class="d-flex justify-content-between align-items-center p-3 mb-3" style="background: rgba(26, 26, 26, 0.4); border-radius: 12px;">
+              <div>
+                <h6 class="mb-1">Recent Activity Sidebar</h6>
+                <small class="text-muted">Get notified on all of your activities</small>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="activity-notifications">
+              </div>
+            </div>
+
+            <!-- Weekly Summary -->
+            <div class="d-flex justify-content-between align-items-center p-3 mb-3" style="background: rgba(26, 26, 26, 0.4); border-radius: 12px;">
+              <div>
+                <h6 class="mb-1">Weekly Earnings Summary</h6>
+                <small class="text-muted">Receive weekly earning summary</small>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="weekly-summary">
+              </div>
+            </div>
+
+            <!-- Campaign Updates -->
+            <div class="d-flex justify-content-between align-items-center p-3 mb-3" style="background: rgba(26, 26, 26, 0.4); border-radius: 12px;">
+              <div>
+                <h6 class="mb-1">Campaign Updates</h6>
+                <small class="text-muted">Get notified about campaign status changes</small>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="campaign-updates">
+              </div>
+            </div>
+
+            <!-- Task Reminders -->
+            <div class="d-flex justify-content-between align-items-center p-3" style="background: rgba(26, 26, 26, 0.4); border-radius: 12px;">
+              <div>
+                <h6 class="mb-1">Task Reminders</h6>
+                <small class="text-muted">Receive reminders for pending tasks</small>
+              </div>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="task-reminders">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/web3@1.8.0/dist/web3.min.js"></script>
+  <script src="../javascript/api.js"></script>
+  <script src="../javascript/globalUser.js"></script>
+  <script>
+    // Dynamic API base URL to match current origin
+    const API_BASE_URL = window.location.origin + "/";
+
+    // SIDEBAR TOGGLE FUNCTIONALITY
+    document.addEventListener('DOMContentLoaded', function() {
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebarOverlay = document.getElementById('sidebarOverlay');
+
+      function toggleSidebar() {
+        if (window.innerWidth <= 768) {
+          // Mobile behavior
+          sidebar.classList.toggle('show');
+          sidebarOverlay.style.display = sidebar.classList.contains('show') ? 'block' : 'none';
+        } else {
+          // Desktop behavior
+          sidebar.classList.toggle('collapsed');
+          mainContent.classList.toggle('sidebar-collapsed');
+        }
+      }
+
+      sidebarToggle.addEventListener('click', toggleSidebar);
+      sidebarOverlay.addEventListener('click', () => {
+        sidebar.classList.remove('show');
+        sidebarOverlay.style.display = 'none';
+      });
+
+      // Handle window resize
+      window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+          sidebar.classList.remove('show');
+          sidebarOverlay.style.display = 'none';
+        }
+      });
+
+      // Global error handlers for evmAsk.js conflicts
+      window.addEventListener('error', function(event) {
+        if (event.error && event.error.message && 
+            (event.error.message.includes('evmAsk') || event.error.message.includes('selectExtension'))) {
+          console.warn('🚫 Wallet extension conflict detected and handled:', event.error.message);
+          event.preventDefault();
+          return false;
+        }
+      });
+
+      window.addEventListener('unhandledrejection', function(event) {
+        if (event.reason && event.reason.message && 
+            (event.reason.message.includes('evmAsk') || event.reason.message.includes('selectExtension'))) {
+          console.warn('🚫 Wallet extension promise rejection handled:', event.reason.message);
+          event.preventDefault();
+        }
+      });
+
+      // Update user info
+      updateUserProfile();
+      updateWalletAddress();
+      
+      // Load user settings
+      loadUserSettings();
+      
+      // Initialize save button
+      initializeSaveButton();
+      
+      // Load current profile picture
+      loadProfilePicture();
+    });
+
+    // Helper function to get valid token
+    async function getValidToken() {
+        let token = localStorage.getItem('authToken');
+        console.log('Current token in localStorage:', token ? 'Present' : 'Missing');
+        
+        // If no JWT token, try to get one for Twitter users
+        if (!token) {
+            try {
+                console.log('No token found, trying to get one from Twitter session...');
+                const response = await fetch(`${API_BASE_URL}api/twitter/get-token.php`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                console.log('Twitter token response status:', response.status);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Twitter token response:', data);
+                    if (data.status === 'success' && data.token) {
+                        token = data.token;
+                        localStorage.setItem('authToken', token);
+                        console.log('✅ Token obtained from Twitter session');
+                        
+                        // Also store user info if available
+                        if (data.user) {
+                            localStorage.setItem('userHandle', data.user.name || '@user');
+                            localStorage.setItem('userId', data.user.id);
+                        }
+                    } else {
+                        console.log('❌ No token in Twitter response:', data.message || 'Unknown error');
+                    }
+                } else {
+                    const errorData = await response.json().catch(() => ({}));
+                    console.log('❌ Twitter token request failed:', response.status, errorData.message || 'Unknown error');
+                }
+            } catch (error) {
+                console.error('Error getting token:', error);
+            }
+        }
+        
+        if (!token) {
+            console.log('❌ No authentication available');
+        } else {
+            console.log('✅ Using token for API calls');
+        }
+        
+        return token;
+    }
+
+    // Update user profile information
+    async function updateUserProfile() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}api/settings/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.twitter_handle) {
+            const userHandle = document.getElementById('userHandle');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            if (userHandle) {
+              userHandle.textContent = `@${data.data.twitter_handle}`;
+            }
+            
+            if (userAvatar) {
+              userAvatar.textContent = data.data.twitter_handle.charAt(0).toUpperCase();
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user profile:', error);
+      }
+    }
+
+    // Update wallet address display
+    function updateWalletAddress() {
+      const CONNECTED_EVM_KEY = 'connected_evm_wallet';
+      const localWallet = localStorage.getItem(CONNECTED_EVM_KEY);
+      const walletAddress = document.getElementById('walletAddress');
+      
+      if (walletAddress) {
+        if (localWallet && localWallet.startsWith('0x')) {
+          const shortAddress = `${localWallet.slice(0, 6)}...${localWallet.slice(-4)}`;
+          walletAddress.textContent = shortAddress;
+        } else {
+          walletAddress.textContent = 'Connect wallet';
+        }
+      }
+    }
+
+    // Initialize save button
+    function initializeSaveButton() {
+      const saveBtn = document.getElementById('saveSettingsBtn');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', saveSettings);
+      }
+    }
+
+    // Load user settings
+    async function loadUserSettings() {
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          window.location.href = '../index.html';
+          return;
+        }
+
+        // Load user profile settings
+        const response = await fetch(`${API_BASE_URL}api/settings/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            populateSettingsForm(data.data);
+          }
+        }
+
+        // Load connected accounts
+        await loadConnectedAccounts();
+        
+        // Load notification settings
+        await loadNotificationSettings();
+        
+      } catch (error) {
+        console.error('Error loading settings:', error);
+      }
+    }
+
+    // Populate settings form with user data
+    function populateSettingsForm(userData) {
+      const nameInput = document.getElementById('display-name');
+      const walletInput = document.getElementById('wallet-address');
+      const addressLabel = document.getElementById('address-label');
+      
+      // Use Twitter handle as display name if available
+      if (nameInput) {
+        const displayName = userData.twitter_handle ? `@${userData.twitter_handle}` : (userData.name || '');
+        nameInput.value = displayName;
+      }
+      
+      if (walletInput && addressLabel) {
+        addressLabel.textContent = 'Wallet ID';
+        
+        // Check both backend data and localStorage for wallet address
+        const CONNECTED_EVM_KEY = 'connected_evm_wallet';
+        const localWallet = localStorage.getItem(CONNECTED_EVM_KEY);
+        const walletAddress = userData.wallet_address || localWallet;
+        
+        if (walletAddress && walletAddress.startsWith('0x')) {
+          walletInput.value = walletAddress;
+          walletInput.placeholder = '0x...';
+        } else {
+          walletInput.value = 'No wallet connected';
+          walletInput.placeholder = 'Connect wallet to see address';
+        }
+      }
+    }
+
+    // Load connected accounts
+    async function loadConnectedAccounts() {
+      try {
+        const token = await getValidToken();
+        const response = await fetch(`${API_BASE_URL}api/settings/connected-accounts`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            updateConnectedAccountsUI(data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading connected accounts:', error);
+      }
+    }
+
+    // Update connected accounts UI
+    function updateConnectedAccountsUI(accounts) {
+      // Update Twitter account
+      const twitterHandle = document.getElementById('twitter-handle');
+      const twitterStatus = document.getElementById('twitter-status');
+      const connectTwitter = document.getElementById('connect-twitter');
+      const disconnectTwitter = document.getElementById('disconnect-twitter');
+      
+      if (accounts.twitter && accounts.twitter.connected) {
+        twitterHandle.textContent = `@${accounts.twitter.handle}`;
+        twitterStatus.innerHTML = '<i class="fas fa-check me-1"></i>Connected';
+        twitterStatus.style.background = 'rgba(16, 185, 129, 0.2)';
+        twitterStatus.style.color = 'var(--success-color)';
+        connectTwitter.style.display = 'none';
+        disconnectTwitter.style.display = 'block';
+      }
+      
+      // Update MetaMask account
+      const metamaskAddress = document.getElementById('metamask-address');
+      const metamaskStatus = document.getElementById('metamask-status');
+      const connectMetamask = document.getElementById('connect-metamask');
+      const disconnectMetamask = document.getElementById('disconnect-metamask');
+      
+      // Check localStorage for immediate display
+      const CONNECTED_EVM_KEY = 'connected_evm_wallet';
+      const localWallet = localStorage.getItem(CONNECTED_EVM_KEY);
+      
+      const isConnected = (accounts.metamask && accounts.metamask.connected) || (localWallet && localWallet.startsWith('0x'));
+      const walletAddress = accounts.metamask?.short_address || (localWallet ? `${localWallet.slice(0, 6)}...${localWallet.slice(-4)}` : null);
+      
+      if (isConnected && walletAddress) {
+        metamaskAddress.textContent = walletAddress;
+        metamaskStatus.innerHTML = '<i class="fas fa-check me-1"></i>Connected';
+        metamaskStatus.style.background = 'rgba(16, 185, 129, 0.2)';
+        metamaskStatus.style.color = 'var(--success-color)';
+        connectMetamask.style.display = 'none';
+        disconnectMetamask.style.display = 'block';
+      }
+    }
+
+    // Load notification settings
+    async function loadNotificationSettings() {
+      try {
+        const token = await getValidToken();
+        const response = await fetch(`${API_BASE_URL}api/settings/notifications`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            updateNotificationSettingsUI(data.data);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading notification settings:', error);
+      }
+    }
+
+    // Update notification settings UI
+    function updateNotificationSettingsUI(settings) {
+      document.getElementById('activity-notifications').checked = settings.email_notifications || false;
+      document.getElementById('weekly-summary').checked = settings.push_notifications || false;
+      document.getElementById('campaign-updates').checked = settings.campaign_updates || false;
+      document.getElementById('task-reminders').checked = settings.task_reminders || false;
+    }
+
+    // Connect MetaMask wallet
+    async function connectMetaMask() {
+      try {
+        if (typeof window.ethereum === 'undefined') {
+          if (window.AppAPI) AppAPI.toast('Please install MetaMask to connect your wallet', 'warning'); else alert('MetaMask is not installed. Please install MetaMask to connect your wallet.');
+          return;
+        }
+
+        const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+        
+        if (accounts.length === 0) {
+          if (window.AppAPI) AppAPI.toast('No accounts found. Unlock MetaMask', 'warning'); else alert('No accounts found. Please make sure MetaMask is unlocked.');
+          return;
+        }
+
+        const walletAddress = accounts[0];
+        
+        // Save wallet address to localStorage
+        localStorage.setItem('connected_evm_wallet', walletAddress);
+        
+        // Save wallet address to backend
+        const token = await getValidToken();
+        const response = await fetch(`${API_BASE_URL}api/settings/connect-wallet`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ wallet_address: walletAddress })
+        });
+
+        if (response.ok) {
+          if (window.AppAPI) AppAPI.toast('MetaMask wallet connected!', 'success'); else alert('MetaMask wallet connected successfully!');
+          updateWalletAddress();
+          await loadConnectedAccounts();
+          await loadUserSettings();
+        }
+      } catch (error) {
+        console.error('Error connecting MetaMask:', error);
+        if (error.code === 4001) {
+          if (window.AppAPI) AppAPI.toast('Connection request rejected', 'warning'); else alert('Connection request was rejected by user.');
+        } else {
+          if (window.AppAPI) AppAPI.toast('Error connecting MetaMask', 'error'); else alert('Error connecting MetaMask. Please try again.');
+        }
+      }
+    }
+
+    // Connect Twitter account
+    function connectTwitter() {
+      window.location.href = '/api/twitter/twitter-auth.php';
+    }
+
+    // Disconnect account function
+    async function disconnectAccount(accountType) {
+      try {
+        const token = await getValidToken();
+        const response = await fetch(`${API_BASE_URL}api/settings/disconnect`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ account_type: accountType })
+        });
+
+        if (response.ok) {
+          if (window.AppAPI) AppAPI.toast(`${accountType.charAt(0).toUpperCase() + accountType.slice(1)} disconnected`, 'success'); else alert(`${accountType.charAt(0).toUpperCase() + accountType.slice(1)} account disconnected successfully!`);
+          
+          if (accountType === 'twitter') {
+            localStorage.removeItem('authToken');
+            window.location.href = '../index.html';
+          } else if (accountType === 'metamask') {
+            localStorage.removeItem('connected_evm_wallet');
+            updateWalletAddress();
+            await loadConnectedAccounts();
+          }
+        }
+      } catch (error) {
+        console.error('Error disconnecting account:', error);
+        if (window.AppAPI) AppAPI.toast('Error disconnecting account', 'error'); else alert('Error disconnecting account. Please try again.');
+      }
+    }
+
+    // Save user settings
+    async function saveSettings() {
+      try {
+        const token = await getValidToken();
+        const nameInput = document.getElementById('display-name');
+        
+        // Save profile settings
+        const profileData = {
+          name: nameInput?.value?.replace('@', '') || ''
+        };
+
+        const profileResponse = await fetch(`${API_BASE_URL}api/settings/profile`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(profileData)
+        });
+
+        // Save notification settings
+        const notificationData = {
+          email_notifications: document.getElementById('activity-notifications').checked,
+          push_notifications: document.getElementById('weekly-summary').checked,
+          campaign_updates: document.getElementById('campaign-updates').checked,
+          task_reminders: document.getElementById('task-reminders').checked
+        };
+
+        const notificationResponse = await fetch(`${API_BASE_URL}api/settings/notifications`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(notificationData)
+        });
+
+        if (profileResponse.ok && notificationResponse.ok) {
+          if (window.AppAPI) AppAPI.toast('Settings saved', 'success'); else alert('Settings saved successfully!');
+        } else {
+          if (window.AppAPI) AppAPI.toast('Error saving some settings', 'error'); else alert('Error saving some settings. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error saving settings:', error);
+        if (window.AppAPI) AppAPI.toast('Error saving settings', 'error'); else alert('Error saving settings. Please try again.');
+      }
+    }
+
+    // Avatar upload functions
+    function triggerAvatarUpload() {
+      document.getElementById('avatar-upload').click();
+    }
+
+    async function handleAvatarUpload(input) {
+      if (!input.files || !input.files[0]) return;
+
+      const file = input.files[0];
+      
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        if (window.AppAPI) AppAPI.toast('Please select an image file', 'warning'); else alert('Please select an image file.');
+        return;
+      }
+
+      // Validate file size (5MB max)
+      if (file.size > 5 * 1024 * 1024) {
+        if (window.AppAPI) AppAPI.toast('File size must be < 5MB', 'warning'); else alert('File size must be less than 5MB.');
+        return;
+      }
+
+      try {
+        const token = await getValidToken();
+        if (!token) {
+          if (window.AppAPI) AppAPI.toast('Please log in to upload profile picture', 'warning'); else alert('Please log in to upload profile picture.');
+          return;
+        }
+
+        // Show loading state
+        const avatarImg = document.getElementById('profile-avatar');
+        const originalSrc = avatarImg.src;
+        avatarImg.style.opacity = '0.5';
+        
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append('avatar', file);
+
+        const response = await fetch(`${API_BASE_URL}api/settings/upload-avatar`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const result = await response.json();
+
+        if (result.status === 'success') {
+          // Update avatar image
+          avatarImg.src = API_BASE_URL.replace('/', '') + result.data.avatar_url + '?t=' + Date.now();
+          avatarImg.style.opacity = '1';
+          
+          // Update all avatar displays across the page
+          updateAllAvatarDisplays(result.data.avatar_url);
+          
+          alert('Profile picture updated successfully!');
+        } else {
+          avatarImg.style.opacity = '1';
+          alert('Error uploading profile picture: ' + result.message);
+        }
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+        document.getElementById('profile-avatar').style.opacity = '1';
+        
+        // Show more specific error message
+        let errorMessage = 'Error uploading profile picture. ';
+        if (error.message.includes('500')) {
+          errorMessage += 'Server error - please check if you are logged in and try again.';
+        } else if (error.message.includes('404')) {
+          errorMessage += 'Upload endpoint not found. Please contact support.';
+        } else if (error.message.includes('401')) {
+          errorMessage += 'Please log in and try again.';
+        } else {
+          errorMessage += 'Please try again.';
+        }
+        alert(errorMessage);
+      }
+
+      // Clear the input
+      input.value = '';
+    }
+
+    // Update all avatar displays on the page
+    function updateAllAvatarDisplays(avatarUrl) {
+      const fullUrl = API_BASE_URL.replace('/', '') + avatarUrl + '?t=' + Date.now();
+      
+      // Update sidebar avatar if it exists
+      const sidebarAvatar = document.querySelector('.sidebar .user-avatar');
+      if (sidebarAvatar && sidebarAvatar.tagName === 'IMG') {
+        sidebarAvatar.src = fullUrl;
+      }
+      
+      // Store in localStorage for other pages
+      localStorage.setItem('userAvatar', avatarUrl);
+    }
+
+    // Load user avatar on page load
+    async function loadUserAvatar() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+
+        const response = await fetch(`${API_BASE_URL}api/settings/profile`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          if (result.status === 'success' && result.data.avatar) {
+            const avatarUrl = API_BASE_URL.replace('/', '') + result.data.avatar + '?t=' + Date.now();
+            document.getElementById('profile-avatar').src = avatarUrl;
+            updateAllAvatarDisplays(result.data.avatar);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading user avatar:', error);
+      }
+    }
+
+    // Helper function to get valid token
+    // Enhanced token validation with 401 error handling
+    async function getValidToken() {
+      let token = localStorage.getItem('authToken');
+      console.log('Settings: Current token in localStorage:', token ? 'Present' : 'Missing');
+      
+      // If no JWT token, try to get one for Twitter users
+      if (!token) {
+        try {
+          console.log('Settings: No token found, trying to get one from Twitter session...');
+          const response = await fetch(`${API_BASE_URL}api/twitter/get-token.php`, {
+            method: 'GET',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          console.log('Settings: Twitter token response status:', response.status);
+          
+          if (response.ok) {
+            const data = await response.json();
+            console.log('Settings: Twitter token response:', data);
+            if (data.status === 'success' && data.token) {
+              token = data.token;
+              localStorage.setItem('authToken', token);
+              console.log('Settings: ✅ Token obtained from Twitter session');
+              
+              // Also store user info if available
+              if (data.user) {
+                localStorage.setItem('userHandle', data.user.name || '@user');
+                localStorage.setItem('userId', data.user.id);
+              }
+            } else {
+              console.log('Settings: ❌ No token in Twitter response:', data.message || 'Unknown error');
+            }
+          } else {
+            const errorData = await response.json().catch(() => ({}));
+            console.log('Settings: ❌ Twitter token request failed:', response.status, errorData.message || 'Unknown error');
+          }
+        } catch (error) {
+          console.warn('Settings: Failed to get Twitter token:', error);
+        }
+      }
+      
+      if (!token) {
+        console.log('Settings: ❌ No authentication available');
+      } else {
+        console.log('Settings: ✅ Using token for API calls');
+      }
+      
+      return token;
+    }
+
+    // Initialize avatar loading
+    document.addEventListener('DOMContentLoaded', function() {
+      loadUserAvatar();
+    });
+    // Profile picture upload functions
+    function triggerAvatarUpload() {
+      document.getElementById('avatar-upload').click();
+    }
+    
+    async function handleAvatarUpload(input) {
+      if (!input.files || !input.files[0]) return;
+      
+      const file = input.files[0];
+      
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        showNotification('Please select a valid image file', 'error');
+        return;
+      }
+      
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        showNotification('Image size must be less than 5MB', 'error');
+        return;
+      }
+      
+      try {
+        // Show loading state
+        const profileAvatar = document.getElementById('profile-avatar');
+        const originalSrc = profileAvatar.src;
+        profileAvatar.style.opacity = '0.5';
+        
+        // Get authentication token
+        const token = await getValidToken();
+        if (!token) {
+          showNotification('Please login to upload profile picture', 'error');
+          return;
+        }
+        
+        // Create FormData for file upload
+        const formData = new FormData();
+        formData.append('profile_picture', file);
+        
+        // Upload to server
+        console.log('Uploading to:', `${API_BASE_URL}api/settings/upload-profile-picture`);
+        console.log('Token:', token ? 'Present' : 'Missing');
+        console.log('FormData entries:', [...formData.entries()]);
+        console.log('File details:', {
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          lastModified: file.lastModified
+        });
+        
+        const response = await fetch(`${API_BASE_URL}api/settings/upload-profile-picture`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+        
+        console.log('Response status:', response.status);
+        console.log('Response headers:', [...response.headers.entries()]);
+        
+        const responseText = await response.text();
+        console.log('Upload response status:', response.status);
+        console.log('Upload response raw text:', responseText.substring(0, 500));
+        
+        let data;
+        try {
+          data = JSON.parse(responseText);
+        } catch (parseError) {
+          console.error('Failed to parse upload response as JSON:', parseError);
+          console.error('Response was not valid JSON. Full response:', responseText);
+          
+          // Restore original image on error
+          profileAvatar.src = originalSrc;
+          profileAvatar.style.opacity = '1';
+          
+          showNotification('Server returned invalid response. Please check server logs.', 'error');
+          return;
+        }
+        
+        console.log('Upload response parsed data:', data);
+        
+        if (response.ok && data.status === 'success') {
+          // Update profile picture display
+          profileAvatar.src = data.data.profile_picture_url;
+          profileAvatar.style.opacity = '1';
+          
+          // Update sidebar avatar too
+          const userAvatar = document.getElementById('userAvatar');
+          if (userAvatar && data.data.profile_picture_url) {
+            userAvatar.innerHTML = `<img src="${data.data.profile_picture_url}" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+          }
+          
+          showNotification('Profile picture updated successfully!', 'success');
+        } else if (response.status === 401) {
+          // Handle 401 Unauthorized - clear token and show login message
+          console.log('Upload API returned 401 - token may be invalid');
+          localStorage.removeItem('authToken');
+          
+          // Restore original image
+          profileAvatar.src = originalSrc;
+          profileAvatar.style.opacity = '1';
+          
+          showNotification('Session expired. Please refresh the page to log in again.', 'warning');
+        } else {
+          // Restore original image on error
+          profileAvatar.src = originalSrc;
+          profileAvatar.style.opacity = '1';
+          
+          console.error('Upload failed:', data);
+          const errorMessage = data.message || 'Error uploading profile picture. Server error - please check if you are logged in and try again.';
+          showNotification(errorMessage, 'error');
+        }
+      } catch (error) {
+        console.error('Profile picture upload error:', error);
+        
+        // Restore original image on error
+        const profileAvatar = document.getElementById('profile-avatar');
+        profileAvatar.style.opacity = '1';
+        
+        showNotification('Error uploading profile picture. Server error - please check if you are logged in and try again.', 'error');
+      }
+    }
+    
+    // Load current profile picture
+    async function loadProfilePicture() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+        
+        const response = await fetch(`${API_BASE_URL}api/settings/profile-picture`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success' && data.data.profile_picture_url) {
+            const profileAvatar = document.getElementById('profile-avatar');
+            const userAvatar = document.getElementById('userAvatar');
+            
+            // Update main profile picture
+            if (profileAvatar) {
+              profileAvatar.src = data.data.profile_picture_url;
+            }
+            
+            // Update sidebar avatar
+            if (userAvatar) {
+              userAvatar.innerHTML = `<img src="${data.data.profile_picture_url}" alt="Profile" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error loading profile picture:', error);
+      }
+    }
+    
+    // Notification system
+    function showNotification(message, type = 'info') {
+      // Remove existing notifications
+      const existingNotifications = document.querySelectorAll('.notification-toast');
+      existingNotifications.forEach(n => n.remove());
+      
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `notification-toast alert alert-${type === 'error' ? 'danger' : type === 'success' ? 'success' : 'info'} position-fixed`;
+      notification.style.cssText = `
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        min-width: 300px;
+        animation: slideInRight 0.3s ease;
+      `;
+      
+      notification.innerHTML = `
+        <div class="d-flex align-items-center">
+          <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} me-2"></i>
+          <span>${message}</span>
+          <button type="button" class="btn-close ms-auto" onclick="this.parentElement.parentElement.remove()"></button>
+        </div>
+      `;
+      
+      document.body.appendChild(notification);
+      
+      // Auto-remove after 5 seconds
+      setTimeout(() => {
+        if (notification.parentElement) {
+          notification.remove();
+        }
+      }, 5000);
+    }
+    
+    // Add CSS for notification animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes slideInRight {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+    
+    // Load user settings from API
+    async function loadUserSettings() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+        
+        // Load notification settings
+        const response = await fetch(`${API_BASE_URL}api/settings/notifications`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            // Update notification toggles
+            const settings = data.data;
+            document.getElementById('activity-notifications').checked = settings.email_notifications || false;
+            document.getElementById('weekly-summary').checked = settings.push_notifications || false;
+            document.getElementById('campaign-updates').checked = settings.campaign_updates || false;
+            document.getElementById('task-reminders').checked = settings.task_reminders || false;
+          }
+        }
+        
+        // Load connected accounts
+        await loadConnectedAccounts();
+        
+      } catch (error) {
+        console.error('Error loading user settings:', error);
+      }
+    }
+    
+    // Load connected accounts status
+    async function loadConnectedAccounts() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+        
+        const response = await fetch(`${API_BASE_URL}api/settings/connected-accounts`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            const accounts = data.data;
+            
+            // Update MetaMask status
+            updateAccountStatus('metamask', accounts.metamask);
+            
+            // Update Twitter status
+            updateAccountStatus('twitter', accounts.twitter);
+          }
+        }
+      } catch (error) {
+        console.error('Error loading connected accounts:', error);
+      }
+    }
+    
+    // Update account connection status in UI
+    function updateAccountStatus(accountType, accountData) {
+      const statusElement = document.getElementById(`${accountType}-status`);
+      const addressElement = document.getElementById(`${accountType}-address`) || document.getElementById(`${accountType}-handle`);
+      const connectBtn = document.getElementById(`connect-${accountType}`);
+      const disconnectBtn = document.getElementById(`disconnect-${accountType}`);
+      
+      if (accountData && accountData.connected) {
+        // Connected state
+        statusElement.innerHTML = '<i class="fas fa-check me-1"></i>Connected';
+        statusElement.className = 'badge';
+        statusElement.style.background = 'rgba(16, 185, 129, 0.2)';
+        statusElement.style.color = 'var(--success-color)';
+        
+        if (addressElement) {
+          addressElement.textContent = accountData.address || accountData.handle || 'Connected';
+        }
+        
+        if (connectBtn) connectBtn.style.display = 'none';
+        if (disconnectBtn) disconnectBtn.style.display = 'inline-block';
+      } else {
+        // Disconnected state
+        statusElement.innerHTML = '<i class="fas fa-times me-1"></i>Not Connected';
+        statusElement.className = 'badge';
+        statusElement.style.background = 'rgba(220, 38, 38, 0.2)';
+        statusElement.style.color = 'var(--danger-color)';
+        
+        if (addressElement) {
+          addressElement.textContent = 'Not connected';
+        }
+        
+        if (connectBtn) connectBtn.style.display = 'inline-block';
+        if (disconnectBtn) disconnectBtn.style.display = 'none';
+      }
+    }
+    
+    // Initialize save button and notification toggles
+    function initializeSaveButton() {
+      // Add event listeners for notification toggles
+      const toggles = ['activity-notifications', 'weekly-summary', 'campaign-updates', 'task-reminders'];
+      
+      toggles.forEach(toggleId => {
+        const toggle = document.getElementById(toggleId);
+        if (toggle) {
+          toggle.addEventListener('change', saveNotificationSettings);
+        }
+      });
+      
+      // Add event listener for save button
+      const saveBtn = document.getElementById('saveSettingsBtn');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', saveAllSettings);
+      }
+    }
+    
+    // Save notification settings automatically
+    async function saveNotificationSettings() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+        
+        const settings = {
+          email_notifications: document.getElementById('activity-notifications').checked,
+          push_notifications: document.getElementById('weekly-summary').checked,
+          campaign_updates: document.getElementById('campaign-updates').checked,
+          task_reminders: document.getElementById('task-reminders').checked
+        };
+        
+        const response = await fetch(`${API_BASE_URL}api/settings/notifications`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(settings)
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'success') {
+            showNotification('Notification settings saved', 'success');
+          }
+        }
+      } catch (error) {
+        console.error('Error saving notification settings:', error);
+        showNotification('Failed to save notification settings', 'error');
+      }
+    }
+    
+    // Save all settings
+    async function saveAllSettings() {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+        
+        const saveBtn = document.getElementById('saveSettingsBtn');
+        const originalText = saveBtn.innerHTML;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i>Saving...';
+        saveBtn.disabled = true;
+        
+        // Get display name
+        const displayName = document.getElementById('display-name').value;
+        
+        // Save profile information
+        const profileResponse = await fetch(`${API_BASE_URL}api/settings/profile`, {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            name: displayName
+          })
+        });
+        
+        if (profileResponse.ok) {
+          showNotification('Settings saved successfully!', 'success');
+        } else {
+          showNotification('Failed to save some settings', 'error');
+        }
+        
+      } catch (error) {
+        console.error('Error saving settings:', error);
+        showNotification('Failed to save settings', 'error');
+      } finally {
+        const saveBtn = document.getElementById('saveSettingsBtn');
+        saveBtn.innerHTML = '<i class="fas fa-save me-1"></i>Save Changes';
+        saveBtn.disabled = false;
+      }
+    }
+    
+    // Connect MetaMask wallet with evmAsk.js conflict handling
+    async function connectMetaMask() {
+      try {
+        if (typeof window.ethereum !== 'undefined') {
+          console.log('🔗 Attempting MetaMask connection...');
+          
+          let accounts;
+          try {
+            // Add timeout protection for evmAsk.js conflicts
+            accounts = await Promise.race([
+              window.ethereum.request({ method: 'eth_requestAccounts' }),
+              new Promise((_, reject) => setTimeout(() => reject(new Error('Connection timeout')), 10000))
+            ]);
+          } catch (requestError) {
+            console.warn('🚫 MetaMask request error:', requestError.message);
+            
+            // Handle specific evmAsk.js conflicts
+            if (requestError.message.includes('evmAsk') || 
+                requestError.message.includes('selectExtension') ||
+                requestError.message.includes('Connection timeout')) {
+              console.warn('🔄 Wallet extension conflict detected, using fallback...');
+              
+              // Try to get existing accounts without requesting new connection
+              try {
+                accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                if (accounts.length === 0) {
+                  throw new Error('No accounts available');
+                }
+              } catch (fallbackError) {
+                console.warn('🚫 Fallback failed, showing user guidance...');
+                showNotification('Wallet extension conflict detected. Please try refreshing the page or disable conflicting wallet extensions.', 'warning');
+                return;
+              }
+            } else {
+              throw requestError;
+            }
+          }
+          
+          if (accounts && accounts.length > 0) {
+            const address = accounts[0];
+            console.log('✅ MetaMask connected:', address);
+            localStorage.setItem('connected_evm_wallet', address);
+            
+            // Save to backend
+            const token = await getValidToken();
+            if (token) {
+              try {
+                await fetch(`${API_BASE_URL}api/settings/connect-wallet`, {
+                  method: 'POST',
+                  headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ wallet_address: address })
+                });
+              } catch (apiError) {
+                console.warn('⚠️ Backend save failed, but wallet connected locally:', apiError);
+              }
+            }
+            
+            // Update UI
+            updateAccountStatus('metamask', { connected: true, address: address });
+            showNotification('MetaMask wallet connected successfully!', 'success');
+          } else {
+            showNotification('No MetaMask accounts available', 'warning');
+          }
+        } else {
+          console.warn('🚫 MetaMask not detected');
+          if (confirm('MetaMask is not installed. Would you like to install it?')) {
+            window.open('https://metamask.io/download/', '_blank');
+          }
+        }
+      } catch (error) {
+        console.error('💥 MetaMask connection error:', error);
+        
+        // Handle different error types with specific messages
+        let errorMessage = 'Failed to connect MetaMask wallet';
+        if (error.message.includes('User rejected')) {
+          errorMessage = 'MetaMask connection was cancelled by user';
+        } else if (error.message.includes('evmAsk') || error.message.includes('selectExtension')) {
+          errorMessage = 'Wallet extension conflict detected. Please refresh the page.';
+        } else if (error.message.includes('timeout')) {
+          errorMessage = 'Connection timed out. Please try again.';
+        }
+        
+        showNotification(errorMessage, 'error');
+      }
+    }
+    
+    // Connect Twitter (redirect to Twitter auth)
+    function connectTwitter() {
+      window.location.href = '/api/twitter/auth.php';
+    }
+    
+    // Disconnect account
+    async function disconnectAccount(accountType) {
+      try {
+        const token = await getValidToken();
+        if (!token) return;
+        
+        const response = await fetch(`${API_BASE_URL}api/settings/disconnect`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ account_type: accountType })
+        });
+        
+        if (response.ok) {
+          if (accountType === 'metamask') {
+            localStorage.removeItem('connected_evm_wallet');
+            updateAccountStatus('metamask', { connected: false });
+            showNotification('MetaMask wallet disconnected', 'success');
+          } else if (accountType === 'twitter') {
+            showNotification('Twitter account disconnected. Redirecting...', 'success');
+            setTimeout(() => {
+              window.location.href = '../index.html';
+            }, 1500);
+          }
+        }
+      } catch (error) {
+        console.error('Error disconnecting account:', error);
+        showNotification('Failed to disconnect account', 'error');
+      }
+    }
+    
+    // Logout function
+    function logout() {
+      // Clear local storage
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('connected_evm_wallet');
+      
+      // Try Twitter logout first, then redirect
+      fetch('/api/twitter/logout.php', {
+        method: 'POST',
+        credentials: 'include'
+      }).finally(() => {
+        window.location.href = '../index.html';
+      });
+    }
+    
+  </script>
+</body>
+</html>
