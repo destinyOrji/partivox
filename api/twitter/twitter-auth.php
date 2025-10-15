@@ -236,25 +236,18 @@ if (isset($_SESSION['twitter_access_token']) && $_SESSION['twitter_access_token'
     }
 } else {
     try {
-        $reuseWindowSeconds = 60; // reuse recent request token for up to 1 minute (reduced from 2 minutes)
+        // Force fresh request tokens to avoid invalid/used token issues on hosted envs
+        $reuseWindowSeconds = 0; // disable reuse entirely
         $useExisting = false;
         if (isset($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'], $_SESSION['oauth_token_time'])) {
-            $age = time() - (int)$_SESSION['oauth_token_time'];
-            if ($age >= 0 && $age < $reuseWindowSeconds) {
-                $useExisting = true;
-                $request_token = [
-                    'oauth_token' => $_SESSION['oauth_token'],
-                    'oauth_token_secret' => $_SESSION['oauth_token_secret']
-                ];
-                error_log('[TWITTER_AUTH][REUSING_TOKEN] Reusing existing token, age: ' . $age . ' seconds');
-            } else {
-                error_log('[TWITTER_AUTH][TOKEN_EXPIRED] Token too old, age: ' . $age . ' seconds, max: ' . $reuseWindowSeconds);
-                // Clear expired tokens
-                clear_oauth_session();
-            }
+            // Always clear any previously issued request tokens before starting a new flow
+            error_log('[TWITTER_AUTH][CLEAR_STALE_REQUEST_TOKEN] Removing any stale oauth_token prior to requesting a new one');
+            clear_oauth_session();
         }
 
         if (!isset($request_token)) {
+            // Extra safety: ensure no stale cookies remain just before requesting a new token
+            clear_oauth_session();
             try {
                 $connectionManager = createTwitterConnection();
                 $request_token = $connectionManager->getRequestToken(OAUTH_CALLBACK);
@@ -270,15 +263,17 @@ if (isset($_SESSION['twitter_access_token']) && $_SESSION['twitter_access_token'
             }
         }
         log_state('REQUEST_TOKEN');
-        // Also persist/refresh in short-lived cookies to survive session issues on callback
-        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+        // Persist in short-lived cookies; on hosted environments some browsers require SameSite=None
+        $isHttps = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ||
+                   (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https');
+        $sameSite = $isHttps ? 'None' : 'Lax';
         setcookie('tw_oauth_token', $request_token['oauth_token'], [
             'expires' => time() + 600,
             'path' => '/',
             'domain' => '',
             'secure' => $isHttps,
             'httponly' => true,
-            'samesite' => 'Lax'
+            'samesite' => $sameSite
         ]);
         setcookie('tw_oauth_token_secret', $request_token['oauth_token_secret'], [
             'expires' => time() + 600,
@@ -286,7 +281,7 @@ if (isset($_SESSION['twitter_access_token']) && $_SESSION['twitter_access_token'
             'domain' => '',
             'secure' => $isHttps,
             'httponly' => true,
-            'samesite' => 'Lax'
+            'samesite' => $sameSite
         ]);
         $isLoggedIn = false;
     } catch (\Abraham\TwitterOAuth\TwitterOAuthException $e) {
