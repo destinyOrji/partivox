@@ -25,9 +25,9 @@ if (!class_exists('Database')) {
 
         private function __construct() {
             try {
-                $host = $_ENV['DB_HOST'] ?? 'localhost';
-                $port = $_ENV['DB_PORT'] ?? 27017;
-                $dbName = $_ENV['DB_NAME'] ?? 'partivox';
+                $host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?? 'localhost';
+                $port = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?? 27017;
+                $dbName = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?? 'partivox';
                 
                 // Create MongoDB connection string
                 $connectionString = "mongodb://{$host}:{$port}";

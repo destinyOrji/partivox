@@ -18,7 +18,9 @@ $allowedOrigins = [
     'http://localhost:8000', 
     'http://127.0.0.1:8000',
     'http://localhost:3000',
-    'http://127.0.0.1:3000'
+    'http://127.0.0.1:3000',
+    'https://partivox-1.onrender.com',
+    'https://www.partivox-1.onrender.com'
 ];
 
 if (in_array($origin, $allowedOrigins)) {

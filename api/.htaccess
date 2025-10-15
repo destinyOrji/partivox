@@ -3,10 +3,7 @@ RewriteEngine On
 # Handle API routes
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^api/(.*)$ api/index.php [QSA,L]
-
-# Handle health check
-RewriteRule ^api/health$ api/health.php [L]
+RewriteRule ^(.*)$ index.php [QSA,L]
 
 # CORS Headers
 Header always set Access-Control-Allow-Origin "*"
@@ -17,19 +14,3 @@ Header always set Access-Control-Allow-Credentials "true"
 # Handle preflight requests
 RewriteCond %{REQUEST_METHOD} OPTIONS
 RewriteRule ^(.*)$ $1 [R=200,L]
-
-# Security - Deny access to sensitive files
-<Files ".env">
-    Order allow,deny
-    Deny from all
-</Files>
-
-<Files "*.md">
-    Order allow,deny
-    Deny from all
-</Files>
-
-<Files "composer.*">
-    Order allow,deny
-    Deny from all
-</Files>
