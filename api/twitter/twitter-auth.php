@@ -42,6 +42,21 @@ function safe_redirect($url) {
     exit;
 }
 
+function clear_oauth_session() {
+    // Clear OAuth-related session data
+    unset($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'], $_SESSION['oauth_token_time']);
+    
+    // Clear OAuth-related cookies
+    if (isset($_COOKIE['tw_oauth_token'])) {
+        setcookie('tw_oauth_token', '', time() - 3600, '/', '', (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'), true);
+    }
+    if (isset($_COOKIE['tw_oauth_token_secret'])) {
+        setcookie('tw_oauth_token_secret', '', time() - 3600, '/', '', (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off'), true);
+    }
+    
+    error_log('[TWITTER_AUTH][SESSION_CLEAR] OAuth session data cleared');
+}
+
 function mask_for_log($s, $keep = 6) {
     if (!$s) return null;
     $len = strlen($s);
@@ -109,10 +124,25 @@ if (isset($_SESSION['twitter_access_token']) && $_SESSION['twitter_access_token'
         $isLoggedIn = true;
         log_state('HAS_ACCESS_TOKEN');
     }
-} elseif (isset($_GET['oauth_verifier']) && isset($_GET['oauth_token']) && (
-    (isset($_SESSION['oauth_token']) && $_GET['oauth_token'] == $_SESSION['oauth_token']) ||
-    (isset($_COOKIE['tw_oauth_token']) && $_GET['oauth_token'] == $_COOKIE['tw_oauth_token'])
-)) {
+} elseif (isset($_GET['oauth_verifier']) && isset($_GET['oauth_token'])) {
+    // Validate that we have the matching token in session or cookies
+    $sessionToken = $_SESSION['oauth_token'] ?? null;
+    $cookieToken = $_COOKIE['tw_oauth_token'] ?? null;
+    $callbackToken = $_GET['oauth_token'] ?? null;
+    
+    // Check if the callback token matches our stored token
+    $tokenMatch = false;
+    if ($sessionToken && $callbackToken === $sessionToken) {
+        $tokenMatch = true;
+        error_log('[TWITTER_AUTH][TOKEN_MATCH] Session token matches callback token');
+    } elseif ($cookieToken && $callbackToken === $cookieToken) {
+        $tokenMatch = true;
+        error_log('[TWITTER_AUTH][TOKEN_MATCH] Cookie token matches callback token');
+    } else {
+        error_log('[TWITTER_AUTH][TOKEN_MISMATCH] Callback token: ' . $callbackToken . ', Session: ' . $sessionToken . ', Cookie: ' . $cookieToken);
+    }
+    
+    if ($tokenMatch) {
     try {
         log_state('CALLBACK_START');
         // Fallback to cookie if session is missing (e.g., session not persisted cross-domain/port)
@@ -194,9 +224,19 @@ if (isset($_SESSION['twitter_access_token']) && $_SESSION['twitter_access_token'
         echo "<a href='/api/twitter/twitter-auth.php' style='display:inline-block;padding:8px 14px;background:#1da1f2;color:#fff;border-radius:4px;text-decoration:none;'>Retry Twitter Login</a>";
         exit;
     }
+    } else {
+        // Token mismatch - clear session and restart OAuth flow
+        error_log('[TWITTER_AUTH][TOKEN_MISMATCH] Clearing session and restarting OAuth flow');
+        clear_oauth_session();
+        
+        echo "<div style='color:orange;font-weight:bold;'>Twitter session expired. Please try logging in again.</div>";
+        echo "<a href='/api/twitter/twitter-auth.php' style='display:inline-block;padding:8px 14px;background:#1da1f2;color:#fff;border-radius:4px;text-decoration:none;'>Login with Twitter</a>";
+        echo "<br><br><a href='/api/twitter/debug-oauth.php' style='display:inline-block;padding:8px 14px;background:#6c757d;color:#fff;border-radius:4px;text-decoration:none;'>Debug OAuth Issues</a>";
+        exit;
+    }
 } else {
     try {
-        $reuseWindowSeconds = 120; // reuse recent request token for up to 2 minutes
+        $reuseWindowSeconds = 60; // reuse recent request token for up to 1 minute (reduced from 2 minutes)
         $useExisting = false;
         if (isset($_SESSION['oauth_token'], $_SESSION['oauth_token_secret'], $_SESSION['oauth_token_time'])) {
             $age = time() - (int)$_SESSION['oauth_token_time'];
@@ -206,6 +246,11 @@ if (isset($_SESSION['twitter_access_token']) && $_SESSION['twitter_access_token'
                     'oauth_token' => $_SESSION['oauth_token'],
                     'oauth_token_secret' => $_SESSION['oauth_token_secret']
                 ];
+                error_log('[TWITTER_AUTH][REUSING_TOKEN] Reusing existing token, age: ' . $age . ' seconds');
+            } else {
+                error_log('[TWITTER_AUTH][TOKEN_EXPIRED] Token too old, age: ' . $age . ' seconds, max: ' . $reuseWindowSeconds);
+                // Clear expired tokens
+                clear_oauth_session();
             }
         }
 
