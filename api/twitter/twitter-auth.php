@@ -459,6 +459,15 @@ if ($isLoggedIn) {
     }
 } else {
     // Build authenticate URL directly (no need for a TwitterOAuth instance)
-    $authUrl = 'https://api.twitter.com/oauth/authenticate?oauth_token=' . rawurlencode($request_token['oauth_token']);
+    $oauthToken = $request_token['oauth_token'] ?? '';
+    if (empty($oauthToken)) {
+        error_log('[TWITTER_AUTH][ERROR] Empty oauth_token in request_token: ' . json_encode($request_token));
+        echo "<div style='color:red;font-weight:bold;'>Twitter authentication error: Invalid token received.</div>";
+        echo "<a href='/api/twitter/twitter-auth.php' style='display:inline-block;padding:8px 14px;background:#1da1f2;color:#fff;border-radius:4px;text-decoration:none;'>Retry Twitter Login</a>";
+        exit;
+    }
+    
+    $authUrl = 'https://api.twitter.com/oauth/authenticate?oauth_token=' . rawurlencode($oauthToken);
+    error_log('[TWITTER_AUTH][REDIRECT_URL] ' . $authUrl);
     safe_redirect($authUrl);
 }

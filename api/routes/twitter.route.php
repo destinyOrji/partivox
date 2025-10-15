@@ -94,7 +94,10 @@ function handleGetToken($method, $data) {
         $base64Header = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
         $base64Payload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload_json));
         
-        $signature = hash_hmac('sha256', $base64Header . "." . $base64Payload, 'your-secret-key', true);
+        // IMPORTANT: This now uses the JWT_SECRET from your environment variables.
+        // Ensure JWT_SECRET is set on Render.
+        $jwtSecret = getenv('JWT_SECRET') ?: 'a_very_strong_default_secret_for_development_only'; // Fallback for local dev, but MUST be set in production
+        $signature = hash_hmac('sha256', $base64Header . "." . $base64Payload, $jwtSecret, true);
         $base64Signature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
         
         $jwt = $base64Header . "." . $base64Payload . "." . $base64Signature;

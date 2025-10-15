@@ -83,7 +83,21 @@ class TwitterConnectionManager {
     }
     
     public function getRequestToken($callbackUrl) {
-        return $this->makeRequest('oauth/request_token', ['oauth_callback' => $callbackUrl]);
+        $response = $this->makeRequest('oauth/request_token', ['oauth_callback' => $callbackUrl]);
+        
+        // Validate the response structure
+        if (!is_array($response) || !isset($response['oauth_token']) || !isset($response['oauth_token_secret'])) {
+            error_log('[TwitterConnectionManager] Invalid request token response: ' . json_encode($response));
+            throw new Exception('Invalid request token response from Twitter API');
+        }
+        
+        // Validate token format (should be alphanumeric)
+        if (!preg_match('/^[A-Za-z0-9_-]+$/', $response['oauth_token'])) {
+            error_log('[TwitterConnectionManager] Invalid oauth_token format: ' . $response['oauth_token']);
+            throw new Exception('Invalid oauth_token format received from Twitter');
+        }
+        
+        return $response;
     }
     
     public function getAccessToken($oauthVerifier) {
