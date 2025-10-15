@@ -7,11 +7,19 @@ $rootEnvPath = __DIR__ . '/../../';
 $apiEnvPath  = __DIR__ . '/../';
 
 if (file_exists($rootEnvPath . '.env')) {
-    $dotenv = Dotenv\Dotenv::createImmutable($rootEnvPath);
-    $dotenv->load();
+    try {
+        $dotenv = Dotenv\Dotenv::createImmutable($rootEnvPath);
+        $dotenv->load();
+    } catch (Exception $e) {
+        error_log('[ENV] Failed to parse .env at project root: ' . $e->getMessage() . ' — continuing with server environment variables.');
+    }
 } elseif (file_exists($apiEnvPath . '.env')) {
-    $dotenv = Dotenv\Dotenv::createImmutable($apiEnvPath);
-    $dotenv->load();
+    try {
+        $dotenv = Dotenv\Dotenv::createImmutable($apiEnvPath);
+        $dotenv->load();
+    } catch (Exception $e) {
+        error_log('[ENV] Failed to parse .env under api/: ' . $e->getMessage() . ' — continuing with server environment variables.');
+    }
 } else {
     error_log("⚠️ No .env file found. Using default values.");
 }
@@ -29,11 +37,25 @@ if (!class_exists('Database')) {
                 $host = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?? 'localhost';
                 $port = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?? 27017;
                 $dbName = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?? 'partivox';
+                $mongoUri = $_ENV['MONGODB_URI'] ?? getenv('MONGODB_URI') ?? null;
                 
-                // For Render free tier, we'll use a simple file-based approach
-                // since MongoDB Atlas requires configuration
+                // If a Mongo connection string is provided, prefer it (works on Render too)
+                if (!empty($mongoUri)) {
+                    $this->client = new MongoDB\Client($mongoUri);
+                    // If DB name is included in URI, default to it; otherwise use env/default
+                    if (!empty($dbName)) {
+                        $this->db = $this->client->$dbName;
+                    } else {
+                        // Best effort: try to parse db name from URI; if not found, fallback
+                        $this->db = $this->client->selectDatabase('partivox');
+                    }
+                    $this->initializeCollections();
+                    $this->createIndexes();
+                    return;
+                }
+
+                // For Render without a Mongo URI, use file-based storage
                 if (getenv('RENDER') === 'true' || getenv('RENDER_EXTERNAL_HOSTNAME')) {
-                    // Running on Render - use file-based storage for now
                     $this->db = new stdClass();
                     $this->db->users = new FileBasedCollection('users');
                     $this->db->campaigns = new FileBasedCollection('campaigns');
