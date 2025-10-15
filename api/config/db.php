@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../../vendor/autoload.php';
+require_once __DIR__ . '/FileBasedCollection.php';
 
 // Try to load .env from both possible locations
 $rootEnvPath = __DIR__ . '/../../';
@@ -29,6 +30,23 @@ if (!class_exists('Database')) {
                 $port = $_ENV['DB_PORT'] ?? getenv('DB_PORT') ?? 27017;
                 $dbName = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?? 'partivox';
                 
+                // For Render free tier, we'll use a simple file-based approach
+                // since MongoDB Atlas requires configuration
+                if (getenv('RENDER') === 'true' || getenv('RENDER_EXTERNAL_HOSTNAME')) {
+                    // Running on Render - use file-based storage for now
+                    $this->db = new stdClass();
+                    $this->db->users = new FileBasedCollection('users');
+                    $this->db->campaigns = new FileBasedCollection('campaigns');
+                    $this->db->transactions = new FileBasedCollection('transactions');
+                    $this->db->reports = new FileBasedCollection('reports');
+                    $this->db->settings = new FileBasedCollection('settings');
+                    $this->db->sessions = new FileBasedCollection('sessions');
+                    $this->db->wallets = new FileBasedCollection('wallets');
+                    $this->db->activities = new FileBasedCollection('activities');
+                    $this->db->twitter_tokens = new FileBasedCollection('twitter_tokens');
+                    return;
+                }
+                
                 // Create MongoDB connection string
                 $connectionString = "mongodb://{$host}:{$port}";
                 
@@ -46,7 +64,17 @@ if (!class_exists('Database')) {
                 
             } catch (Exception $e) {
                 error_log("Database connection failed: " . $e->getMessage());
-                throw new Exception("Database connection failed: " . $e->getMessage());
+                // Fallback to file-based storage
+                $this->db = new stdClass();
+                $this->db->users = new FileBasedCollection('users');
+                $this->db->campaigns = new FileBasedCollection('campaigns');
+                $this->db->transactions = new FileBasedCollection('transactions');
+                $this->db->reports = new FileBasedCollection('reports');
+                $this->db->settings = new FileBasedCollection('settings');
+                $this->db->sessions = new FileBasedCollection('sessions');
+                $this->db->wallets = new FileBasedCollection('wallets');
+                $this->db->activities = new FileBasedCollection('activities');
+                $this->db->twitter_tokens = new FileBasedCollection('twitter_tokens');
             }
         }
 
