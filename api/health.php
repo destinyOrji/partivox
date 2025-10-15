@@ -20,15 +20,25 @@ try {
     ];
     
     // Try to check database connection
-    if (file_exists(__DIR__ . '/api/config/db.php')) {
-        require_once __DIR__ . '/api/config/db.php';
+    if (file_exists(__DIR__ . '/config/db.php')) {
+        require_once __DIR__ . '/config/db.php';
         try {
-            Database::getInstance();
+            Database::getDB();
             $status['database'] = 'connected';
         } catch (Exception $e) {
             $status['database'] = 'disconnected';
             $status['database_error'] = $e->getMessage();
         }
+    }
+    
+    // Check Twitter API configuration
+    if (file_exists(__DIR__ . '/config/twitter.php')) {
+        require_once __DIR__ . '/config/twitter.php';
+        $status['twitter'] = [
+            'consumer_key_set' => defined('CONSUMER_KEY') && !empty(CONSUMER_KEY),
+            'consumer_secret_set' => defined('CONSUMER_SECRET') && !empty(CONSUMER_SECRET),
+            'callback_set' => defined('OAUTH_CALLBACK') && !empty(OAUTH_CALLBACK)
+        ];
     }
     
     echo json_encode($status, JSON_PRETTY_PRINT);

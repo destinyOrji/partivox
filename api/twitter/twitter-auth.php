@@ -26,6 +26,7 @@ require_once __DIR__ . '/../config/twitter.php';
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/TwitterApiHelper.php';
 require_once __DIR__ . '/TwitterDbService.php';
+require_once __DIR__ . '/twitter-timeout-fix.php';
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 use Abraham\TwitterOAuth\TwitterOAuth;
@@ -117,9 +118,7 @@ if (isset($_SESSION['twitter_access_token']) && $_SESSION['twitter_access_token'
         // Fallback to cookie if session is missing (e.g., session not persisted cross-domain/port)
         $rtToken = $_SESSION['oauth_token'] ?? ($_COOKIE['tw_oauth_token'] ?? null);
         $rtSecret = $_SESSION['oauth_token_secret'] ?? ($_COOKIE['tw_oauth_token_secret'] ?? null);
-        $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $rtToken, $rtSecret);
-        // Increase timeouts for slow networks
-        $connection->setTimeouts(15, 45);
+        
         // Read and validate callback params (avoid deprecated FILTER_SANITIZE_STRING)
         $oauthVerifier = (isset($_GET['oauth_verifier']) && preg_match('/^[A-Za-z0-9_-]+$/', $_GET['oauth_verifier']))
             ? $_GET['oauth_verifier']
@@ -127,7 +126,17 @@ if (isset($_SESSION['twitter_access_token']) && $_SESSION['twitter_access_token'
         $callbackToken = (isset($_GET['oauth_token']) && preg_match('/^[A-Za-z0-9_-]+$/', $_GET['oauth_token']))
             ? $_GET['oauth_token']
             : null;
-        $access_token = $connection->oauth('oauth/access_token', array('oauth_verifier' => $oauthVerifier));
+            
+        try {
+            $connectionManager = createTwitterConnection($rtToken, $rtSecret);
+            $access_token = $connectionManager->getAccessToken($oauthVerifier);
+        } catch (Exception $e) {
+            $errorInfo = handleTwitterError($e, 'ACCESS_TOKEN');
+            error_log('Twitter access_token exchange failed: ' . $e->getMessage());
+            echo "<div style='color:red;font-weight:bold;'>" . $errorInfo['message'] . "</div>";
+            echo "<a href='/api/twitter/twitter-auth.php' style='display:inline-block;padding:8px 14px;background:#1da1f2;color:#fff;border-radius:4px;text-decoration:none;'>Retry Twitter Login</a>";
+            exit;
+        }
         // Add timestamp for token expiration tracking
         $access_token['created_at'] = time();
         $_SESSION['twitter_access_token'] = $access_token;
@@ -201,13 +210,19 @@ if (isset($_SESSION['twitter_access_token']) && $_SESSION['twitter_access_token'
         }
 
         if (!isset($request_token)) {
-            $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET);
-            // Increase timeouts for slow networks
-            $connection->setTimeouts(15, 45);
-            $request_token = $connection->oauth('oauth/request_token', array('oauth_callback' => OAUTH_CALLBACK));
-            $_SESSION['oauth_token'] = $request_token['oauth_token'];
-            $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
-            $_SESSION['oauth_token_time'] = time();
+            try {
+                $connectionManager = createTwitterConnection();
+                $request_token = $connectionManager->getRequestToken(OAUTH_CALLBACK);
+                $_SESSION['oauth_token'] = $request_token['oauth_token'];
+                $_SESSION['oauth_token_secret'] = $request_token['oauth_token_secret'];
+                $_SESSION['oauth_token_time'] = time();
+            } catch (Exception $e) {
+                $errorInfo = handleTwitterError($e, 'REQUEST_TOKEN');
+                error_log('Twitter request_token failed: ' . $e->getMessage());
+                echo "<div style='color:red;font-weight:bold;'>" . $errorInfo['message'] . "</div>";
+                echo "<a href='/api/twitter/twitter-auth.php' style='display:inline-block;padding:8px 14px;background:#1da1f2;color:#fff;border-radius:4px;text-decoration:none;'>Retry Twitter Login</a>";
+                exit;
+            }
         }
         log_state('REQUEST_TOKEN');
         // Also persist/refresh in short-lived cookies to survive session issues on callback
@@ -283,12 +298,11 @@ if ($isLoggedIn) {
     }
     $oauthToken = $_SESSION['twitter_access_token']['oauth_token'];
     $oauthTokenSecret = $_SESSION['twitter_access_token']['oauth_token_secret'];
-    $connection = new TwitterOAuth(CONSUMER_KEY, CONSUMER_SECRET, $oauthToken, $oauthTokenSecret);
-    $connection->setTimeouts(15, 45);
-    // Use TwitterApiHelper for better API handling
+    
+    // Use improved connection manager for better API handling
     try {
-        $apiHelper = new TwitterApiHelper($connection, TWITTER_API_VERSION);
-        $user = $apiHelper->getUserInfo();
+        $connectionManager = createTwitterConnection($oauthToken, $oauthTokenSecret);
+        $user = $connectionManager->verifyCredentials();
         
         if ($user === null) {
             throw new Exception('Failed to get user information from Twitter API');
@@ -297,6 +311,7 @@ if ($isLoggedIn) {
         error_log('[TWITTER_AUTH][API_SUCCESS] Successfully retrieved user info for: ' . ($user->screen_name ?? 'unknown'));
         
     } catch (Exception $e) {
+        $errorInfo = handleTwitterError($e, 'VERIFY_CREDENTIALS');
         error_log('[TWITTER_AUTH][API_ERROR] ' . $e->getMessage());
         
         // Handle specific error types
