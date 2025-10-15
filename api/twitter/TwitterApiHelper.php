@@ -21,10 +21,10 @@ class TwitterApiHelper {
                     'twitter_id' => $user->twitter_id ?? '',
                     'twitter_handle' => $user->twitter_handle ?? '',
                     'avatar' => $user->avatar ?? ''
-                ];
-            }
-            
-            return null;
+            ];
+        }
+        
+        return null;
         } catch (Exception $e) {
             error_log('[TwitterApiHelper] Error getting user info: ' . $e->getMessage());
             return null;

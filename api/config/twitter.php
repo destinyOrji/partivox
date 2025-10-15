@@ -18,8 +18,16 @@ if (!$envCallback) {
     $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
     $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
     
-    // Handle ngrok URLs (they use HTTPS by default)
-    if (strpos($host, 'ngrok') !== false || strpos($host, 'ngrok.io') !== false) {
+    // Handle Render and other cloud platforms
+    if (strpos($host, 'render.com') !== false || 
+        strpos($host, 'ngrok') !== false || 
+        strpos($host, 'ngrok.io') !== false ||
+        strpos($host, 'herokuapp.com') !== false) {
+        $scheme = 'https';
+    }
+    
+    // Force HTTPS for production domains
+    if (!strpos($host, 'localhost') && !strpos($host, '127.0.0.1')) {
         $scheme = 'https';
     }
     

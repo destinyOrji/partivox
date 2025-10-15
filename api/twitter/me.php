@@ -13,10 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 
 try {
     // Start session
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
     // Check if user is authenticated
     if (isset($_SESSION['is_authenticated']) && $_SESSION['is_authenticated'] === true) {
         $user = [
@@ -36,7 +36,7 @@ try {
         
         echo json_encode($user);
     } else {
-        echo json_encode([
+    echo json_encode([
             'authenticated' => false,
             'message' => 'Not authenticated'
         ]);
@@ -44,7 +44,7 @@ try {
     
 } catch (Exception $e) {
     http_response_code(500);
-    echo json_encode([
+echo json_encode([
         'status' => 'error',
         'message' => 'Authentication check failed: ' . $e->getMessage()
     ]);
