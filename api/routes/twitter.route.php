@@ -2,6 +2,21 @@
 // Twitter API Routes
 // Handles Twitter authentication and token management
 
+// Load environment variables if not already loaded
+if (!getenv('TWITTER_CONSUMER_KEY') && file_exists(__DIR__ . '/../../.env')) {
+    require_once __DIR__ . '/../../vendor/autoload.php';
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
+    $dotenv->load();
+}
+
+// Debug environment variables
+error_log("=== TWITTER ROUTE DEBUG ===");
+error_log("TWITTER_CONSUMER_KEY: " . (getenv('TWITTER_CONSUMER_KEY') ?: 'NOT SET'));
+error_log("TWITTER_CONSUMER_SECRET: " . (getenv('TWITTER_CONSUMER_SECRET') ? 'SET (hidden)' : 'NOT SET'));
+error_log("TWITTER_OAUTH_CALLBACK: " . (getenv('TWITTER_OAUTH_CALLBACK') ?: 'NOT SET'));
+error_log("MONGODB_URI: " . (getenv('MONGODB_URI') ? 'SET (hidden)' : 'NOT SET'));
+error_log("JWT_SECRET: " . (getenv('JWT_SECRET') ? 'SET (hidden)' : 'NOT SET'));
+
 require_once __DIR__ . '/../config/db.php';
 require_once __DIR__ . '/../config/twitter.php';
 require_once __DIR__ . '/../twitter/TwitterDbService.php';
@@ -94,8 +109,6 @@ function handleGetToken($method, $data) {
         $base64Header = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($header));
         $base64Payload = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($payload_json));
         
-        // IMPORTANT: This now uses the JWT_SECRET from your environment variables.
-        // Ensure JWT_SECRET is set on Render.
         $jwtSecret = getenv('JWT_SECRET') ?: 'a_very_strong_default_secret_for_development_only'; // Fallback for local dev, but MUST be set in production
         $signature = hash_hmac('sha256', $base64Header . "." . $base64Payload, $jwtSecret, true);
         $base64Signature = str_replace(['+', '/', '='], ['-', '_', ''], base64_encode($signature));
@@ -232,4 +245,5 @@ function handleCallback($method, $data) {
     }
 }
 
+// Remove the debug logs from the end of the file
 ?>

@@ -1,4 +1,18 @@
 <?php
+// Load environment variables first
+require_once __DIR__ . '/../vendor/autoload.php';
+
+// Load .env file if it exists (for local development)
+if (file_exists(__DIR__ . '/../.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+    $dotenv->load();
+}
+
+// Debug environment variables (remove after fixing)
+error_log("=== API INDEX DEBUG ===");
+error_log("TWITTER_CONSUMER_KEY: " . (getenv('TWITTER_CONSUMER_KEY') ?: 'NOT SET'));
+error_log("MONGODB_URI: " . (getenv('MONGODB_URI') ? 'SET' : 'NOT SET'));
+
 // Error reporting for development (disable in production)
 // Disable error display to prevent HTML in JSON responses
 error_reporting(E_ALL);
